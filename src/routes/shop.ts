@@ -1,4 +1,4 @@
-import * as express from "express";
+import { Router } from "express";
 import * as info from "@controllers/shop/info";
 import * as dish from "@controllers/shop/dish";
 import * as post from "@controllers/shop/post";
@@ -7,7 +7,7 @@ import * as order from "@controllers/shop/order";
 import * as retrieve from "@controllers/shop/retrieve";
 
 export const path: string = "/shops";
-export const router: express.Router = express.Router();
+export const router: Router = Router();
 
 // 전체 가게 조회 API
 router.get("/", retrieve.getAllShopList);

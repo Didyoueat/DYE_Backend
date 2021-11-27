@@ -1,9 +1,9 @@
-import * as express from "express";
+import { Router } from "express";
 import * as token from "@controllers/auth/token";
 import * as phone from "@controllers/auth/phone";
 
 export const path: string = "/auth";
-export const router: express.Router = express.Router();
+export const router: Router = Router();
 
 // 로그인 관련 API
 router.post("/token", token.checkToken);

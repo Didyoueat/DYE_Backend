@@ -1,11 +1,11 @@
-import * as express from "express";
+import { Router } from "express";
 import * as info from "@controllers/user/info";
 import * as subs from "@controllers/user/subs";
 import * as order from "@controllers/user/order";
 import * as retrieve from "@controllers/user/retrieve";
 
 export const path: string = "/users";
-export const router: express.Router = express.Router();
+export const router: Router = Router();
 
 // 전체 회원 조회 API
 router.get("/", retrieve.getAllUserList);

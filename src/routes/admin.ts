@@ -1,9 +1,9 @@
-import * as express from "express";
+import { Router } from "express";
 import * as info from "@controllers/admin/info";
 import * as retrieve from "@controllers/admin/retrieve";
 
 export const path: string = "/admin";
-export const router: express.Router = express.Router();
+export const router: Router = Router();
 
 // 전체 관리자 조회 API
 router.get("/", retrieve.getAllAdminList);
