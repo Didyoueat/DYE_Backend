@@ -9,6 +9,12 @@ import * as retrieve from "@controllers/shop/retrieve";
 export const path: string = "/shops";
 export const router: express.Router = express.Router();
 
+// 전체 가게 조회 API
+router.get("/", retrieve.getAllShopList);
+
+// 동네 가게 조회 API
+router.get("/around", retrieve.getAroundShopList);
+
 // 가게 정보 관련 API
 router.get("/:shopId", info.getShop);
 router.post("/create", info.createShop);
@@ -30,14 +36,8 @@ router.patch("/:shopId/posts/:postId", post.updateShopPost);
 router.delete("/:shopId/posts/:postId", post.deleteShopPost);
 
 // 가게 구독 관련 API
-router.get(":shopId/subscriptions", subs.getShopSubsList);
-router.post(":shopId/subscriptions/:subscriptionId", subs.updateShopSubs);
+router.get("/:shopId/subscriptions", subs.getShopSubsList);
+router.post("/:shopId/subscriptions/:subscriptionId", subs.updateShopSubs);
 
 // 가게 주문 목록 조회 API
-router.get(":shopId/orders", order.getShopOrderList);
-
-// 전체 가게 조회 API
-router.get("/", retrieve.getAllShopList);
-
-// 동네 가게 조회 API
-router.get("/around", retrieve.getAroundShopList);
+router.get("/:shopId/orders", order.getShopOrderList);

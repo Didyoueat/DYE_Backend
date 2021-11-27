@@ -7,6 +7,15 @@ import * as retrieve from "@controllers/user/retrieve";
 export const path: string = "/users";
 export const router: express.Router = express.Router();
 
+// 전체 회원 조회 API
+router.get("/", retrieve.getAllUserList);
+
+// 전체 회원 구독 목록 조회 API
+router.get("/subscriptions", retrieve.getAllUserSubsList);
+
+// 전체 회원 주문 목록 조회 API
+router.get("/orders", retrieve.getAllUserOrderList);
+
 // 회원 정보 관련 API
 router.get("/:userId", info.getUser);
 router.post("/create", info.createUser);
@@ -26,12 +35,3 @@ router.get("/:userId/orders", order.getUserOrderList);
 router.get("/:userId/orders/:orderId", order.getUserOrderDetail);
 router.patch("/:userId/orders/:orderId", order.updateUserOrder);
 router.delete("/:userId/orders/:orderId", order.deleteUserOrder);
-
-// 전체 회원 조회 API
-router.get("/", retrieve.getAllUserList);
-
-// 전체 회원 구독 목록 조회 API
-router.get("/subscriptions", retrieve.getAllUserSubsList);
-
-// 전체 회원 주문 목록 조회 API
-router.get("/orders", retrieve.getAllUserOrderList);
