@@ -1,0 +1,15 @@
+### Node ###
+
+# Logs
+logs
+
+# Dependency directories
+node_modules/
+
+# dotenv environment variables file
+.env.test
+.env.prod
+.env.dev
+
+# TypeScript build / generate output
+dist

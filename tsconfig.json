@@ -1,0 +1,20 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "allowSyntheticDefaultImports": true,
+        "target": "ES2017",
+        "moduleResolution": "node",
+        "sourceMap": true,
+        "outDir": "./dist",
+        "rootDir": "src",
+        "baseUrl": "./",
+        "skipLibCheck": true,
+        "paths": {
+            "@routes/*": ["./src/routes/*"],
+            "@modules/*": ["./src/modules/*"],
+            "@controllers/*": ["./src/controllers/*"]
+        }
+    },
+    "include": ["src"],
+    "exclude": ["node_modules"]
+}
