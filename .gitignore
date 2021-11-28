@@ -13,3 +13,5 @@ node_modules/
 
 # TypeScript build / generate output
 dist
+
+migrations

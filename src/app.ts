@@ -1,12 +1,21 @@
-import * as express from "express";
+import express from "express";
+import morgan from "morgan";
+import cookieParser from "cookie-parser";
+import cors from "cors";
+import env from "@modules/env";
+
 import * as apiRouter from "@routes/index";
-import * as morgan from "morgan";
-import * as cookieParser from "cookie-parser";
+import { Sequelize } from "@models/index";
 
-const app: express.Application = express();
+const app = express();
+const port = env.port || 5000;
 
-const port: number = Number(process.env.PORT) || 5000;
+Sequelize()
+    .sync({ force: false })
+    .then(() => console.log("🚀 DB Connected"))
+    .catch((err) => console.log(err));
 
+app.use(cors());
 app.use(morgan("dev"));
 app.use(cookieParser());
 app.use(express.json());
