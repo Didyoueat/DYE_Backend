@@ -1,11 +1,16 @@
 import SequelizeConf from "sequelize";
 import env from "@modules/env";
-import { Shop } from "@models/shops";
-import type { shopAttributes } from "@models/shops";
+import Shops from "@models/shops";
+import Users from "@models/users";
+import Dishes from "@models/dishes";
+import Subscriptions from "@models/subscriptions";
+import Orders from "@models/orders";
+import OrderDishes from "@models/orderDishes";
+import OrderOneTimeDishes from "@models/orderOneTimeDishes";
 
 const { username, password, database, host, port } = env.dbConfig;
 
-const sequelize = new SequelizeConf.Sequelize(database, username, password, {
+export const sequelize = new SequelizeConf.Sequelize(database, username, password, {
     host: host,
     dialect: "mysql",
     port,
@@ -27,11 +32,40 @@ sequelize
         console.log("Unable to connect to the database:", err);
     });
 
-export { sequelize, Shop };
+const Table = {
+    Shops: Shops(sequelize),
+    Users: Users(sequelize),
+    Dishes: Dishes(sequelize),
+    Subscriptions: Subscriptions(sequelize),
+    Orders: Orders(sequelize),
+    OrderDishes: OrderDishes(sequelize),
+    OrderOneTimeDishes: OrderOneTimeDishes(sequelize),
+};
 
-export type { shopAttributes };
+// hasMany
+Table.Users.hasMany(Table.Subscriptions, { sourceKey: "userId", foreignKey: "userId" });
+Table.Users.hasMany(Table.Orders, { sourceKey: "userId", foreignKey: "userId" });
+Table.Shops.hasMany(Table.Dishes, { sourceKey: "shopId", foreignKey: "shopId" });
+Table.Shops.hasMany(Table.Subscriptions, { sourceKey: "shopId", foreignKey: "shopId" });
+Table.Shops.hasMany(Table.Orders, { sourceKey: "shopId", foreignKey: "shopId" });
+Table.Subscriptions.hasMany(Table.OrderDishes, { sourceKey: "subscriptionId", foreignKey: "subscriptionId" });
+Table.Subscriptions.hasMany(Table.OrderOneTimeDishes, { sourceKey: "subscriptionId", foreignKey: "subscriptionId" });
+Table.Orders.hasMany(Table.OrderDishes, { sourceKey: "orderId", foreignKey: "orderId" });
+Table.Orders.hasMany(Table.OrderOneTimeDishes, { sourceKey: "orderId", foreignKey: "orderId" });
+Table.Dishes.hasMany(Table.OrderDishes, { sourceKey: "dishId", foreignKey: "dishId" });
+Table.Dishes.hasMany(Table.OrderOneTimeDishes, { sourceKey: "dishId", foreignKey: "dishId" });
 
-export function Sequelize() {
-    Shop.initModel(sequelize);
-    return sequelize;
-}
+// belongsTo
+Table.Subscriptions.belongsTo(Table.Users, { foreignKey: "userId" });
+Table.Subscriptions.belongsTo(Table.Shops, { foreignKey: "shopId" });
+Table.Orders.belongsTo(Table.Users, { foreignKey: "userId" });
+Table.Orders.belongsTo(Table.Shops, { foreignKey: "shopId" });
+Table.Dishes.belongsTo(Table.Shops, { foreignKey: "shopId" });
+Table.OrderDishes.belongsTo(Table.Subscriptions, { foreignKey: "subscriptionId" });
+Table.OrderDishes.belongsTo(Table.Orders, { foreignKey: "orderId" });
+Table.OrderDishes.belongsTo(Table.Dishes, { foreignKey: "dishId" });
+Table.OrderOneTimeDishes.belongsTo(Table.Subscriptions, { foreignKey: "subscriptionId" });
+Table.OrderOneTimeDishes.belongsTo(Table.Orders, { foreignKey: "orderId" });
+Table.OrderOneTimeDishes.belongsTo(Table.Dishes, { foreignKey: "dishId" });
+
+export default Table;
