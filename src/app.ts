@@ -5,17 +5,22 @@ import cors from "cors";
 import env from "@modules/env";
 
 import * as apiRouter from "@routes/index";
-import { Sequelize } from "@models/index";
+import { sequelize } from "@models/index";
 
 const app = express();
 const port = env.port || 5000;
 
-Sequelize()
+const corsOptions = {
+    origin: "*",
+    credentials: true,
+};
+
+sequelize
     .sync({ force: false })
     .then(() => console.log("🚀 DB Connected"))
     .catch((err) => console.log(err));
 
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(morgan("dev"));
 app.use(cookieParser());
 app.use(express.json());
