@@ -11,6 +11,8 @@ export interface dishAttributes {
     count: number;
     weight: number;
     image: string;
+    createdAt?: Date;
+    updatedAt?: Date;
 }
 
 export class Dishes extends Model<dishAttributes> implements dishAttributes {
@@ -25,8 +27,8 @@ export class Dishes extends Model<dishAttributes> implements dishAttributes {
     public weight: number;
     public image!: string;
 
-    public readonly created_at!: Date;
-    public readonly updated_at!: Date;
+    public readonly createdAt!: Date;
+    public readonly updatedAt!: Date;
 }
 
 export default function (sequelize: Sequelize): typeof Dishes {

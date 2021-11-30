@@ -11,6 +11,8 @@ export interface userAttributes {
     gender: string;
     phone: string;
     address: string;
+    createdAt?: Date;
+    updatedAt?: Date;
 }
 
 export class Users extends Model<userAttributes> {
@@ -25,8 +27,8 @@ export class Users extends Model<userAttributes> {
     public phone: string;
     public address: string;
 
-    public readonly created_at!: Date;
-    public readonly updated_at!: Date;
+    public readonly createdAt!: Date;
+    public readonly updatedAt!: Date;
 }
 
 export default function (sequelize: Sequelize): typeof Users {

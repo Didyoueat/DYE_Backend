@@ -5,10 +5,11 @@ export interface orderAttributes {
     userId: number;
     shopId: number;
     weekLabel: number;
-
     address: string;
     toShop: string;
     toDelivery: string;
+    createdAt?: Date;
+    updatedAt?: Date;
 }
 
 export class Orders extends Model<orderAttributes> implements orderAttributes {
@@ -20,8 +21,8 @@ export class Orders extends Model<orderAttributes> implements orderAttributes {
     public toShop!: string;
     public toDelivery!: string;
 
-    public readonly created_at!: Date;
-    public readonly updated_at!: Date;
+    public readonly createdAt!: Date;
+    public readonly updatedAt!: Date;
 }
 
 export default function (sequelize: Sequelize): typeof Orders {

@@ -12,6 +12,8 @@ export interface orderDishAttributes {
     count: number;
     weight: number;
     image: string;
+    createdAt?: Date;
+    updatedAt?: Date;
 }
 
 export class OrderDishes extends Model<orderDishAttributes> implements orderDishAttributes {
@@ -27,8 +29,8 @@ export class OrderDishes extends Model<orderDishAttributes> implements orderDish
     public weight: number;
     public image!: string;
 
-    public readonly created_at!: Date;
-    public readonly updated_at!: Date;
+    public readonly createdAt!: Date;
+    public readonly updatedAt!: Date;
 }
 
 export default function (sequelize: Sequelize): typeof OrderDishes {

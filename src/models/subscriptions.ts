@@ -9,6 +9,8 @@ export interface subscriptionAttributes {
     address: string;
     toShop: string;
     toDelivery: string;
+    createdAt?: Date;
+    updatedAt?: Date;
 }
 
 export class Subscriptions extends Model<subscriptionAttributes> implements subscriptionAttributes {
@@ -21,8 +23,8 @@ export class Subscriptions extends Model<subscriptionAttributes> implements subs
     public toShop!: string;
     public toDelivery!: string;
 
-    public readonly created_at!: Date;
-    public readonly updated_at!: Date;
+    public readonly createdAt!: Date;
+    public readonly updatedAt!: Date;
 }
 
 export default function (sequelize: Sequelize): typeof Subscriptions {

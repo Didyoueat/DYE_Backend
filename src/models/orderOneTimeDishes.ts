@@ -12,6 +12,8 @@ export interface orderOneTimeDishAttributes {
     count: number;
     weight: number;
     image: string;
+    createdAt?: Date;
+    updatedAt?: Date;
 }
 
 export class OrderOneTimeDishes extends Model<orderOneTimeDishAttributes> implements orderOneTimeDishAttributes {
@@ -27,8 +29,8 @@ export class OrderOneTimeDishes extends Model<orderOneTimeDishAttributes> implem
     public weight: number;
     public image!: string;
 
-    public readonly created_at!: Date;
-    public readonly updated_at!: Date;
+    public readonly createdAt!: Date;
+    public readonly updatedAt!: Date;
 }
 
 export default function (sequelize: Sequelize): typeof OrderOneTimeDishes {

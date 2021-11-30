@@ -14,6 +14,8 @@ export interface shopAttributes {
     origin: string;
     temporaryDayStart: Date;
     temporaryDayEnd: Date;
+    createdAt?: Date;
+    updatedAt?: Date;
 }
 
 export class Shops extends Model<shopAttributes> implements shopAttributes {
@@ -31,8 +33,8 @@ export class Shops extends Model<shopAttributes> implements shopAttributes {
     public temporaryDayStart!: Date;
     public temporaryDayEnd!: Date;
 
-    public readonly created_at!: Date;
-    public readonly updated_at!: Date;
+    public readonly createdAt!: Date;
+    public readonly updatedAt!: Date;
 }
 
 export default function (sequelize: Sequelize): typeof Shops {
