@@ -45,10 +45,10 @@ module.exports = {
         extensions: [".ts", ".tsx", ".js"],
         alias: {
             "@routes": path.resolve(__dirname, "./src/routes/"),
-            "@modules": path.resolve(__dirname, "./src/modules/"),
             "@controllers": path.resolve(__dirname, "./src/controllers/"),
+            "@services": path.resolve(__dirname, "./src/services/"),
             "@models": path.resolve(__dirname, "./src/models/"),
-            "@configs": path.resolve(__dirname, "./src/configs/"),
+            "@modules": path.resolve(__dirname, "./src/modules/"),
         },
         plugins: [new TsconfigPathsPlugin()],
     },

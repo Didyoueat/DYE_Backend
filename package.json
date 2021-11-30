@@ -44,9 +44,9 @@
     },
     "_moduleAlias": {
         "@routes/*": "./dist/routes/*",
-        "@modules/*": "./dist/modules/*",
         "@controllers/*": "./dist/controllers/*",
+        "@services/*": "./dist/services/*",
         "@models/*": "./dist/models/*",
-        "@configs/*": "./dist/configs/*"
+        "@modules/*": "./dist/modules/*"
     }
 }
