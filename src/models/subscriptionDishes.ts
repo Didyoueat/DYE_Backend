@@ -1,10 +1,10 @@
 import { Sequelize, Model, DataTypes } from "sequelize";
 
-export interface orderOneTimeDishAttributes {
-    orderOneTimeDishId: number;
+export interface subscriptionDishAttributes {
+    subscriptionDishId: number;
     subscriptionId: number;
-    orderId: number;
     dishId: number;
+    oneTime: boolean;
     main: boolean;
     title: string;
     content: string;
@@ -16,11 +16,11 @@ export interface orderOneTimeDishAttributes {
     updatedAt?: Date;
 }
 
-export class OrderOneTimeDishes extends Model<orderOneTimeDishAttributes> implements orderOneTimeDishAttributes {
-    public orderOneTimeDishId: number;
+export class SubscriptionDishes extends Model<subscriptionDishAttributes> implements subscriptionDishAttributes {
+    public subscriptionDishId: number;
     public subscriptionId!: number;
-    public orderId!: number;
     public dishId: number;
+    public oneTime!: boolean;
     public main: boolean;
     public title: string;
     public content!: string;
@@ -33,25 +33,25 @@ export class OrderOneTimeDishes extends Model<orderOneTimeDishAttributes> implem
     public readonly updatedAt!: Date;
 }
 
-export default function (sequelize: Sequelize): typeof OrderOneTimeDishes {
-    OrderOneTimeDishes.init(
+export default function (sequelize: Sequelize): typeof SubscriptionDishes {
+    SubscriptionDishes.init(
         {
-            orderOneTimeDishId: {
+            subscriptionDishId: {
                 type: DataTypes.INTEGER,
                 autoIncrement: true,
                 primaryKey: true,
             },
             subscriptionId: {
                 type: DataTypes.INTEGER,
-                // allowNull: true,
-            },
-            orderId: {
-                type: DataTypes.INTEGER,
-                // allowNull: true,
+                // allowNull: false,
             },
             dishId: {
                 type: DataTypes.INTEGER,
-                // allowNull: false,
+                // allowNull: true,
+            },
+            oneTime: {
+                type: DataTypes.BOOLEAN,
+                // allowNull: true,
             },
             main: {
                 type: DataTypes.TINYINT,
@@ -60,35 +60,35 @@ export default function (sequelize: Sequelize): typeof OrderOneTimeDishes {
             },
             title: {
                 type: DataTypes.STRING,
-                allowNull: false,
+                // allowNull: false,
             },
             content: {
                 type: DataTypes.TEXT,
-                allowNull: true,
+                // allowNull: true,
             },
             price: {
                 type: DataTypes.INTEGER,
-                allowNull: false,
+                // allowNull: false,
             },
             count: {
                 type: DataTypes.INTEGER,
-                allowNull: false,
+                // allowNull: false,
             },
             weight: {
                 type: DataTypes.INTEGER,
-                allowNull: false,
+                // allowNull: false,
             },
             image: {
                 type: DataTypes.BLOB,
-                allowNull: true,
+                // allowNull: true,
             },
         },
         {
-            modelName: "OrderOneTimeDishes",
-            tableName: "order_one_timedishes",
+            modelName: "SubscriptionDishes",
+            tableName: "subscription_dishes",
             sequelize,
             freezeTableName: true,
         }
     );
-    return OrderOneTimeDishes;
+    return SubscriptionDishes;
 }

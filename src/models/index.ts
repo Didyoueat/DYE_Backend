@@ -6,7 +6,7 @@ import Dishes from "@models/dishes";
 import Subscriptions from "@models/subscriptions";
 import Orders from "@models/orders";
 import OrderDishes from "@models/orderDishes";
-import OrderOneTimeDishes from "@models/orderOneTimeDishes";
+import SubscriptionDishes from "@models/subscriptionDishes";
 
 const { username, password, database, host, port } = env.dbConfig;
 
@@ -39,7 +39,7 @@ const Table = {
     Subscriptions: Subscriptions(sequelize),
     Orders: Orders(sequelize),
     OrderDishes: OrderDishes(sequelize),
-    OrderOneTimeDishes: OrderOneTimeDishes(sequelize),
+    SubscriptionDishes: SubscriptionDishes(sequelize),
 };
 
 // hasMany
@@ -49,11 +49,11 @@ Table.Shops.hasMany(Table.Dishes, { sourceKey: "shopId", foreignKey: "shopId" })
 Table.Shops.hasMany(Table.Subscriptions, { sourceKey: "shopId", foreignKey: "shopId" });
 Table.Shops.hasMany(Table.Orders, { sourceKey: "shopId", foreignKey: "shopId" });
 Table.Subscriptions.hasMany(Table.OrderDishes, { sourceKey: "subscriptionId", foreignKey: "subscriptionId" });
-Table.Subscriptions.hasMany(Table.OrderOneTimeDishes, { sourceKey: "subscriptionId", foreignKey: "subscriptionId" });
+Table.Subscriptions.hasMany(Table.SubscriptionDishes, { sourceKey: "subscriptionId", foreignKey: "subscriptionId" });
 Table.Orders.hasMany(Table.OrderDishes, { sourceKey: "orderId", foreignKey: "orderId" });
-Table.Orders.hasMany(Table.OrderOneTimeDishes, { sourceKey: "orderId", foreignKey: "orderId" });
+Table.Orders.hasMany(Table.SubscriptionDishes, { sourceKey: "orderId", foreignKey: "orderId" });
 Table.Dishes.hasMany(Table.OrderDishes, { sourceKey: "dishId", foreignKey: "dishId" });
-Table.Dishes.hasMany(Table.OrderOneTimeDishes, { sourceKey: "dishId", foreignKey: "dishId" });
+Table.Dishes.hasMany(Table.SubscriptionDishes, { sourceKey: "dishId", foreignKey: "dishId" });
 
 // belongsTo
 Table.Subscriptions.belongsTo(Table.Users, { foreignKey: "userId" });
@@ -64,8 +64,8 @@ Table.Dishes.belongsTo(Table.Shops, { foreignKey: "shopId" });
 Table.OrderDishes.belongsTo(Table.Subscriptions, { foreignKey: "subscriptionId" });
 Table.OrderDishes.belongsTo(Table.Orders, { foreignKey: "orderId" });
 Table.OrderDishes.belongsTo(Table.Dishes, { foreignKey: "dishId" });
-Table.OrderOneTimeDishes.belongsTo(Table.Subscriptions, { foreignKey: "subscriptionId" });
-Table.OrderOneTimeDishes.belongsTo(Table.Orders, { foreignKey: "orderId" });
-Table.OrderOneTimeDishes.belongsTo(Table.Dishes, { foreignKey: "dishId" });
+Table.SubscriptionDishes.belongsTo(Table.Subscriptions, { foreignKey: "subscriptionId" });
+Table.SubscriptionDishes.belongsTo(Table.Orders, { foreignKey: "orderId" });
+Table.SubscriptionDishes.belongsTo(Table.Dishes, { foreignKey: "dishId" });
 
 export default Table;

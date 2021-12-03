@@ -2,9 +2,9 @@ import { Sequelize, Model, DataTypes } from "sequelize";
 
 export interface orderDishAttributes {
     orderDishId: number;
-    subscriptionId: number;
     orderId: number;
     dishId: number;
+    oneTime: boolean;
     main: boolean;
     title: string;
     content: string;
@@ -18,9 +18,9 @@ export interface orderDishAttributes {
 
 export class OrderDishes extends Model<orderDishAttributes> implements orderDishAttributes {
     public orderDishId: number;
-    public subscriptionId!: number;
     public orderId!: number;
     public dishId: number;
+    public oneTime!: boolean;
     public main: boolean;
     public title: string;
     public content!: string;
@@ -41,17 +41,17 @@ export default function (sequelize: Sequelize): typeof OrderDishes {
                 autoIncrement: true,
                 primaryKey: true,
             },
-            subscriptionId: {
-                type: DataTypes.INTEGER,
-                // allowNull: true,
-            },
             orderId: {
                 type: DataTypes.INTEGER,
-                // allowNull: true,
+                // allowNull: false,
             },
             dishId: {
                 type: DataTypes.INTEGER,
-                // allowNull: false,
+                // allowNull: true,
+            },
+            oneTime: {
+                type: DataTypes.BOOLEAN,
+                allowNull: true,
             },
             main: {
                 type: DataTypes.TINYINT,
@@ -60,27 +60,27 @@ export default function (sequelize: Sequelize): typeof OrderDishes {
             },
             title: {
                 type: DataTypes.STRING,
-                allowNull: false,
+                // allowNull: false,
             },
             content: {
                 type: DataTypes.TEXT,
-                allowNull: true,
+                // allowNull: true,
             },
             price: {
                 type: DataTypes.INTEGER,
-                allowNull: false,
+                // allowNull: false,
             },
             count: {
                 type: DataTypes.INTEGER,
-                allowNull: false,
+                // allowNull: false,
             },
             weight: {
                 type: DataTypes.INTEGER,
-                allowNull: false,
+                // allowNull: false,
             },
             image: {
                 type: DataTypes.BLOB,
-                allowNull: true,
+                // allowNull: true,
             },
         },
         {

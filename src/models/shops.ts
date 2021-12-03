@@ -12,6 +12,7 @@ export interface shopAttributes {
     longitude: number;
     phone: string;
     origin: string;
+    imageUrl: string;
     temporaryDayStart: Date;
     temporaryDayEnd: Date;
     createdAt?: Date;
@@ -30,6 +31,7 @@ export class Shops extends Model<shopAttributes> implements shopAttributes {
     public longitude: number;
     public phone!: string;
     public origin!: string;
+    public imageUrl!: string;
     public temporaryDayStart!: Date;
     public temporaryDayEnd!: Date;
 
@@ -46,52 +48,56 @@ export default function (sequelize: Sequelize): typeof Shops {
                 primaryKey: true,
             },
             businessNumber: {
-                type: DataTypes.STRING,
-                // allowNull: false,
+                type: DataTypes.STRING(30),
+                allowNull: false,
             },
             businessName: {
-                type: DataTypes.STRING,
-                // allowNull: false,
+                type: DataTypes.STRING(50),
+                allowNull: false,
             },
             businessPhone: {
-                type: DataTypes.STRING,
-                // allowNull: false,
+                type: DataTypes.STRING(20),
+                allowNull: false,
             },
             password: {
-                type: DataTypes.STRING,
-                // allowNull: false,
+                type: DataTypes.STRING(100),
+                allowNull: false,
             },
             dayOff: {
                 type: DataTypes.TINYINT.UNSIGNED,
-                // allowNull: false,
+                allowNull: false,
             },
             address: {
-                type: DataTypes.STRING,
-                // allowNull: false,
+                type: DataTypes.STRING(100),
+                allowNull: false,
             },
             latitude: {
                 type: DataTypes.FLOAT,
-                // allowNull: false,
+                allowNull: false,
             },
             longitude: {
                 type: DataTypes.FLOAT,
-                // allowNull: false,
+                allowNull: false,
             },
             phone: {
-                type: DataTypes.STRING,
-                // allowNull: true,
+                type: DataTypes.STRING(20),
+                allowNull: true,
             },
             origin: {
-                type: DataTypes.TEXT,
-                // allowNull: true,
+                type: DataTypes.STRING(300),
+                allowNull: true,
+            },
+            imageUrl: {
+                type: DataTypes.STRING(255),
+                allowNull: true,
             },
             temporaryDayStart: {
                 type: DataTypes.DATE,
-                // allowNull: true,
+                allowNull: true,
             },
             temporaryDayEnd: {
                 type: DataTypes.DATE,
-                // allowNull: true,
+                allowNull: true,
             },
         },
         {
