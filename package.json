@@ -23,7 +23,9 @@
         "express": "^4.17.1",
         "morgan": "^1.10.0",
         "mysql2": "^2.3.3",
+        "reflect-metadata": "^0.1.13",
         "sequelize": "^6.12.0-alpha.1",
+        "typeorm": "^0.2.41",
         "webpack": "^5.64.4"
     },
     "devDependencies": {
@@ -46,7 +48,7 @@
         "@routes/*": "./dist/routes/*",
         "@controllers/*": "./dist/controllers/*",
         "@services/*": "./dist/services/*",
-        "@models/*": "./dist/models/*",
+        "@entities/*": "./dist/entities/*",
         "@modules/*": "./dist/modules/*"
     }
 }

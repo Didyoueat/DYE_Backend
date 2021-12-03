@@ -2,10 +2,10 @@ import express from "express";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import env from "@modules/env";
+import { createConnection } from "typeorm";
 
+import env from "@modules/env";
 import * as apiRouter from "@routes/index";
-import { sequelize } from "@models/index";
 
 const app = express();
 const port = env.port || 5000;
@@ -15,8 +15,7 @@ const corsOptions = {
     credentials: true,
 };
 
-sequelize
-    .sync({ force: false })
+createConnection()
     .then(() => console.log("🚀 DB Connected"))
     .catch((err) => console.log(err));
 

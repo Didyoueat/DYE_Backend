@@ -47,7 +47,7 @@ module.exports = {
             "@routes": path.resolve(__dirname, "./src/routes/"),
             "@controllers": path.resolve(__dirname, "./src/controllers/"),
             "@services": path.resolve(__dirname, "./src/services/"),
-            "@models": path.resolve(__dirname, "./src/models/"),
+            "@entities": path.resolve(__dirname, "./src/entities/"),
             "@modules": path.resolve(__dirname, "./src/modules/"),
         },
         plugins: [new TsconfigPathsPlugin()],

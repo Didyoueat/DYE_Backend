@@ -3,6 +3,8 @@
         "module": "commonjs",
         "esModuleInterop": true,
         "allowSyntheticDefaultImports": true,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
         "target": "ES2017",
         "moduleResolution": "node",
         "sourceMap": true,
@@ -17,7 +19,8 @@
             "@services/*": ["./src/services/*"],
             "@models/*": ["./src/models/*"],
             "@modules/*": ["./src/modules/*"]
-        }
+        },
+        "lib": ["dom", "dom.iterable"]
     },
     "include": ["src"],
     "exclude": ["node_modules"]
