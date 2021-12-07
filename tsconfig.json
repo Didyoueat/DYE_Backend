@@ -17,7 +17,7 @@
             "@routes/*": ["./src/routes/*"],
             "@controllers/*": ["./src/controllers/*"],
             "@services/*": ["./src/services/*"],
-            "@models/*": ["./src/models/*"],
+            "@entities/*": ["./src/entities/*"],
             "@modules/*": ["./src/modules/*"]
         },
         "lib": ["dom", "dom.iterable"]

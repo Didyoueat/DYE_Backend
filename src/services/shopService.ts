@@ -1,5 +1,5 @@
-import Table from "@models/index";
-import { shopAttributes } from "@models/shops";
+import * as connection from "typeorm";
+import { Shops } from "@entities/shops";
 
 const getDistance = (lat1: number, lat2: number, lon1: number, lon2: number) => {
     const rad = (deg: number) => deg * (Math.PI / 180);
@@ -13,30 +13,38 @@ const getDistance = (lat1: number, lat2: number, lon1: number, lon2: number) => 
 };
 
 export const aroundShop = async (lat: number, lon: number, radius: number) => {
-    const shopList = await Table.Shops.findAll({ raw: true });
-    if (!shopList) return null;
+    const shopRepository = await connection
+        .getRepository(Shops)
+        .createQueryBuilder("shops")
+        .select()
+        .addSelect(
+            `(FLOOR(1000 * 6371 * acos(cos(radians(${lat})) * cos(radians(latitude)) * cos(radians(longitude) - radians(${lon})) + sin(radians(${lat})) * sin(radians(latitude)))))`,
+            "distance"
+        )
+        .leftJoinAndSelect("shops.dishes", "dishes")
+        .having(`distance <= ${radius}`)
+        .orderBy("distance", "ASC")
+        .getMany();
 
-    const aroundShopList = shopList.map((data: shopAttributes) => {
-        const distance = getDistance(lat, data.latitude, lon, data.longitude);
-        if (distance <= radius) {
-            const thumbDish = Table.Dishes.findAll({ raw: true });
-            if (!thumbDish) return null;
-
-            return {
-                shopId: data.shopId,
-                shopName: data.businessName,
-                address: data.address,
-                dayOff: data.dayOff,
-                latitude: data.latitude,
-                longitude: data.longitude,
-                distance: distance,
-                thumb1: thumbDish[0] !== undefined ? thumbDish[0].thumbnail : null,
-                thumb2: thumbDish[1] !== undefined ? thumbDish[1].thumbnail : null,
-                thumb3: thumbDish[2] !== undefined ? thumbDish[2].thumbnail : null,
-                createdAt: data.createdAt,
-                updatedAt: data.updatedAt,
-            };
-        }
+    shopRepository.map((value) => {
+        delete value.password;
+        value["distance"] = getDistance(lat, value.latitude, lon, value.longitude);
+        return value;
     });
-    return aroundShopList.filter((data) => data !== undefined);
+
+    return shopRepository;
+};
+
+export const shopInfo = async (id: number) => {
+    const shopRepository = await connection
+        .getRepository(Shops)
+        .createQueryBuilder("shops")
+        .select()
+        .leftJoinAndSelect("shops.dishes", "dishes")
+        .where("shops.shopId = :shopId", { shopId: id })
+        .getOne();
+
+    delete shopRepository.password;
+
+    return shopRepository;
 };
