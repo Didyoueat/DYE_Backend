@@ -8,7 +8,7 @@ if (NODE_ENV === "production") {
 } else if (NODE_ENV === "development") {
     dotenv.config({ path: path.resolve(__dirname, "../../.env.dev") });
 } else if (NODE_ENV === "test") {
-    dotenv.config({ path: path.resolve(__dirname, "/.env.test") });
+    dotenv.config({ path: path.resolve(__dirname, "../../.env.test") });
 } else {
     throw new Error("process.env.NODE_ENV를 설정하지 않았습니다.");
 }

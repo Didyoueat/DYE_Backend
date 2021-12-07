@@ -32,14 +32,23 @@ export class Shops {
     @Column("float")
     longitude: number;
 
+    @Column("varchar", { length: 10 })
+    name: string;
+
     @Column("varchar", { length: 20, nullable: true })
     phone!: string;
 
     @Column("varchar", { length: 300, nullable: true })
     origin!: string;
 
-    @Column("varchar", { length: 255, nullable: true })
+    @Column("varchar", { length: 300, nullable: true })
+    content!: string;
+
+    @Column("varchar", { length: 500, nullable: true })
     imageUrl: string;
+
+    @Column("varchar", { length: 8, nullable: true })
+    officeHour!: string;
 
     @Column("datetime", { nullable: true })
     temporaryDayStart!: Date;
