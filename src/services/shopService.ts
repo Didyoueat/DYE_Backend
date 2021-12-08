@@ -13,7 +13,7 @@ const getDistance = (lat1: number, lat2: number, lon1: number, lon2: number) => 
 };
 
 export const aroundShop = async (lat: number, lon: number, radius: number) => {
-    const shopRepository = await connection
+    const shopRepository: Array<Shops> = await connection
         .getRepository(Shops)
         .createQueryBuilder("shops")
         .select()
@@ -24,27 +24,37 @@ export const aroundShop = async (lat: number, lon: number, radius: number) => {
         .leftJoinAndSelect("shops.dishes", "dishes")
         .having(`distance <= ${radius}`)
         .orderBy("distance", "ASC")
-        .getMany();
-
-    shopRepository.map((value) => {
-        delete value.password;
-        value["distance"] = getDistance(lat, value.latitude, lon, value.longitude);
-        return value;
-    });
+        .getMany()
+        .then((shops) => {
+            shops.map((value) => {
+                delete value.password;
+                value["distance"] = getDistance(lat, value.latitude, lon, value.longitude);
+                return value;
+            });
+            return shops;
+        })
+        .catch((err) => {
+            return null;
+        });
 
     return shopRepository;
 };
 
 export const shopInfo = async (id: number) => {
-    const shopRepository = await connection
+    const shopRepository: Shops = await connection
         .getRepository(Shops)
         .createQueryBuilder("shops")
         .select()
         .leftJoinAndSelect("shops.dishes", "dishes")
         .where("shops.shopId = :shopId", { shopId: id })
-        .getOne();
-
-    delete shopRepository.password;
+        .getOne()
+        .then((shop) => {
+            if (shop !== undefined) delete shop.password;
+            return shop;
+        })
+        .catch((err) => {
+            return null;
+        });
 
     return shopRepository;
 };
