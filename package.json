@@ -47,6 +47,7 @@
         "@routes/*": "./dist/routes/*",
         "@controllers/*": "./dist/controllers/*",
         "@services/*": "./dist/services/*",
+        "@repository/*": "./dish/repository/*",
         "@entities/*": "./dist/entities/*",
         "@modules/*": "./dist/modules/*"
     }

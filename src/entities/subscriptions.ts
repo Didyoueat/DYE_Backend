@@ -29,8 +29,17 @@ export class Subscriptions {
     @Column("boolean", { default: false })
     oneTime: boolean;
 
+    @Column("varchar", { length: 10 })
+    reciever: string;
+
     @Column("varchar", { length: 100 })
     address: string;
+
+    @Column("varchar", { length: 20 })
+    paymentState: string;
+
+    @Column("int")
+    deliveryCost: number;
 
     @Column("varchar", { length: 50, nullable: true })
     toShop!: string;

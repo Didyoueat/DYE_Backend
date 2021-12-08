@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import * as userService from "@services/userService";
 
 // 회원 구독 목록 조회
 export const getUserSubsList = (req: Request, res: Response) => {};
@@ -7,7 +8,17 @@ export const getUserSubsList = (req: Request, res: Response) => {};
 export const getUserSubsDetail = (req: Request, res: Response) => {};
 
 // 회원 구독 신청
-export const createUserSubs = (req: Request, res: Response) => {};
+export const createUserSubs = (req: Request, res: Response) => {
+    const userId: number = parseInt(req.params.userId, 10);
+    const data: object = req.body;
+    
+    if (isNaN(userId) || Object.keys(data).length <= 0) res.send("잘못된 요청입니다.").status(400);
+
+    const body = userService.createSubscription(userId, data);
+
+    if (body === null) res.send("API Server Error").status(500);
+    else res.send({}).status(200);
+};
 
 // 회원 구독 수정
 export const updateUserSubs = (req: Request, res: Response) => {};

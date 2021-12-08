@@ -17,6 +17,7 @@
             "@routes/*": ["./src/routes/*"],
             "@controllers/*": ["./src/controllers/*"],
             "@services/*": ["./src/services/*"],
+            "@repository/*": ["./src/repository/*"],
             "@entities/*": ["./src/entities/*"],
             "@modules/*": ["./src/modules/*"]
         },

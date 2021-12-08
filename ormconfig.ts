@@ -11,7 +11,7 @@ export default {
     database: database,
     charset: "utf8mb4_general_ci",
     timezone: "+09:00",
-    synchronize: false,
+    synchronize: true,
     logging: ["error"],
     maxQueryExecutionTime: 2000,
     entities: ["src/entities/**/*.ts"],

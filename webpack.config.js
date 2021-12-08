@@ -47,6 +47,7 @@ module.exports = {
             "@routes": path.resolve(__dirname, "./src/routes/"),
             "@controllers": path.resolve(__dirname, "./src/controllers/"),
             "@services": path.resolve(__dirname, "./src/services/"),
+            "@repository": path.resolve(__dirname, "./src/repository/"),
             "@entities": path.resolve(__dirname, "./src/entities/"),
             "@modules": path.resolve(__dirname, "./src/modules/"),
         },

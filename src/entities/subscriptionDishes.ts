@@ -22,14 +22,11 @@ export class SubscriptionDishes {
     @Column("varchar", { length: 30 })
     title: string;
 
-    @Column("varchar", { length: 150, nullable: true })
-    content: string;
+    @Column("int")
+    orderCount: number;
 
     @Column("int")
     price: number;
-
-    @Column("int")
-    count: number;
 
     @Column("int")
     weight: number;
