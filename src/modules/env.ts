@@ -23,6 +23,12 @@ const env = {
         host: process.env.DATABASE_HOST,
         port: parseInt(process.env.DATABASE_PORT, 10),
     },
+    awsConfig: {
+        accessKey: process.env.AWS_IAM_ACCESS_KEY,
+        secretKey: process.env.AWS_IAM_SECRET_KEY,
+        region: process.env.AWS_S3_REGION,
+        bucket: process.env.AWS_S3_BUCKET,
+    },
 };
 
 export default env;
