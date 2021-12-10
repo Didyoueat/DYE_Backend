@@ -29,6 +29,8 @@ export const aroundShop = async (lat: number, lon: number, radius: number) => {
             shops.map((value) => {
                 delete value.password;
                 value["distance"] = getDistance(lat, value.latitude, lon, value.longitude);
+                value["dishCount"] = value.dishes.length;
+
                 return value;
             });
             return shops;
@@ -37,7 +39,10 @@ export const aroundShop = async (lat: number, lon: number, radius: number) => {
             return null;
         });
 
-    return shopRepository;
+    return {
+        shopCount: shopRepository.length,
+        shops: shopRepository,
+    };
 };
 
 export const shopInfo = async (id: number) => {

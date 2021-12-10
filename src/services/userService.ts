@@ -48,10 +48,9 @@ export const createSubscription = async (userId: number, data: object) => {
                         weight: dish.weight,
                         imageUrl: dish.imageUrl,
                     })
-                    .execute()
-                    .catch((err) => console.log(err));
+                    .execute();
             })
-            .catch((err) => console.log("err"));
+            .catch((err) => console.log(err));
     }
 
     return "";
