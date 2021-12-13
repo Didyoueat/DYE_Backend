@@ -27,7 +27,8 @@ router.get("/:userId/subscriptions", subs.getUserSubsList);
 router.get("/:userId/subscriptions/:subscriptionId", subs.getUserSubsDetail);
 router.post("/:userId/subscriptions/create", subs.createUserSubs);
 router.patch("/:userId/subscriptions/:subscriptionId", subs.updateUserSubs);
-router.put("/:userId/subscriptions/:subscriptionId", subs.updateUserSubsOneTime);
+router.put("/:userId/subscriptions/:subscriptionId/dishes", subs.updateUserSubsDishes);
+router.put("/:userId/subscriptions/:subscriptionId/onetime", subs.updateUserSubsOnetime);
 router.delete("/:userId/subscriptions/:subscriptionId", subs.deleteUserSubs);
 
 // 회원 주문 관련 API

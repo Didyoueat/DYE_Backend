@@ -21,3 +21,6 @@ export const getAroundShopList = async (req: Request, res: Response) => {
         else res.send("API Server Error").status(500);
     }
 };
+
+// 가게 구독 목록 조회
+export const getShopSubsList = (req: Request, res: Response) => {};

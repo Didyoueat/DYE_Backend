@@ -2,7 +2,6 @@ import { Router } from "express";
 import * as info from "@controllers/shop/info";
 import * as dish from "@controllers/shop/dish";
 import * as post from "@controllers/shop/post";
-import * as subs from "@controllers/shop/subs";
 import * as order from "@controllers/shop/order";
 import * as retrieve from "@controllers/shop/retrieve";
 
@@ -14,6 +13,9 @@ router.get("/", retrieve.getAllShopList);
 
 // 동네 가게 조회 API
 router.get("/around", retrieve.getAroundShopList);
+
+// 가게 구독 조회 API
+router.get("/:shopId/subscriptions", retrieve.getShopSubsList);
 
 // 가게 정보 관련 API
 router.get("/:shopId", info.getShop);
@@ -34,10 +36,6 @@ router.get("/:shopId/posts/:postId", post.getShopPostDetail);
 router.post("/:shopId/posts/create", post.createShopPost);
 router.patch("/:shopId/posts/:postId", post.updateShopPost);
 router.delete("/:shopId/posts/:postId", post.deleteShopPost);
-
-// 가게 구독 관련 API
-router.get("/:shopId/subscriptions", subs.getShopSubsList);
-router.post("/:shopId/subscriptions/:subscriptionId", subs.updateShopSubs);
 
 // 가게 주문 목록 조회 API
 router.get("/:shopId/orders", order.getShopOrderList);
