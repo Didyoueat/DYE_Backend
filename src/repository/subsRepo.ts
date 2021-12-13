@@ -36,6 +36,7 @@ export class SubsRepo extends Repository<Subscriptions> {
         return this.createQueryBuilder("subs")
             .select()
             .leftJoinAndSelect("subs.subscriptionDishes", "subsDishes", "subsDishes.deleted = :deleted", { deleted: false })
+            .where('subs.deleted = :deleted', {deleted: false})
             .getMany();
     };
 
@@ -44,7 +45,7 @@ export class SubsRepo extends Repository<Subscriptions> {
             .select()
             .leftJoinAndSelect("subs.subscriptionDishes", "subsDishes", "subsDishes.deleted = :deleted", { deleted: false })
             .leftJoinAndSelect("users", "users", "users.userId = subs.userId")
-            .where("subs.shopId = :shopId", { shopId: shopId })
+            .where("subs.shopId = :shopId AND subs.deleted = :deleted", { shopId: shopId, deleted: false })
             .getMany();
     };
 
@@ -52,7 +53,7 @@ export class SubsRepo extends Repository<Subscriptions> {
         return this.createQueryBuilder("subs")
             .select()
             .leftJoinAndSelect("subs.subscriptionDishes", "subsDishes", "subsDishes.deleted = :deleted", { deleted: false })
-            .where("subs.userId = :userId", { userId: userId })
+            .where("subs.userId = :userId AND subs.deleted = :deleted", { userId: userId, deleted: false })
             .getMany();
     };
 
@@ -60,7 +61,7 @@ export class SubsRepo extends Repository<Subscriptions> {
         return this.createQueryBuilder("subs")
             .select()
             .leftJoinAndSelect("subs.subscriptionDishes", "subsDishes", "subsDishes.deleted = :deleted", { deleted: false })
-            .where("subs.userId = :userId", { userId: userId })
+            .where("subs.userId = :userId AND subs.deleted = :deleted", { userId: userId, deleted: false })
             .andWhere("subs.subscriptionId = :subscriptionId", { subscriptionId: subsId })
             .getOne();
     };

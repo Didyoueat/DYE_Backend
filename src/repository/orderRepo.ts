@@ -5,14 +5,18 @@ import { OrderDishes } from "@entities/orderDishes";
 @EntityRepository(Orders)
 export class OrderRepo extends Repository<Orders> {
     findAllOrder = () => {
-        return this.createQueryBuilder("orders").select().leftJoinAndSelect("orders.orderDishes", "orderDishes").getMany();
+        return this.createQueryBuilder("orders")
+            .select()
+            .leftJoinAndSelect("orders.orderDishes", "orderDishes")
+            .where("orders.deleted = :deleted", { deleted: false })
+            .getMany();
     };
 
     findShopOrder = (shopId: number) => {
         return this.createQueryBuilder("orders")
             .select()
             .leftJoinAndSelect("orders.orderDishes", "orderDishes")
-            .where("orders.shopId = :shopId", { shopId: shopId })
+            .where("orders.shopId = :shopId AND orders.deleted = :deleted", { shopId: shopId, deleted: false })
             .getMany();
     };
 
@@ -20,7 +24,7 @@ export class OrderRepo extends Repository<Orders> {
         return this.createQueryBuilder("orders")
             .select()
             .leftJoinAndSelect("orders.orderDishes", "orderDishes")
-            .where("orders.userId = :userId", { userId: userId })
+            .where("orders.userId = :userId, AND orders.deleted = :deleted", { userId: userId, deleted: false })
             .getMany();
     };
 
@@ -28,7 +32,7 @@ export class OrderRepo extends Repository<Orders> {
         return this.createQueryBuilder("orders")
             .select()
             .leftJoinAndSelect("orders.orderDishes", "orderDishes")
-            .where("orders.userId = :userId", { userId: userId })
+            .where("orders.userId = :userId AND orders.deleted = :deleted", { userId: userId, deleted: false })
             .getOne();
     };
 
