@@ -10,6 +10,7 @@ import {
 } from "typeorm";
 import { Shops } from "@entities/shops";
 import { SubscriptionDishes } from "@entities/subscriptionDishes";
+import { SubscriptionOnetime } from "@entities/subscriptionOnetime";
 import { OrderDishes } from "@entities/orderDishes";
 
 @Entity("dishes")
@@ -52,6 +53,9 @@ export class Dishes {
 
     @OneToMany(() => SubscriptionDishes, (subscriptionDishes) => subscriptionDishes.dishes)
     subscriptionDishes: Dishes[];
+
+    @OneToMany(() => SubscriptionOnetime, (subscriptionOnetime) => subscriptionOnetime.dishes)
+    subscriptionOnetime: Dishes[];
 
     @OneToMany(() => OrderDishes, (orderDishes) => orderDishes.dishes)
     orderDishes: Dishes[];

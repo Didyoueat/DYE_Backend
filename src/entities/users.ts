@@ -34,6 +34,12 @@ export class Users {
     @Column("varchar", { length: 100 })
     address: string;
 
+    @Column("varchar", { length: 20 })
+    paymentState: string;
+
+    @Column("varchar", { length: 255 })
+    paymentKey: string;
+
     @CreateDateColumn()
     createdAt: Date;
 

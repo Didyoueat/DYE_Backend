@@ -1,5 +1,5 @@
 import * as connection from "typeorm";
-import { Shops } from "@entities/shops";
+import { ShopRepo } from "@repository/shopRepo";
 
 const getDistance = (lat1: number, lat2: number, lon1: number, lon2: number) => {
     const rad = (deg: number) => deg * (Math.PI / 180);
@@ -13,53 +13,26 @@ const getDistance = (lat1: number, lat2: number, lon1: number, lon2: number) => 
 };
 
 export const aroundShop = async (lat: number, lon: number, radius: number) => {
-    const shopRepository: Array<Shops> = await connection
-        .getRepository(Shops)
-        .createQueryBuilder("shops")
-        .select()
-        .addSelect(
-            `(FLOOR(1000 * 6371 * acos(cos(radians(${lat})) * cos(radians(latitude)) * cos(radians(longitude) - radians(${lon})) + sin(radians(${lat})) * sin(radians(latitude)))))`,
-            "distance"
-        )
-        .leftJoinAndSelect("shops.dishes", "dishes")
-        .having(`distance <= ${radius}`)
-        .orderBy("distance", "ASC")
-        .getMany()
-        .then((shops) => {
-            shops.map((value) => {
-                delete value.password;
-                value["distance"] = getDistance(lat, value.latitude, lon, value.longitude);
-                value["dishCount"] = value.dishes.length;
-
-                return value;
-            });
-            return shops;
-        })
-        .catch((err) => {
-            return null;
-        });
+    const shopRepo = connection.getCustomRepository(ShopRepo);
+    const aroundShop = await shopRepo.findAroundShop(lat, lon, radius);
 
     return {
-        shopCount: shopRepository.length,
-        shops: shopRepository,
+        shopCount: aroundShop.length,
+        shops: aroundShop.map((value) => {
+            delete value.password;
+            value["distance"] = getDistance(lat, value.latitude, lon, value.longitude);
+            value["dishCount"] = value.dishes.length;
+
+            return value;
+        }),
     };
 };
 
 export const shopInfo = async (id: number) => {
-    const shopRepository: Shops = await connection
-        .getRepository(Shops)
-        .createQueryBuilder("shops")
-        .select()
-        .leftJoinAndSelect("shops.dishes", "dishes")
-        .where("shops.shopId = :shopId", { shopId: id })
-        .getOne()
-        .then((shop) => {
-            if (shop !== undefined) delete shop.password;
-            return shop;
-        })
-        .catch((err) => {
-            return null;
-        });
+    const shopRepo = connection.getCustomRepository(ShopRepo);
+    const shop = await shopRepo.findOneShop(id);
 
-    return shopRepository;
+    delete shop.password;
+
+    return shop;
 };

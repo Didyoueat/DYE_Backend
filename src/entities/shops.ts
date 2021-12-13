@@ -47,7 +47,7 @@ export class Shops {
     @Column("varchar", { length: 500, nullable: true })
     imageUrl: string;
 
-    @Column("varchar", { length: 8, nullable: true })
+    @Column("varchar", { length: 11, nullable: true })
     officeHour!: string;
 
     @Column("datetime", { nullable: true })

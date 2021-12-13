@@ -38,6 +38,9 @@ export class Orders {
     @Column("varchar", { length: 50, nullable: true })
     toDelivery!: string;
 
+    @Column("boolean", { default: false })
+    deleted: boolean;
+
     @CreateDateColumn()
     createdAt: Date;
 

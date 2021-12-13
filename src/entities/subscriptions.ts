@@ -26,17 +26,11 @@ export class Subscriptions {
     @Column("tinyint", { unsigned: true })
     weekLabel: number;
 
-    @Column("boolean", { default: false })
-    oneTime: boolean;
-
     @Column("varchar", { length: 10 })
     reciever: string;
 
     @Column("varchar", { length: 100 })
     address: string;
-
-    @Column("varchar", { length: 20 })
-    paymentState: string;
 
     @Column("int")
     deliveryCost: number;
@@ -46,6 +40,9 @@ export class Subscriptions {
 
     @Column("varchar", { length: 50, nullable: true })
     toDelivery!: string;
+
+    @Column("boolean", { default: false })
+    deleted: boolean;
 
     @CreateDateColumn()
     createdAt: Date;
