@@ -1,22 +1,23 @@
 import { Request, Response, NextFunction } from "express";
+import { catchAsync } from "@modules/error";
 
 // 회원 구독 목록 조회
-export const getUserSubsList = (req: Request, res: Response) => {};
+export const getUserSubsList = catchAsync((req: Request, res: Response) => {});
 
 // 회원 구독 상세 조회
-export const getUserSubsDetail = (req: Request, res: Response) => {};
+export const getUserSubsDetail = catchAsync((req: Request, res: Response) => {});
 
 // 회원 구독 신청
-export const createUserSubs = (req: Request, res: Response) => {};
+export const createUserSubs = catchAsync((req: Request, res: Response) => {});
 
 // 회원 구독 정보 수정
-export const updateUserSubs = (req: Request, res: Response) => {};
+export const updateUserSubs = catchAsync((req: Request, res: Response) => {});
 
 // 회원 구독 반찬 수정
-export const updateUserSubsDishes = (req: Request, res: Response) => {};
+export const updateUserSubsDishes = catchAsync((req: Request, res: Response) => {});
 
 // 회원 구독 반찬 이번만 수정
-export const updateUserSubsOnetime = (req: Request, res: Response) => {};
+export const updateUserSubsOnetime = catchAsync((req: Request, res: Response) => {});
 
 // 회원 구독 취소
-export const deleteUserSubs = (req: Request, res: Response) => {};
+export const deleteUserSubs = catchAsync((req: Request, res: Response) => {});
