@@ -42,28 +42,20 @@ export class ShopRepo extends Repository<Shops> {
     findOneShop = (shopId: number) => {
         return this.createQueryBuilder("shops")
             .leftJoinAndSelect("shops.dishes", "dishes")
-            .where("shops.shopId = :shopId", { shopId: shopId })
+            .where("shops.shopId = :shopd", { shopId: shopId })
             .getOne();
     };
 
     createShop = (data: shopData) => {
-        return this.createQueryBuilder().insert().into(Shops).values(data).execute();
+        this.createQueryBuilder().insert().into(Shops).values(data).execute();
     };
 
     updateShop = (shopId: number, data: shopData) => {
-        return this.createQueryBuilder("shops")
-            .update(Shops)
-            .set(data)
-            .where("shops.shopId = :shopId", { shopId: shopId })
-            .execute();
+        this.createQueryBuilder("shops").update(Shops).set(data).where("shops.shopId = :shopId", { shopId: shopId }).execute();
     };
 
-    // 나중에 논리적 삭제로 필히 수정
+    // 나중에 논리적 삭제로 수정(?)
     deleteShop = (shopId: number) => {
-        return this.createQueryBuilder("shops")
-            .delete()
-            .from(Shops)
-            .where("shops.shopId = :shopId", { shopId: shopId })
-            .execute();
+        this.createQueryBuilder("shops").delete().from(Shops).where("shops.shopId = :shopId", { shopId: shopId }).execute();
     };
 }

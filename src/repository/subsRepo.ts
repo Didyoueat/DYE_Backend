@@ -36,7 +36,7 @@ export class SubsRepo extends Repository<Subscriptions> {
         return this.createQueryBuilder("subs")
             .select()
             .leftJoinAndSelect("subs.subscriptionDishes", "subsDishes", "subsDishes.deleted = :deleted", { deleted: false })
-            .where('subs.deleted = :deleted', {deleted: false})
+            .where("subs.deleted = :deleted", { deleted: false })
             .getMany();
     };
 
@@ -69,14 +69,15 @@ export class SubsRepo extends Repository<Subscriptions> {
     createSubs = async (userId: number, data: subsData) => {
         data.userId = userId;
         const subs = await this.createQueryBuilder().insert().into(Subscriptions).values(data).execute();
-        const subsDish = data.dishes.map(async (value: dishData) => {
+
+        data.dishes.map(async (value: dishData) => {
             const dish = await getRepository(Dishes)
                 .createQueryBuilder("dishes")
                 .select()
                 .where("dishes.dishId = :dishId", { dishId: value.dishId })
                 .getOne();
 
-            return await getConnection()
+            getConnection()
                 .createQueryBuilder()
                 .insert()
                 .into(SubscriptionDishes)
@@ -95,12 +96,10 @@ export class SubsRepo extends Repository<Subscriptions> {
                 })
                 .execute();
         });
-
-        return { subscriptions: subs, subscriptionDishes: subsDish };
     };
 
     updateSubsInfo = (userId: number, subsId: number, data: subsData) => {
-        return this.createQueryBuilder()
+        this.createQueryBuilder()
             .update(Subscriptions)
             .set(data)
             .where("userId = :userId", { userId: userId })
@@ -109,8 +108,8 @@ export class SubsRepo extends Repository<Subscriptions> {
     };
 
     updateSubsDish = async (userId: number, subsId: number, data: subsDishData) => {
-        const oldDishes = data.dishes.map(async (value) => {
-            return await getConnection()
+        data.dishes.map((value) => {
+            getConnection()
                 .createQueryBuilder()
                 .update(SubscriptionDishes)
                 .set({ deleted: true })
@@ -121,14 +120,14 @@ export class SubsRepo extends Repository<Subscriptions> {
                 .execute();
         });
 
-        const newDishes = data.dishes.map(async (value) => {
+        data.dishes.map(async (value) => {
             const dish = await getRepository(Dishes)
                 .createQueryBuilder("dishes")
                 .select()
                 .where("dishes.dishId = :dishId", { dishId: value.dishId })
                 .getOne();
 
-            return await getConnection()
+            getConnection()
                 .createQueryBuilder()
                 .insert()
                 .into(SubscriptionDishes)
@@ -147,13 +146,11 @@ export class SubsRepo extends Repository<Subscriptions> {
                 })
                 .execute();
         });
-
-        return { oldDishes: oldDishes, newDishes: newDishes };
     };
 
     updateSubsDishOnetime = async (userId: number, subsId: number, data: subsDishData) => {
-        const oldDishes = data.dishes.map(async (value) => {
-            return await getConnection()
+        data.dishes.map((value) => {
+            getConnection()
                 .createQueryBuilder()
                 .update(SubscriptionDishes)
                 .set({ oneTime: true })
@@ -164,14 +161,14 @@ export class SubsRepo extends Repository<Subscriptions> {
                 .execute();
         });
 
-        const newDishes = data.dishes.map(async (value) => {
+        data.dishes.map(async (value) => {
             const dish = await getRepository(Dishes)
                 .createQueryBuilder()
                 .select()
                 .where("dishId = :dishId", { dishId: value.dishId })
                 .getOne();
 
-            return await getConnection()
+            getConnection()
                 .createQueryBuilder()
                 .insert()
                 .into(SubscriptionOnetime)
@@ -188,12 +185,10 @@ export class SubsRepo extends Repository<Subscriptions> {
                 })
                 .execute();
         });
-
-        return { oldDishes: oldDishes, newDishes: newDishes };
     };
 
     deleteSubs = async (userId: number, subsId: number) => {
-        await this.createQueryBuilder()
+        this.createQueryBuilder()
             .update(Subscriptions)
             .set({ deleted: true })
             .where("userId = :userId AND subscriptionId = :subscriptionId", {
@@ -208,15 +203,15 @@ export class SubsRepo extends Repository<Subscriptions> {
             .where("subscriptionId = :subscriptionId", { subscriptionId: subsId })
             .getMany();
 
-        await getConnection()
+        getConnection()
             .createQueryBuilder()
             .update(SubscriptionDishes)
             .set({ deleted: true })
             .where("subscriptionId = :subscriptionId", { subscriptionId: subsId })
             .execute();
 
-        subsDishes.map(async (value) => {
-            await getConnection()
+        subsDishes.map((value) => {
+            getConnection()
                 .createQueryBuilder()
                 .update(SubscriptionOnetime)
                 .set({ deleted: true })

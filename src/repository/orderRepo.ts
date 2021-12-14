@@ -36,14 +36,14 @@ export class OrderRepo extends Repository<Orders> {
             .getOne();
     };
 
-    deleteOrder = async (userId: number, orderId: number) => {
-        await this.createQueryBuilder()
+    deleteOrder = (userId: number, orderId: number) => {
+        this.createQueryBuilder()
             .update(Orders)
             .set({ deleted: true })
             .where("userId = :userId AND orderId = :orderId", { userId: userId, orderId: orderId })
             .execute();
 
-        await getConnection()
+        getConnection()
             .createQueryBuilder()
             .update(OrderDishes)
             .set({ deleted: true })

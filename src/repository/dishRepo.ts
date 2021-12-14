@@ -29,11 +29,12 @@ export class DishRepo extends Repository<Dishes> {
 
     createDish = (shopId: number, data: dishData) => {
         data.shopId = shopId;
-        return this.createQueryBuilder().insert().into(Dishes).values(data).execute();
+
+        this.createQueryBuilder().insert().into(Dishes).values(data).execute();
     };
 
     updateDish = (shopId: number, dishId: number, data: dishData) => {
-        return this.createQueryBuilder("dishes")
+        this.createQueryBuilder("dishes")
             .update(Dishes)
             .set(data)
             .where("dishes.shopId = :shopId", { shopId: shopId })
@@ -42,7 +43,7 @@ export class DishRepo extends Repository<Dishes> {
     };
 
     deleteDish = (shopId: number, dishId: number) => {
-        return this.createQueryBuilder("dishes")
+        this.createQueryBuilder("dishes")
             .delete()
             .from(Dishes)
             .where("dishes.shopId = :shopId", { shopId: shopId })
