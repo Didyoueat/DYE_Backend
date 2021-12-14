@@ -13,6 +13,7 @@ export default {
     timezone: "+09:00",
     synchronize: true,
     logging: ["error"],
+    logger: "file",
     maxQueryExecutionTime: 2000,
     entities: ["src/entities/**/*.ts"],
     migrations: ["src/migrations/**/*.ts"],
