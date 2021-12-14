@@ -2,9 +2,12 @@
 
 # Logs
 logs
+yarn-error.log
+ormlogs.log
 
 # Dependency directories
 node_modules/
+
 
 # dotenv environment variables file
 .env.test
@@ -14,5 +17,8 @@ node_modules/
 # TypeScript build / generate output
 dist
 
+# Database directories
 migrations
-test
+
+# Development test directories
+test/
