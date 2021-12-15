@@ -23,7 +23,7 @@ export const errorHandler = (err: ApiError, req: Request, res: Response, next: N
         stack: undefined,
     };
 
-    if (env.nodeEnv === "development") response.stack = err.stack;
+    if (env.nodeEnv !== "production") response.stack = err.stack;
 
     logger.error(stack);
 
