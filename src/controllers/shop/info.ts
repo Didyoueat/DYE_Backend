@@ -7,12 +7,15 @@ export const getShop = catchAsync(async (req: Request, res: Response) => {
     const shopId: number = parseInt(req.params.shopId, 10);
     const body = await shopService.shopInfo(shopId);
 
-    if (body === undefined || isNaN(shopId)) res.send("잘못된 요청입니다.").status(400);
-    else res.json(body).status(200);
+    res.json(body).status(200);
 });
 
 // 가게 생성
-export const createShop = catchAsync((req: Request, res: Response) => {});
+export const createShop = catchAsync((req: Request, res: Response) => {
+    shopService.shopCreate(req.body);
+
+    res.json({}).status(200);
+});
 
 // 가게 정보 수정
 export const updateShop = catchAsync((req: Request, res: Response) => {});

@@ -42,7 +42,7 @@ export class ShopRepo extends Repository<Shops> {
     findOneShop = (shopId: number) => {
         return this.createQueryBuilder("shops")
             .leftJoinAndSelect("shops.dishes", "dishes")
-            .where("shops.shopId = :shopd", { shopId: shopId })
+            .where("shops.shopId = :shopId", { shopId: shopId })
             .getOne();
     };
 

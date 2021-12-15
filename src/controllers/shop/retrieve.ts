@@ -14,9 +14,8 @@ export const getAroundShopList = catchAsync(async (req: Request, res: Response) 
     const lat: number = parseFloat(String(req.query.latitude));
     const lon: number = parseFloat(String(req.query.longitude));
     const radius: number = parseInt(String(req.query.radius), 10);
-
-    // if (isNaN(lat) || isNaN(lon) || isNaN(radius)) res.send("잘못된 요청입니다.").status(400);
     const body = await shopService.aroundShop(lat, lon, radius);
+
     res.json(body).status(200);
 });
 
