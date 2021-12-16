@@ -1,30 +1,20 @@
-import * as connection from "typeorm";
 import ApiError from "@modules/apiError";
 import httpStatus from "http-status";
+import { infoTypes } from "infoTypes";
+import { repository, shopPropertyCheck, shopTypeCheck } from "@modules/property";
 import { ShopRepo } from "@repository/shopRepo";
-import { DishRepo } from "@repository/dishRepo";
 
-interface shopData {
-    businessName: string;
-    businessNumber: string;
-    businessPhone: string;
-    dayOff: number;
-    password: string;
-    address: string;
-    latitude: number;
-    longitude: number;
-    name: string;
-    phone: string;
-    origin: string | null;
-    content: string | null;
-    officeHour: string;
-    temporaryDayStart: Date | null;
-    temporaryDayEnd: Date | null;
-}
+export const findAllShop = async () => {
+    const shopRepo = repository(ShopRepo);
+    const allShop = await shopRepo.findAllShop();
 
-const repository = <T>(repository: connection.ObjectType<T>) => connection.getCustomRepository(repository);
+    return {
+        shopCount: allShop.length,
+        shops: allShop,
+    };
+};
 
-export const aroundShop = async (lat: number, lon: number, radius: number) => {
+export const findAroundShop = async (lat: number, lon: number, radius: number) => {
     if (isNaN(lat) || isNaN(lon) || isNaN(radius)) throw new ApiError(httpStatus.BAD_REQUEST, "잘못된 요청입니다.");
 
     const shopRepo = repository(ShopRepo);
@@ -52,50 +42,41 @@ export const aroundShop = async (lat: number, lon: number, radius: number) => {
     };
 };
 
-export const shopInfo = async (id: number) => {
-    if (isNaN(id)) throw new ApiError(httpStatus.BAD_REQUEST, "잘못된 요청입니다.");
+export const findOneShop = async (shopId: number) => {
+    if (isNaN(shopId)) throw new ApiError(httpStatus.BAD_REQUEST, "잘못된 요청입니다.");
 
     const shopRepo = repository(ShopRepo);
-    const shop = await shopRepo.findOneShop(id);
+    const shop = await shopRepo.findOneShop(shopId);
 
     delete shop.password;
 
     return shop;
 };
 
-export const shopCreate = (data: shopData) => {
-    const isProperty = (value: any) => data.hasOwnProperty(value);
-    if (
-        !(
-            isProperty(data.businessNumber) &&
-            isProperty(data.businessName) &&
-            isProperty(data.businessPhone) &&
-            isProperty(data.dayOff) &&
-            isProperty(data.password) &&
-            isProperty(data.address) &&
-            isProperty(data.latitude) &&
-            isProperty(data.longitude) &&
-            isProperty(data.name) &&
-            isProperty(data.phone) &&
-            isProperty(data.origin) &&
-            isProperty(data.content) &&
-            isProperty(data.officeHour) &&
-            isProperty(data.temporaryDayStart) &&
-            isProperty(data.temporaryDayEnd)
-        )
-    )
+export const createShop = (data: infoTypes.shop) => {
+    if (!shopPropertyCheck(data) || !shopTypeCheck(data)) {
         throw new ApiError(httpStatus.BAD_REQUEST, "잘못된 요청입니다.");
-
-    for (const key in data) {
-        if (!(key === "origin" || key === "content" || key === "temporaryDayStart" || key === "temporaryDayEnd")) {
-            if (key === "dayOff" || key === "latitude" || key === "longitude") {
-                if (isNaN(data[key])) throw new ApiError(httpStatus.BAD_REQUEST, "잘못된 요청입니다.");
-            } else {
-                if (typeof data[key] !== "string") throw new ApiError(httpStatus.BAD_REQUEST, "잘못된 요청입니다.");
-            }
-        }
     }
-    // if (data.hasOwnProperty) const shopRepo = repository(ShopRepo);
 
-    // shopRepo.createShop(data);
+    const shopRepo = repository(ShopRepo);
+
+    shopRepo.createShop(data);
+};
+
+export const updateShop = (shopId: number, data: infoTypes.shop) => {
+    if (!shopTypeCheck(data) || isNaN(shopId)) {
+        throw new ApiError(httpStatus.BAD_REQUEST, "잘못된 요청입니다.");
+    }
+
+    const shopRepo = repository(ShopRepo);
+
+    shopRepo.updateShop(shopId, data);
+};
+
+export const deleteShop = (shopId: number) => {
+    if (isNaN(shopId)) throw new ApiError(httpStatus.BAD_REQUEST, "잘못된 요청입니다.");
+
+    const shopRepo = repository(ShopRepo);
+
+    shopRepo.deleteShop(shopId);
 };
