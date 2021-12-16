@@ -1,17 +1,6 @@
 import { EntityRepository, Repository } from "typeorm";
 import { Dishes } from "@entities/dishes";
-
-interface dishData {
-    shopId: number;
-    main: boolean;
-    thumbnail: boolean;
-    title: string;
-    content: string | null;
-    price: number;
-    count: number;
-    weight: number;
-    imageUrl: string;
-}
+import { infoTypes } from "infoTypes";
 
 @EntityRepository(Dishes)
 export class DishRepo extends Repository<Dishes> {
@@ -27,13 +16,13 @@ export class DishRepo extends Repository<Dishes> {
             .getOne();
     };
 
-    createDish = (shopId: number, data: dishData) => {
+    createDish = (shopId: number, data: infoTypes.dish) => {
         data.shopId = shopId;
 
         this.createQueryBuilder().insert().into(Dishes).values(data).execute();
     };
 
-    updateDish = (shopId: number, dishId: number, data: dishData) => {
+    updateDish = (shopId: number, dishId: number, data: infoTypes.dish) => {
         this.createQueryBuilder("dishes")
             .update(Dishes)
             .set(data)

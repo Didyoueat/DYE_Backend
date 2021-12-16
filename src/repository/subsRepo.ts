@@ -3,32 +3,7 @@ import { Subscriptions } from "@entities/subscriptions";
 import { SubscriptionDishes } from "@entities/subscriptionDishes";
 import { Dishes } from "@entities/dishes";
 import { SubscriptionOnetime } from "@entities/subscriptionOnetime";
-
-interface dishData {
-    dishId: number;
-    orderCount: number;
-}
-
-interface subsData {
-    userId: number;
-    shopId: number;
-    weekLabel: number;
-    reciever: string;
-    address: string;
-    deliveryCost: number;
-    toShop: string | null;
-    toDelivery: string | null;
-    dishes: Array<dishData>;
-    deleted: boolean;
-}
-
-interface subsDishData {
-    dishes: Array<{
-        subscriptionDishId: number;
-        dishId: number;
-        orderCount: number;
-    }>;
-}
+import { infoTypes } from "infoTypes";
 
 @EntityRepository(Subscriptions)
 export class SubsRepo extends Repository<Subscriptions> {
@@ -66,11 +41,11 @@ export class SubsRepo extends Repository<Subscriptions> {
             .getOne();
     };
 
-    createSubs = async (userId: number, data: subsData) => {
+    createSubs = async (userId: number, data: infoTypes.subscription) => {
         data.userId = userId;
         const subs = await this.createQueryBuilder().insert().into(Subscriptions).values(data).execute();
 
-        data.dishes.map(async (value: dishData) => {
+        data.dishes.map(async (value: infoTypes.subsDishData) => {
             const dish = await getRepository(Dishes)
                 .createQueryBuilder("dishes")
                 .select()
@@ -98,7 +73,7 @@ export class SubsRepo extends Repository<Subscriptions> {
         });
     };
 
-    updateSubsInfo = (userId: number, subsId: number, data: subsData) => {
+    updateSubsInfo = (userId: number, subsId: number, data: infoTypes.subscription) => {
         this.createQueryBuilder()
             .update(Subscriptions)
             .set(data)
@@ -107,7 +82,7 @@ export class SubsRepo extends Repository<Subscriptions> {
             .execute();
     };
 
-    updateSubsDish = async (userId: number, subsId: number, data: subsDishData) => {
+    updateSubsDish = async (userId: number, subsId: number, data: infoTypes.subscriptionDish) => {
         data.dishes.map((value) => {
             getConnection()
                 .createQueryBuilder()
@@ -148,7 +123,7 @@ export class SubsRepo extends Repository<Subscriptions> {
         });
     };
 
-    updateSubsDishOnetime = async (userId: number, subsId: number, data: subsDishData) => {
+    updateSubsDishOnetime = async (userId: number, subsId: number, data: infoTypes.subscriptionDish) => {
         data.dishes.map((value) => {
             getConnection()
                 .createQueryBuilder()

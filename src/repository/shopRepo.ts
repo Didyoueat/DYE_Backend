@@ -1,24 +1,6 @@
 import { EntityRepository, Repository } from "typeorm";
 import { Shops } from "@entities/shops";
-
-interface shopData {
-    businessName: string;
-    businessNumber: string;
-    businessPhone: string;
-    password: string;
-    dayOff: number;
-    address: string;
-    latitude: number;
-    longitude: number;
-    name: string;
-    phone: string;
-    origin: string | null;
-    content: string | null;
-    imageUrl: string | null;
-    officeHour: string;
-    temporaryDayStart: Date | null;
-    temporaryDayEnd: Date | null;
-}
+import { infoTypes } from "infoTypes";
 
 @EntityRepository(Shops)
 export class ShopRepo extends Repository<Shops> {
@@ -46,11 +28,11 @@ export class ShopRepo extends Repository<Shops> {
             .getOne();
     };
 
-    createShop = (data: shopData) => {
+    createShop = (data: infoTypes.shop) => {
         this.createQueryBuilder().insert().into(Shops).values(data).execute();
     };
 
-    updateShop = (shopId: number, data: shopData) => {
+    updateShop = (shopId: number, data: infoTypes.shop) => {
         this.createQueryBuilder("shops").update(Shops).set(data).where("shops.shopId = :shopId", { shopId: shopId }).execute();
     };
 
