@@ -1,7 +1,7 @@
 ### Node ###
 
 # Logs
-logs
+logs/
 yarn-error.log
 ormlogs.log
 
@@ -15,10 +15,10 @@ node_modules/
 .env.dev
 
 # TypeScript build / generate output
-dist
+dist/
 
 # Database directories
-migrations
+migrations/
 
 # Development test directories
 test/
