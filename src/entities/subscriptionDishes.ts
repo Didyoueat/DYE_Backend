@@ -7,6 +7,7 @@ import {
     ManyToOne,
     JoinColumn,
     OneToMany,
+    DeleteDateColumn,
 } from "typeorm";
 import { Subscriptions } from "@entities/subscriptions";
 import { Dishes } from "@entities/dishes";
@@ -44,11 +45,8 @@ export class SubscriptionDishes {
     @Column("int")
     weight: number;
 
-    @Column("varchar", { length: 255, nullable: true })
+    @Column("varchar", { length: 500, nullable: true })
     imageUrl: string;
-
-    @Column("boolean", { default: false })
-    deleted: boolean;
 
     @CreateDateColumn()
     createdAt: Date;
@@ -56,14 +54,21 @@ export class SubscriptionDishes {
     @UpdateDateColumn()
     updatedAt: Date;
 
+    @DeleteDateColumn({ nullable: true })
+    deletedAt: Date;
+
     @OneToMany(() => SubscriptionOnetime, (subscriptionOnetime) => subscriptionOnetime.subscriptionDishes)
-    subscriptionOnetime: SubscriptionDishes[];
+    subscriptionOnetime: SubscriptionOnetime[];
 
-    @ManyToOne(() => Subscriptions, (subscriptions) => subscriptions.subscriptionDishes, { nullable: false, onDelete: "CASCADE" })
+    @ManyToOne(() => Subscriptions, (subscriptions) => subscriptions.subscriptionDishes, {
+        nullable: false,
+        onDelete: "CASCADE",
+        cascade: true,
+    })
     @JoinColumn({ name: "subscriptionId", referencedColumnName: "subscriptionId" })
-    subscriptions: SubscriptionDishes;
+    subscriptions: Subscriptions;
 
-    @ManyToOne(() => Dishes, (dishes) => dishes.subscriptionDishes, { nullable: false, onDelete: "CASCADE" })
+    @ManyToOne(() => Dishes, (dishes) => dishes.subscriptionDishes, { nullable: false })
     @JoinColumn({ name: "dishId", referencedColumnName: "dishId" })
-    dishes: SubscriptionDishes;
+    dishes: Dishes;
 }

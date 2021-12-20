@@ -7,6 +7,7 @@ import {
     ManyToOne,
     JoinColumn,
     OneToMany,
+    DeleteDateColumn,
 } from "typeorm";
 import { Users } from "@entities/users";
 import { Shops } from "@entities/shops";
@@ -41,23 +42,23 @@ export class Subscriptions {
     @Column("varchar", { length: 50, nullable: true })
     toDelivery!: string;
 
-    @Column("boolean", { default: false })
-    deleted: boolean;
-
     @CreateDateColumn()
     createdAt: Date;
 
     @UpdateDateColumn()
     updatedAt: Date;
 
+    @DeleteDateColumn({ nullable: true })
+    deletedAt: Date;
+
     @OneToMany(() => SubscriptionDishes, (subscriptionDishes) => subscriptionDishes.subscriptions)
-    subscriptionDishes: Subscriptions[];
+    subscriptionDishes: SubscriptionDishes[];
 
     @ManyToOne(() => Users, (users) => users.subscriptions, { nullable: false, onDelete: "CASCADE" })
     @JoinColumn({ name: "userId", referencedColumnName: "userId" })
-    users: Subscriptions;
+    users: Users;
 
     @ManyToOne(() => Shops, (shops) => shops.subscriptions, { nullable: false, onDelete: "CASCADE" })
     @JoinColumn({ name: "shopId", referencedColumnName: "shopId" })
-    shops: Subscriptions;
+    shops: Shops;
 }

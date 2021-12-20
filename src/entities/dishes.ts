@@ -42,7 +42,7 @@ export class Dishes {
     @Column("int")
     weight: number;
 
-    @Column("varchar", { length: 255, nullable: true })
+    @Column("varchar", { length: 500, nullable: true })
     imageUrl: string;
 
     @CreateDateColumn()
@@ -52,13 +52,13 @@ export class Dishes {
     updatedAt: Date;
 
     @OneToMany(() => SubscriptionDishes, (subscriptionDishes) => subscriptionDishes.dishes)
-    subscriptionDishes: Dishes[];
+    subscriptionDishes: SubscriptionDishes[];
 
     @OneToMany(() => SubscriptionOnetime, (subscriptionOnetime) => subscriptionOnetime.dishes)
-    subscriptionOnetime: Dishes[];
+    subscriptionOnetime: SubscriptionOnetime[];
 
     @OneToMany(() => OrderDishes, (orderDishes) => orderDishes.dishes)
-    orderDishes: Dishes[];
+    orderDishes: OrderDishes[];
 
     @ManyToOne(() => Shops, (shops) => shops.dishes, { nullable: false, onDelete: "CASCADE" })
     @JoinColumn({ name: "shopId", referencedColumnName: "shopId" })

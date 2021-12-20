@@ -1,4 +1,13 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from "typeorm";
+import {
+    Entity,
+    PrimaryGeneratedColumn,
+    Column,
+    CreateDateColumn,
+    UpdateDateColumn,
+    ManyToOne,
+    JoinColumn,
+    DeleteDateColumn,
+} from "typeorm";
 import { Orders } from "@entities/orders";
 import { Dishes } from "@entities/dishes";
 
@@ -31,11 +40,8 @@ export class OrderDishes {
     @Column("int")
     weight: number;
 
-    @Column("varchar", { length: 255, nullable: true })
+    @Column("varchar", { length: 500, nullable: true })
     imageUrl: string;
-
-    @Column("boolean", { default: false })
-    deleted: boolean;
 
     @CreateDateColumn()
     createdAt: Date;
@@ -43,11 +49,14 @@ export class OrderDishes {
     @UpdateDateColumn()
     updatedAt: Date;
 
+    @DeleteDateColumn({ nullable: true })
+    deletedAt: Date;
+
     @ManyToOne(() => Orders, (orders) => orders.orderDishes, { nullable: false, onDelete: "CASCADE" })
     @JoinColumn({ name: "orderId", referencedColumnName: "orderId" })
-    orders: OrderDishes;
+    orders: Orders;
 
     @ManyToOne(() => Dishes, (dishes) => dishes.orderDishes, { nullable: false, onDelete: "CASCADE" })
     @JoinColumn({ name: "dishId", referencedColumnName: "dishId" })
-    dishes: OrderDishes;
+    dishes: Dishes;
 }

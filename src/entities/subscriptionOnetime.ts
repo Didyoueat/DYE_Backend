@@ -1,4 +1,13 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from "typeorm";
+import {
+    Entity,
+    PrimaryGeneratedColumn,
+    Column,
+    CreateDateColumn,
+    UpdateDateColumn,
+    ManyToOne,
+    JoinColumn,
+    DeleteDateColumn,
+} from "typeorm";
 import { SubscriptionDishes } from "@entities/subscriptionDishes";
 import { Dishes } from "@entities/dishes";
 
@@ -28,11 +37,8 @@ export class SubscriptionOnetime {
     @Column("int")
     weight: number;
 
-    @Column("varchar", { length: 255, nullable: true })
+    @Column("varchar", { length: 500, nullable: true })
     imageUrl: string;
-
-    @Column("boolean", { default: false })
-    deleted: boolean;
 
     @CreateDateColumn()
     createdAt: Date;
@@ -40,14 +46,18 @@ export class SubscriptionOnetime {
     @UpdateDateColumn()
     updatedAt: Date;
 
+    @DeleteDateColumn({ nullable: true })
+    deletedAt: Date;
+
     @ManyToOne(() => SubscriptionDishes, (subscriptionDishes) => subscriptionDishes.subscriptionOnetime, {
         nullable: false,
         onDelete: "CASCADE",
+        cascade: true,
     })
     @JoinColumn({ name: "subscriptionDishId", referencedColumnName: "subscriptionDishId" })
-    subscriptionDishes: SubscriptionOnetime;
+    subscriptionDishes: SubscriptionDishes;
 
-    @ManyToOne(() => Dishes, (dishes) => dishes.subscriptionOnetime, { nullable: false, onDelete: "CASCADE" })
+    @ManyToOne(() => Dishes, (dishes) => dishes.subscriptionOnetime, { nullable: false })
     @JoinColumn({ name: "dishId", referencedColumnName: "dishId" })
-    dishes: SubscriptionOnetime;
+    dishes: Dishes;
 }

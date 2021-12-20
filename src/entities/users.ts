@@ -16,7 +16,7 @@ export class Users {
     @Column("varchar", { length: 50, nullable: true })
     email!: string;
 
-    @Column("varchar", { length: 100, nullable: true })
+    @Column("varchar", { length: 100, nullable: true, select: false })
     password!: string;
 
     @Column("varchar", { length: 10 })
@@ -34,10 +34,10 @@ export class Users {
     @Column("varchar", { length: 100 })
     address: string;
 
-    @Column("varchar", { length: 20 })
+    @Column("varchar", { length: 20, nullable: true })
     paymentState: string;
 
-    @Column("varchar", { length: 255 })
+    @Column("varchar", { length: 255, nullable: true, select: false })
     paymentKey: string;
 
     @CreateDateColumn()
@@ -47,8 +47,8 @@ export class Users {
     updatedAt: Date;
 
     @OneToMany(() => Subscriptions, (subscriptions) => subscriptions.users)
-    subscriptions: Users[];
+    subscriptions: Subscriptions[];
 
     @OneToMany(() => Orders, (orders) => orders.users)
-    orders: Users[];
+    orders: Orders[];
 }

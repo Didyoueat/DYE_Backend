@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany, DeleteDateColumn } from "typeorm";
 import { Dishes } from "@entities/dishes";
 import { Subscriptions } from "@entities/subscriptions";
 import { Orders } from "@entities/orders";
@@ -17,7 +17,7 @@ export class Shops {
     @Column("varchar", { length: 20 })
     businessPhone: string;
 
-    @Column("varchar", { length: 100 })
+    @Column("varchar", { length: 100, select: false })
     password: string;
 
     @Column("tinyint", { unsigned: true })
@@ -35,7 +35,7 @@ export class Shops {
     @Column("varchar", { length: 10 })
     name: string;
 
-    @Column("varchar", { length: 20, nullable: true })
+    @Column("varchar", { length: 20, nullable: true, select: false })
     phone!: string;
 
     @Column("varchar", { length: 300, nullable: true })
@@ -62,12 +62,15 @@ export class Shops {
     @UpdateDateColumn()
     updatedAt: Date;
 
+    @DeleteDateColumn({ nullable: true })
+    deletedAt: Date;
+
     @OneToMany(() => Dishes, (dishes) => dishes.shops)
-    dishes: Shops[];
+    dishes: Dishes[];
 
     @OneToMany(() => Subscriptions, (subscriptions) => subscriptions.shops)
-    subscriptions: Shops[];
+    subscriptions: Subscriptions[];
 
     @OneToMany(() => Orders, (orders) => orders.shops)
-    orders: Shops[];
+    orders: Orders[];
 }
