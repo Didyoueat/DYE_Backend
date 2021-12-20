@@ -1,8 +1,6 @@
-import ApiError from "@modules/apiError";
-import httpStatus from "http-status";
-import { infoTypes } from "infoTypes";
-import { repository, shopPropertyCheck, shopTypeCheck } from "@modules/property";
 import { ShopRepo } from "@repository/shopRepo";
+import { repository, addProperty, propertyCheck } from "@modules/property";
+import { infoTypes } from "infoTypes";
 
 export const findAllShop = async () => {
     const shopRepo = repository(ShopRepo);
@@ -15,7 +13,7 @@ export const findAllShop = async () => {
 };
 
 export const findAroundShop = async (lat: number, lon: number, radius: number) => {
-    if (isNaN(lat) || isNaN(lon) || isNaN(radius)) throw new ApiError(httpStatus.BAD_REQUEST, "잘못된 요청입니다.");
+    propertyCheck(lat, lon, radius);
 
     const shopRepo = repository(ShopRepo);
     const aroundShop = await shopRepo.findAroundShop(lat, lon, radius);
@@ -43,7 +41,7 @@ export const findAroundShop = async (lat: number, lon: number, radius: number) =
 };
 
 export const findOneShop = async (shopId: number) => {
-    if (isNaN(shopId)) throw new ApiError(httpStatus.BAD_REQUEST, "잘못된 요청입니다.");
+    propertyCheck(shopId);
 
     const shopRepo = repository(ShopRepo);
     const shop = await shopRepo.findOneShop(shopId);
@@ -53,30 +51,26 @@ export const findOneShop = async (shopId: number) => {
     return shop;
 };
 
-export const createShop = (data: infoTypes.shop) => {
-    if (!shopPropertyCheck(data) || !shopTypeCheck(data)) {
-        throw new ApiError(httpStatus.BAD_REQUEST, "잘못된 요청입니다.");
-    }
+export const createShop = async (data: infoTypes.shop) => {
+    propertyCheck(data);
 
     const shopRepo = repository(ShopRepo);
 
-    shopRepo.createShop(data);
+    await shopRepo.createShop(data);
 };
 
-export const updateShop = (shopId: number, data: infoTypes.shop) => {
-    if (!shopTypeCheck(data) || isNaN(shopId)) {
-        throw new ApiError(httpStatus.BAD_REQUEST, "잘못된 요청입니다.");
-    }
+export const updateShop = async (shopId: number, data: infoTypes.shop) => {
+    propertyCheck(shopId, addProperty(data, "shop"));
 
     const shopRepo = repository(ShopRepo);
 
-    shopRepo.updateShop(shopId, data);
+    await shopRepo.updateShop(shopId, data);
 };
 
-export const deleteShop = (shopId: number) => {
-    if (isNaN(shopId)) throw new ApiError(httpStatus.BAD_REQUEST, "잘못된 요청입니다.");
+export const deleteShop = async (shopId: number) => {
+    propertyCheck(shopId);
 
     const shopRepo = repository(ShopRepo);
 
-    shopRepo.deleteShop(shopId);
+    await shopRepo.deleteShop(shopId);
 };

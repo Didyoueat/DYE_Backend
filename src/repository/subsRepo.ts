@@ -1,8 +1,8 @@
 import { EntityRepository, Repository, getRepository, getConnection } from "typeorm";
 import { Subscriptions } from "@entities/subscriptions";
 import { SubscriptionDishes } from "@entities/subscriptionDishes";
-import { Dishes } from "@entities/dishes";
 import { SubscriptionOnetime } from "@entities/subscriptionOnetime";
+import { Dishes } from "@entities/dishes";
 import { infoTypes } from "infoTypes";
 
 @EntityRepository(Subscriptions)
@@ -10,33 +10,38 @@ export class SubsRepo extends Repository<Subscriptions> {
     findAllUserSubs = () => {
         return this.createQueryBuilder("subs")
             .select()
-            .leftJoinAndSelect("subs.subscriptionDishes", "subsDishes", "subsDishes.deleted = :deleted", { deleted: false })
-            .where("subs.deleted = :deleted", { deleted: false })
+            .leftJoinAndSelect("subs.subscriptionDishes", "subsDishes")
+            .orderBy("subs.userId", "ASC")
             .getMany();
     };
 
     findShopSubs = (shopId: number) => {
         return this.createQueryBuilder("subs")
             .select()
-            .leftJoinAndSelect("subs.subscriptionDishes", "subsDishes", "subsDishes.deleted = :deleted", { deleted: false })
-            .leftJoinAndSelect("users", "users", "users.userId = subs.userId")
-            .where("subs.shopId = :shopId AND subs.deleted = :deleted", { shopId: shopId, deleted: false })
+            .innerJoin("subs.users", "users", "users.userId = subs.userId")
+            .addSelect(["users.userId", "users.name", "users.phone", "users.paymentState"])
+            .leftJoinAndSelect("subs.subscriptionDishes", "subsDishes")
+            .leftJoinAndSelect("subsDishes.subscriptionOnetime", "subsOnetime")
+            .where("subs.shopId = :shopId", { shopId: shopId })
+            .orderBy("subs.userId", "ASC")
             .getMany();
     };
 
-    findUserSubs = (userId: number) => {
-        return this.createQueryBuilder("subs")
+    findUserSubs = async (userId: number) => {
+        return await this.createQueryBuilder("subs")
             .select()
-            .leftJoinAndSelect("subs.subscriptionDishes", "subsDishes", "subsDishes.deleted = :deleted", { deleted: false })
-            .where("subs.userId = :userId AND subs.deleted = :deleted", { userId: userId, deleted: false })
+            .leftJoinAndSelect("subs.subscriptionDishes", "subsDishes")
+            .leftJoinAndSelect("subsDishes.subscriptionOnetime", "subsOnetime")
+            .where("subs.userId = :userId", { userId: userId })
             .getMany();
     };
 
     findOneSubs = (userId: number, subsId: number) => {
         return this.createQueryBuilder("subs")
             .select()
-            .leftJoinAndSelect("subs.subscriptionDishes", "subsDishes", "subsDishes.deleted = :deleted", { deleted: false })
-            .where("subs.userId = :userId AND subs.deleted = :deleted", { userId: userId, deleted: false })
+            .leftJoinAndSelect("subs.subscriptionDishes", "subsDishes")
+            .leftJoinAndSelect("subsDishes.subscriptionOnetime", "subsOnetime")
+            .where("subs.userId = :userId")
             .andWhere("subs.subscriptionId = :subscriptionId", { subscriptionId: subsId })
             .getOne();
     };
@@ -45,7 +50,7 @@ export class SubsRepo extends Repository<Subscriptions> {
         data.userId = userId;
         const subs = await this.createQueryBuilder().insert().into(Subscriptions).values(data).execute();
 
-        data.dishes.map(async (value: infoTypes.subsDishData) => {
+        data.dishes.map(async (value: infoTypes.subscriptionDish) => {
             const dish = await getRepository(Dishes)
                 .createQueryBuilder("dishes")
                 .select()
@@ -67,14 +72,13 @@ export class SubsRepo extends Repository<Subscriptions> {
                     orderCount: value.orderCount,
                     weight: dish.weight,
                     imageUrl: dish.imageUrl,
-                    deleted: false,
                 })
                 .execute();
         });
     };
 
-    updateSubsInfo = (userId: number, subsId: number, data: infoTypes.subscription) => {
-        this.createQueryBuilder()
+    updateSubsInfo = async (userId: number, subsId: number, data: infoTypes.subscription) => {
+        await this.createQueryBuilder()
             .update(Subscriptions)
             .set(data)
             .where("userId = :userId", { userId: userId })
@@ -82,12 +86,12 @@ export class SubsRepo extends Repository<Subscriptions> {
             .execute();
     };
 
-    updateSubsDish = async (userId: number, subsId: number, data: infoTypes.subscriptionDish) => {
-        data.dishes.map((value) => {
+    updateSubsDish = async (userId: number, subsId: number, data: infoTypes.changeDish) => {
+        data.changeDishes.map((value) => {
             getConnection()
                 .createQueryBuilder()
-                .update(SubscriptionDishes)
-                .set({ deleted: true })
+                .softDelete()
+                .from(SubscriptionDishes)
                 .where("subscriptionId = :subscriptionId AND subscriptionDishId = :subscriptionDishId", {
                     subscriptionId: subsId,
                     subscriptionDishId: value.subscriptionDishId,
@@ -95,7 +99,7 @@ export class SubsRepo extends Repository<Subscriptions> {
                 .execute();
         });
 
-        data.dishes.map(async (value) => {
+        data.changeDishes.map(async (value) => {
             const dish = await getRepository(Dishes)
                 .createQueryBuilder("dishes")
                 .select()
@@ -117,14 +121,13 @@ export class SubsRepo extends Repository<Subscriptions> {
                     orderCount: value.orderCount,
                     weight: dish.weight,
                     imageUrl: dish.imageUrl,
-                    deleted: false,
                 })
                 .execute();
         });
     };
 
-    updateSubsDishOnetime = async (userId: number, subsId: number, data: infoTypes.subscriptionDish) => {
-        data.dishes.map((value) => {
+    updateSubsDishOnetime = async (userId: number, subsId: number, data: infoTypes.changeDish) => {
+        data.changeDishes.map((value) => {
             getConnection()
                 .createQueryBuilder()
                 .update(SubscriptionDishes)
@@ -136,7 +139,24 @@ export class SubsRepo extends Repository<Subscriptions> {
                 .execute();
         });
 
-        data.dishes.map(async (value) => {
+        data.changeDishes.map(async (value) => {
+            const onetime = await getRepository(SubscriptionOnetime)
+                .createQueryBuilder()
+                .select()
+                .where("subscriptionDishId = :subscriptionDishId", { subscriptionDishId: value.subscriptionDishId })
+                .getOne();
+
+            if (onetime.subscriptionOnetimeId !== undefined) {
+                getConnection()
+                    .createQueryBuilder()
+                    .softDelete()
+                    .from(SubscriptionOnetime)
+                    .where("subscriptionOnetimeId = :subscriptionOnetimeId", {
+                        subscriptionOnetimeId: onetime.subscriptionOnetimeId,
+                    })
+                    .execute();
+            }
+
             const dish = await getRepository(Dishes)
                 .createQueryBuilder()
                 .select()
@@ -156,20 +176,18 @@ export class SubsRepo extends Repository<Subscriptions> {
                     orderCount: value.orderCount,
                     weight: dish.weight,
                     imageUrl: dish.imageUrl,
-                    deleted: false,
                 })
                 .execute();
         });
     };
 
     deleteSubs = async (userId: number, subsId: number) => {
-        this.createQueryBuilder()
-            .update(Subscriptions)
-            .set({ deleted: true })
+        await this.createQueryBuilder("subs")
             .where("userId = :userId AND subscriptionId = :subscriptionId", {
                 userId: userId,
                 subscriptionId: subsId,
             })
+            .softDelete()
             .execute();
 
         const subsDishes = await getRepository(SubscriptionDishes)
@@ -180,18 +198,20 @@ export class SubsRepo extends Repository<Subscriptions> {
 
         getConnection()
             .createQueryBuilder()
-            .update(SubscriptionDishes)
-            .set({ deleted: true })
+            .softDelete()
+            .from(SubscriptionDishes)
             .where("subscriptionId = :subscriptionId", { subscriptionId: subsId })
             .execute();
 
         subsDishes.map((value) => {
-            getConnection()
-                .createQueryBuilder()
-                .update(SubscriptionOnetime)
-                .set({ deleted: true })
-                .where("subscriptionDishId = :subscriptionDishId", { subscriptionDishId: value.subscriptionDishId })
-                .execute();
+            if (value.oneTime === true) {
+                getConnection()
+                    .createQueryBuilder()
+                    .softDelete()
+                    .from(SubscriptionOnetime)
+                    .where("subscriptionDishId = :subscriptionDishId", { subscriptionDishId: value.subscriptionDishId })
+                    .execute();
+            }
         });
     };
 }

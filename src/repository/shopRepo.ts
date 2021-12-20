@@ -1,4 +1,4 @@
-import { EntityRepository, Repository } from "typeorm";
+import { EntityRepository, Repository, getConnection, getRepository } from "typeorm";
 import { Shops } from "@entities/shops";
 import { infoTypes } from "infoTypes";
 
@@ -10,7 +10,6 @@ export class ShopRepo extends Repository<Shops> {
 
     findAroundShop = (lat: number, lon: number, radius: number) => {
         return this.createQueryBuilder("shops")
-            .select()
             .addSelect(
                 `(FLOOR(1000 * 6371 * acos(cos(radians(${lat})) * cos(radians(latitude)) * cos(radians(longitude) - radians(${lon})) + sin(radians(${lat})) * sin(radians(latitude)))))`,
                 "distance"
@@ -28,16 +27,20 @@ export class ShopRepo extends Repository<Shops> {
             .getOne();
     };
 
-    createShop = (data: infoTypes.shop) => {
-        this.createQueryBuilder().insert().into(Shops).values(data).execute();
+    createShop = async (data: infoTypes.shop) => {
+        await this.createQueryBuilder().insert().into(Shops).values(data).execute();
     };
 
-    updateShop = (shopId: number, data: infoTypes.shop) => {
-        this.createQueryBuilder("shops").update(Shops).set(data).where("shops.shopId = :shopId", { shopId: shopId }).execute();
+    updateShop = async (shopId: number, data: infoTypes.shop) => {
+        await this.createQueryBuilder("shops")
+            .update(Shops)
+            .set(data)
+            .where("shops.shopId = :shopId", { shopId: shopId })
+            .execute();
     };
 
     // 나중에 논리적 삭제로 수정(?)
-    deleteShop = (shopId: number) => {
-        this.createQueryBuilder("shops").delete().from(Shops).where("shops.shopId = :shopId", { shopId: shopId }).execute();
+    deleteShop = async (shopId: number) => {
+        await this.createQueryBuilder("shops").where("shops.shopId = :shopId", { shopId: shopId }).softDelete().execute();
     };
 }

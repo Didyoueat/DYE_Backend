@@ -16,14 +16,14 @@ export class DishRepo extends Repository<Dishes> {
             .getOne();
     };
 
-    createDish = (shopId: number, data: infoTypes.dish) => {
+    createDish = async (shopId: number, data: infoTypes.dish) => {
         data.shopId = shopId;
 
-        this.createQueryBuilder().insert().into(Dishes).values(data).execute();
+        await this.createQueryBuilder().insert().into(Dishes).values(data).execute();
     };
 
-    updateDish = (shopId: number, dishId: number, data: infoTypes.dish) => {
-        this.createQueryBuilder("dishes")
+    updateDish = async (shopId: number, dishId: number, data: infoTypes.dish) => {
+        await this.createQueryBuilder("dishes")
             .update(Dishes)
             .set(data)
             .where("dishes.shopId = :shopId", { shopId: shopId })
@@ -31,8 +31,8 @@ export class DishRepo extends Repository<Dishes> {
             .execute();
     };
 
-    deleteDish = (shopId: number, dishId: number) => {
-        this.createQueryBuilder("dishes")
+    deleteDish = async (shopId: number, dishId: number) => {
+        await this.createQueryBuilder("dishes")
             .delete()
             .from(Dishes)
             .where("dishes.shopId = :shopId", { shopId: shopId })

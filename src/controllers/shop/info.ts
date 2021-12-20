@@ -11,24 +11,23 @@ export const getShop = catchAsync(async (req: Request, res: Response) => {
 });
 
 // 가게 생성
-export const createShop = catchAsync((req: Request, res: Response) => {
-    shopService.createShop(req.body);
-
+export const createShop = catchAsync(async (req: Request, res: Response) => {
+    await shopService.createShop(req.body);
     res.json({}).status(200);
 });
 
 // 가게 정보 수정
-export const updateShop = catchAsync((req: Request, res: Response) => {
+export const updateShop = catchAsync(async (req: Request, res: Response) => {
     const shopId: number = parseInt(req.params.shopId, 10);
 
-    shopService.updateShop(shopId, req.body);
+    await shopService.updateShop(shopId, req.body);
     res.json({}).status(200);
 });
 
 // 가게 탈퇴
-export const deleteUser = catchAsync((req: Request, res: Response) => {
+export const deleteUser = catchAsync(async (req: Request, res: Response) => {
     const shopId: number = parseInt(req.params.shopId, 10);
 
-    shopService.deleteShop(shopId);
+    await shopService.deleteShop(shopId);
     res.json({}).status(200);
 });

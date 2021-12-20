@@ -1,11 +1,9 @@
-import ApiError from "@modules/apiError";
-import httpStatus from "http-status";
-import { infoTypes } from "infoTypes";
-import { repository, dishPropertyCheck, dishTypeCheck } from "@modules/property";
 import { DishRepo } from "@repository/dishRepo";
+import { repository, propertyCheck, addProperty } from "@modules/property";
+import { infoTypes } from "infoTypes";
 
 export const findShopDishes = async (shopId: number) => {
-    if (isNaN(shopId)) throw new ApiError(httpStatus.BAD_REQUEST, "잘못된 요청입니다.");
+    propertyCheck(shopId);
 
     const dishRepo = repository(DishRepo);
 
@@ -13,33 +11,32 @@ export const findShopDishes = async (shopId: number) => {
 };
 
 export const findShopDish = async (shopId: number, dishId: number) => {
-    if (isNaN(shopId) || isNaN(dishId)) throw new ApiError(httpStatus.BAD_REQUEST, "잘못된 요청입니다.");
+    propertyCheck(shopId, dishId);
 
     const dishRepo = repository(DishRepo);
 
     return await dishRepo.findOneDish(shopId, dishId);
 };
 
-export const createDish = (shopId: number, data: infoTypes.dish) => {
-    if (!dishPropertyCheck || !dishTypeCheck || isNaN(shopId)) throw new ApiError(httpStatus.BAD_REQUEST, "잘못된 요청입니다.");
-
+export const createDish = async (shopId: number, data: infoTypes.dish) => {
     const dishRepo = repository(DishRepo);
 
-    dishRepo.createDish(shopId, data);
+    propertyCheck(shopId, data);
+    await dishRepo.createDish(shopId, data);
 };
 
-export const updateDish = (shopId: number, dishId: number, data: infoTypes.dish) => {
-    if (!dishTypeCheck || isNaN(shopId) || isNaN(dishId)) throw new ApiError(httpStatus.BAD_REQUEST, "잘못된 요청입니다.");
+export const updateDish = async (shopId: number, dishId: number, data: infoTypes.dish) => {
+    propertyCheck(shopId, dishId, addProperty(data, "dish"));
 
     const dishRepo = repository(DishRepo);
 
-    dishRepo.updateDish(shopId, dishId, data);
+    await dishRepo.updateDish(shopId, dishId, data);
 };
 
-export const deleteDish = (shopId: number, dishId: number) => {
-    if (isNaN(shopId) || isNaN(dishId)) throw new ApiError(httpStatus.BAD_REQUEST, "잘못된 요청입니다.");
+export const deleteDish = async (shopId: number, dishId: number) => {
+    propertyCheck(shopId, dishId);
 
     const dishRepo = repository(DishRepo);
 
-    dishRepo.deleteDish(shopId, dishId);
+    await dishRepo.deleteDish(shopId, dishId);
 };

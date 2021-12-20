@@ -8,7 +8,7 @@ export class OrderRepo extends Repository<Orders> {
         return this.createQueryBuilder("orders")
             .select()
             .leftJoinAndSelect("orders.orderDishes", "orderDishes")
-            .where("orders.deleted = :deleted", { deleted: false })
+            .orderBy("orders.userId", "ASC")
             .getMany();
     };
 
@@ -16,7 +16,8 @@ export class OrderRepo extends Repository<Orders> {
         return this.createQueryBuilder("orders")
             .select()
             .leftJoinAndSelect("orders.orderDishes", "orderDishes")
-            .where("orders.shopId = :shopId AND orders.deleted = :deleted", { shopId: shopId, deleted: false })
+            .where("orders.shopId = :shopId", { shopId: shopId })
+            .orderBy("orders.userId", "ASC")
             .getMany();
     };
 
@@ -24,30 +25,30 @@ export class OrderRepo extends Repository<Orders> {
         return this.createQueryBuilder("orders")
             .select()
             .leftJoinAndSelect("orders.orderDishes", "orderDishes")
-            .where("orders.userId = :userId, AND orders.deleted = :deleted", { userId: userId, deleted: false })
+            .where("orders.userId = :userId", { userId: userId })
             .getMany();
     };
 
-    findOneOrder = (userId: number) => {
+    findOneOrder = (userId: number, orderId: number) => {
         return this.createQueryBuilder("orders")
             .select()
             .leftJoinAndSelect("orders.orderDishes", "orderDishes")
-            .where("orders.userId = :userId AND orders.deleted = :deleted", { userId: userId, deleted: false })
+            .where("orders.userId = :userId AND orders.orderId = :orderId", { userId: userId, orderId: orderId })
             .getOne();
     };
 
-    deleteOrder = (userId: number, orderId: number) => {
-        this.createQueryBuilder()
+    deleteOrder = async (userId: number, orderId: number) => {
+        await this.createQueryBuilder()
             .update(Orders)
-            .set({ deleted: true })
             .where("userId = :userId AND orderId = :orderId", { userId: userId, orderId: orderId })
+            .softDelete()
             .execute();
 
-        getConnection()
+        await getConnection()
             .createQueryBuilder()
             .update(OrderDishes)
-            .set({ deleted: true })
             .where("orderId = :orderId", { orderId: orderId })
+            .softDelete()
             .execute();
     };
 }

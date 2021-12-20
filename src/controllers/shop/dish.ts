@@ -20,27 +20,27 @@ export const getShopDishDetail = catchAsync(async (req: Request, res: Response) 
 });
 
 // 가게 반찬 등록
-export const createShopDish = catchAsync((req: Request, res: Response) => {
+export const createShopDish = catchAsync(async (req: Request, res: Response) => {
     const shopId: number = parseInt(req.params.shopId, 10);
 
-    dishService.createDish(shopId, req.body);
+    await dishService.createDish(shopId, req.body);
     res.json({}).status(200);
 });
 
 // 가게 반찬 수정
-export const updateShopDish = catchAsync((req: Request, res: Response) => {
+export const updateShopDish = catchAsync(async (req: Request, res: Response) => {
     const shopId: number = parseInt(req.params.shopId, 10);
     const dishId: number = parseInt(req.params.dishId, 10);
 
-    dishService.updateDish(shopId, dishId, req.body);
+    await dishService.updateDish(shopId, dishId, req.body);
     res.json({}).status(200);
 });
 
 // 가게 반찬 삭제
-export const deleteShopDish = catchAsync((req: Request, res: Response) => {
+export const deleteShopDish = catchAsync(async (req: Request, res: Response) => {
     const shopId: number = parseInt(req.params.shopId, 10);
     const dishId: number = parseInt(req.params.dishId, 10);
 
-    dishService.deleteDish(shopId, dishId);
+    await dishService.deleteDish(shopId, dishId);
     res.json({}).status(200);
 });
