@@ -31,7 +31,7 @@ declare module "infoTypes" {
             imageUrl: string;
         }
 
-        interface subsDishData {
+        interface subscriptionDish {
             dishId: number;
             orderCount: number;
         }
@@ -49,8 +49,8 @@ declare module "infoTypes" {
             deleted: boolean;
         }
 
-        interface subscriptionDish {
-            dishes: Array<{
+        interface changeDish {
+            changeDishes: Array<{
                 subscriptionDishId: number;
                 dishId: number;
                 orderCount: number;
