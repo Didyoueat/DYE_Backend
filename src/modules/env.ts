@@ -16,6 +16,7 @@ if (NODE_ENV === "production") {
 const env = {
     port: parseInt(process.env.PORT, 10) || 5000,
     nodeEnv: process.env.NODE_ENV,
+    slackWebhook: process.env.SLACK_WEBHOOK,
     dbConfig: {
         username: process.env.DATABASE_USERNAME,
         password: process.env.DATABASE_PASSWORD,

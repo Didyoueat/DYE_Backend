@@ -110,25 +110,25 @@ const debugLog = winston.createLogger({
 
 const logger = {
     error(message: string) {
-        errorLog.error(message);
-        infoLog.error(message);
         devOption.debug(message);
+        infoLog.error(message);
+        return errorLog.error(message);
     },
 
     warn(message: string) {
-        warnLog.warn(message);
-        infoLog.warn(message);
         devOption.debug(message);
+        infoLog.warn(message);
+        return warnLog.warn(message);
     },
 
     info(message: string) {
-        infoLog.info(message);
         devOption.debug(message);
+        return infoLog.info(message);
     },
 
     http(message: string) {
-        httpLog.http(message);
         devOption.debug(message);
+        return httpLog.http(message);
     },
 
     stream: {
