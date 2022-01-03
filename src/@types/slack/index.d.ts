@@ -1,5 +1,5 @@
-declare module "slackFormatType" {
-    export namespace slackFormatType {
+declare module "slackTypes" {
+    export namespace slackTypes {
         interface Field {
             title: string;
             value: any;

@@ -3,7 +3,7 @@ import axios from "axios";
 import env from "@modules/env";
 import logger from "@modules/logger";
 import datetime from "@modules/datetime";
-import { slackFormatType } from "slackFormatType";
+import { slackTypes } from "slackTypes";
 
 type IError = {
     log: winston.Logger;
@@ -17,8 +17,8 @@ const SLACK_API = "https://hooks.slack.com/services/";
 class SlackTextBuilder {
     color: string;
     pretext: string;
-    fields: Array<slackFormatType.Field>;
-    blocks: Array<slackFormatType.Block>;
+    fields: Array<slackTypes.Field>;
+    blocks: Array<slackTypes.Block>;
 
     constructor({ color, pretext }: Partial<{ color: string; pretext: string }>) {
         this.color = color || "#2eb886";
@@ -27,7 +27,7 @@ class SlackTextBuilder {
         this.blocks = [];
     }
 
-    addField(field: slackFormatType.Field) {
+    addField(field: slackTypes.Field) {
         if (field.short === undefined) {
             field.short = true;
         }

@@ -98,8 +98,10 @@ const dishTypeCheck = (data: infoTypes.dish): boolean => {
         } else {
             if (key === "title") {
                 if (typeof data[key] !== "string") return false;
-            } else {
+            } else if (key === "content") {
                 if (typeof data[key] !== "string" && data[key] !== null) return false;
+            } else {
+                return false;
             }
         }
     }

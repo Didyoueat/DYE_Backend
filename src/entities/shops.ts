@@ -1,4 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany, DeleteDateColumn } from "typeorm";
+import { VirtualColumn } from "@modules/decorator";
 import { Dishes } from "@entities/dishes";
 import { Subscriptions } from "@entities/subscriptions";
 import { Orders } from "@entities/orders";
@@ -73,4 +74,7 @@ export class Shops {
 
     @OneToMany(() => Orders, (orders) => orders.shops)
     orders: Orders[];
+
+    @VirtualColumn()
+    distance: number;
 }

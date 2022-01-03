@@ -1,6 +1,6 @@
-import { EntityRepository, Repository, getConnection, getRepository } from "typeorm";
-import { Shops } from "@entities/shops";
+import { EntityRepository, Repository } from "typeorm";
 import { infoTypes } from "infoTypes";
+import { Shops } from "@entities/shops";
 
 @EntityRepository(Shops)
 export class ShopRepo extends Repository<Shops> {
@@ -17,7 +17,7 @@ export class ShopRepo extends Repository<Shops> {
             .leftJoinAndSelect("shops.dishes", "dishes")
             .having(`distance <= ${radius}`)
             .orderBy("distance", "ASC")
-            .getMany();
+            .getAroundShop();
     };
 
     findOneShop = (shopId: number) => {
@@ -39,7 +39,6 @@ export class ShopRepo extends Repository<Shops> {
             .execute();
     };
 
-    // 나중에 논리적 삭제로 수정(?)
     deleteShop = async (shopId: number) => {
         await this.createQueryBuilder("shops").where("shops.shopId = :shopId", { shopId: shopId }).softDelete().execute();
     };

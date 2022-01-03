@@ -6,16 +6,21 @@ export const findShopDishes = async (shopId: number) => {
     propertyCheck(shopId);
 
     const dishRepo = repository(DishRepo);
+    const dishes = await dishRepo.findShopDish(shopId);
 
-    return await dishRepo.findShopDish(shopId);
+    return {
+        dishCount: dishes.length,
+        dishes: dishes,
+    };
 };
 
 export const findShopDish = async (shopId: number, dishId: number) => {
     propertyCheck(shopId, dishId);
 
     const dishRepo = repository(DishRepo);
+    const dish = await dishRepo.findOneDish(shopId, dishId);
 
-    return await dishRepo.findOneDish(shopId, dishId);
+    return dish;
 };
 
 export const createDish = async (shopId: number, data: infoTypes.dish) => {

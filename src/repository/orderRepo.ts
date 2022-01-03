@@ -43,7 +43,9 @@ export class OrderRepo extends Repository<Orders> {
             .where("userId = :userId AND orderId = :orderId", { userId: userId, orderId: orderId })
             .softDelete()
             .execute();
+    };
 
+    deleteOrderDish = async (orderId: number) => {
         await getConnection()
             .createQueryBuilder()
             .update(OrderDishes)

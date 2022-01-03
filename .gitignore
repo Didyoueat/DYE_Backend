@@ -21,4 +21,4 @@ dist/
 migrations/
 
 # Development test directories
-test/
+dummy/
