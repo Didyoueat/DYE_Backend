@@ -1,5 +1,8 @@
 import { SubsRepo } from "@repository/subsRepo";
+import { SubsDishRepo } from "@repository/subsDishRepo";
+import { DishRepo } from "@repository/dishRepo";
 import { repository, addProperty, propertyCheck } from "@modules/property";
+import tableCheck from "@modules/tableCheck";
 import { infoTypes } from "infoTypes";
 
 export const findAllSubs = async () => {
@@ -20,7 +23,7 @@ export const findShopSubs = async (shopId: number) => {
 
     return {
         subsCount: shopSubs.length,
-        subscriptions: shopSubs, // user 정보 수정 필요
+        subscriptions: shopSubs,
     };
 };
 
@@ -42,10 +45,19 @@ export const findOneSubs = async (shopId: number, subsId: number) => {
 
 export const createSubs = async (userId: number, data: infoTypes.subscription) => {
     propertyCheck(userId, data);
+    await tableCheck({ user: userId, shop: data.shopId, dish: data.dishes.map((value) => value.dishId) });
 
-    const subsRepo = repository(SubsRepo);
+    const { createSubs } = repository(SubsRepo);
+    const { createSubsDish } = repository(SubsDishRepo);
+    const { findOneDish } = repository(DishRepo);
 
-    await subsRepo.createSubs(userId, data);
+    const subs = await createSubs(userId, data);
+
+    data.dishes.map(async (value: infoTypes.subscriptionDish) => {
+        const dish = await findOneDish(data.shopId, value.dishId);
+
+        await createSubsDish(subs.raw.insertId, dish, value.orderCount);
+    });
 };
 
 export const updateSubsInfo = async (userId: number, subsId: number, data: infoTypes.subscription) => {
@@ -61,7 +73,7 @@ export const updateSubsDish = async (userId: number, subsId: number, data: infoT
 
     const subsRepo = repository(SubsRepo);
 
-    await subsRepo.updateSubsDish(userId, subsId, data);
+    // await subsRepo.updateSubsDish(userId, subsId, data);
 };
 
 export const updateSubsDishOnetime = async (userId: number, subsId: number, data: infoTypes.changeDish) => {
@@ -69,7 +81,7 @@ export const updateSubsDishOnetime = async (userId: number, subsId: number, data
 
     const subsRepo = repository(SubsRepo);
 
-    await subsRepo.updateSubsDishOnetime(userId, subsId, data);
+    // await subsRepo.updateSubsDishOnetime(userId, subsId, data);
 };
 
 export const deleteSubs = async (userId: number, subsId: number) => {

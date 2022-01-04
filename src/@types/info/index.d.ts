@@ -45,7 +45,7 @@ declare module "infoTypes" {
             deliveryCost: number;
             toShop: string | null;
             toDelivery: string | null;
-            dishes: Array<subsDishData>;
+            dishes: Array<subscriptionDish>;
             deleted: boolean;
         }
 

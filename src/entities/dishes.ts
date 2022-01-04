@@ -4,6 +4,7 @@ import {
     Column,
     CreateDateColumn,
     UpdateDateColumn,
+    DeleteDateColumn,
     ManyToOne,
     JoinColumn,
     OneToMany,
@@ -50,6 +51,9 @@ export class Dishes {
 
     @UpdateDateColumn()
     updatedAt: Date;
+
+    @DeleteDateColumn({ nullable: true })
+    deletedAt: Date;
 
     @OneToMany(() => SubscriptionDishes, (subscriptionDishes) => subscriptionDishes.dishes)
     subscriptionDishes: SubscriptionDishes[];

@@ -18,10 +18,6 @@ const corsOptions = {
     credentials: true,
 };
 
-createConnection()
-    .then(() => console.log("🚀 DB Connected"))
-    .catch((err) => console.log(err));
-
 app.use(cors(corsOptions));
 app.use(morgan("dev", { stream: logger.stream }));
 app.use(cookieParser());
@@ -32,7 +28,14 @@ app.use(apiRouter.path, apiRouter.router);
 app.use(errorConverter);
 app.use(errorHandler);
 
-app.listen(port, () => {
-    console.log(`======= ENV: ${env.nodeEnv} =======`);
-    console.log(`🚀 App listening on the port ${port}`);
-});
+if (env.nodeEnv !== "test") {
+    app.listen(port, async () => {
+        console.log(`======= ENV: ${env.nodeEnv} =======`);
+        console.log(`🚀 App listening on the port ${port}`);
+        await createConnection()
+            .then(() => console.log("🚀 DB Connected"))
+            .catch((err) => console.log(err));
+    });
+}
+
+export default app;

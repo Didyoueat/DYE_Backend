@@ -1,6 +1,6 @@
 import { EntityRepository, Repository } from "typeorm";
-import { Dishes } from "@entities/dishes";
 import { infoTypes } from "infoTypes";
+import { Dishes } from "@entities/dishes";
 
 @EntityRepository(Dishes)
 export class DishRepo extends Repository<Dishes> {
@@ -11,8 +11,7 @@ export class DishRepo extends Repository<Dishes> {
     findOneDish = (shopId: number, dishId: number) => {
         return this.createQueryBuilder("dishes")
             .select()
-            .where("dishes.shopId = :shopId", { shopId: shopId })
-            .andWhere("dishes.dishId = :dishId", { dishId: dishId })
+            .where("dishes.shopId = :shopId AND dishes.dishId = :dishId", { shopId: shopId, dishId: dishId })
             .getOne();
     };
 
@@ -31,12 +30,15 @@ export class DishRepo extends Repository<Dishes> {
             .execute();
     };
 
+    deleteShopDishes = async (shopId: number) => {
+        await this.createQueryBuilder("dishes").where("dishes.shopId = :shopId", { shopId: shopId }).softDelete().execute();
+    };
+
     deleteDish = async (shopId: number, dishId: number) => {
         await this.createQueryBuilder("dishes")
-            .delete()
-            .from(Dishes)
             .where("dishes.shopId = :shopId", { shopId: shopId })
             .andWhere("dishes.dishId = :dishId", { dishId: dishId })
+            .softDelete()
             .execute();
     };
 }
