@@ -11,7 +11,7 @@ import {
 } from "typeorm";
 import { Subscriptions } from "@entities/subscriptions";
 import { Dishes } from "@entities/dishes";
-import { SubscriptionOnetime } from "@entities/subscriptionOnetime";
+import { SubscriptionOnetime } from "@entities/subscription.onetime";
 
 @Entity("subscription_dishes")
 export class SubscriptionDishes {

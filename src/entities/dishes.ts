@@ -10,9 +10,9 @@ import {
     OneToMany,
 } from "typeorm";
 import { Shops } from "@entities/shops";
-import { SubscriptionDishes } from "@entities/subscriptionDishes";
-import { SubscriptionOnetime } from "@entities/subscriptionOnetime";
-import { OrderDishes } from "@entities/orderDishes";
+import { SubscriptionDishes } from "@entities/subscription.dishes";
+import { SubscriptionOnetime } from "@entities/subscription.onetime";
+import { OrderDishes } from "@entities/order.dishes";
 
 @Entity("dishes")
 export class Dishes {

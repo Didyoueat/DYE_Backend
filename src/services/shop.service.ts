@@ -1,6 +1,7 @@
-import { ShopRepo } from "@repository/shopRepo";
 import { repository, addProperty, propertyCheck } from "@modules/property";
 import { infoTypes } from "infoTypes";
+import { ShopRepo } from "@repository/shop.repository";
+import { DishRepo } from "@repository/dish.repository";
 
 export const findAllShop = async () => {
     const shopRepo = repository(ShopRepo);
@@ -53,6 +54,8 @@ export const deleteShop = async (shopId: number) => {
     propertyCheck(shopId);
 
     const shopRepo = repository(ShopRepo);
+    const dishRepo = repository(DishRepo);
 
-    await shopRepo.deleteShop(shopId);
+    await shopRepo.softDeleteShop(shopId);
+    await dishRepo.softDeleteShopDishes(shopId);
 };

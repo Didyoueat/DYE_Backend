@@ -11,7 +11,7 @@ import {
 } from "typeorm";
 import { Users } from "@entities/users";
 import { Shops } from "@entities/shops";
-import { SubscriptionDishes } from "@entities/subscriptionDishes";
+import { SubscriptionDishes } from "@entities/subscription.dishes";
 
 @Entity("subscriptions")
 export class Subscriptions {
@@ -58,7 +58,7 @@ export class Subscriptions {
     @JoinColumn({ name: "userId", referencedColumnName: "userId" })
     users: Users;
 
-    @ManyToOne(() => Shops, (shops) => shops.subscriptions, { nullable: false, onDelete: "CASCADE" })
+    @ManyToOne(() => Shops, (shops) => shops.subscriptions, { nullable: false })
     @JoinColumn({ name: "shopId", referencedColumnName: "shopId" })
     shops: Shops;
 }

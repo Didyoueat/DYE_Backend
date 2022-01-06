@@ -1,4 +1,4 @@
-import { OrderRepo } from "@repository/orderRepo";
+import { OrderRepo } from "@repository/order.repository";
 import { repository, propertyCheck } from "@modules/property";
 import { infoTypes } from "infoTypes";
 

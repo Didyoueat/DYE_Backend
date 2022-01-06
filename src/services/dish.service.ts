@@ -1,4 +1,4 @@
-import { DishRepo } from "@repository/dishRepo";
+import { DishRepo } from "@repository/dish.repository";
 import { repository, propertyCheck, addProperty } from "@modules/property";
 import { infoTypes } from "infoTypes";
 
@@ -43,5 +43,5 @@ export const deleteDish = async (shopId: number, dishId: number) => {
 
     const dishRepo = repository(DishRepo);
 
-    await dishRepo.deleteDish(shopId, dishId);
+    await dishRepo.softDeleteOneDish(shopId, dishId);
 };

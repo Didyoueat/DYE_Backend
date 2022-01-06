@@ -1,6 +1,6 @@
 import { EntityRepository, Repository, getRepository, getConnection } from "typeorm";
-import { SubscriptionDishes } from "@entities/subscriptionDishes";
-import { SubscriptionOnetime } from "@entities/subscriptionOnetime";
+import { SubscriptionDishes } from "@entities/subscription.dishes";
+import { SubscriptionOnetime } from "@entities/subscription.onetime";
 import { Dishes } from "@entities/dishes";
 
 @EntityRepository(SubscriptionDishes)

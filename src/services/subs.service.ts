@@ -1,6 +1,6 @@
-import { SubsRepo } from "@repository/subsRepo";
-import { SubsDishRepo } from "@repository/subsDishRepo";
-import { DishRepo } from "@repository/dishRepo";
+import { SubsRepo } from "@repository/subscription.repository";
+import { SubsDishRepo } from "@repository/subscription.dish.repository";
+import { DishRepo } from "@repository/dish.repository";
 import { repository, addProperty, propertyCheck } from "@modules/property";
 import tableCheck from "@modules/tableCheck";
 import { infoTypes } from "infoTypes";

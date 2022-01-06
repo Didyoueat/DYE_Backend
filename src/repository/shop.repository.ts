@@ -27,19 +27,37 @@ export class ShopRepo extends Repository<Shops> {
             .getOne();
     };
 
+    findDeletedAllShop = () => {
+        return this.createQueryBuilder("shops").where("shops.deletedAt = :deletedAt", { deletedAt: true }).getMany();
+    };
+
+    findDeletedOneShop = (shopId: number) => {
+        return this.createQueryBuilder("shops")
+            .select()
+            .withDeleted()
+            .where("shops.shopId = :shopId", {
+                shopId: shopId,
+            })
+            .getOne();
+    };
+
     createShop = async (data: infoTypes.shop) => {
-        await this.createQueryBuilder().insert().into(Shops).values(data).execute();
+        return await this.createQueryBuilder().insert().into(Shops).values(data).execute();
     };
 
     updateShop = async (shopId: number, data: infoTypes.shop) => {
-        await this.createQueryBuilder("shops")
+        return await this.createQueryBuilder("shops")
             .update(Shops)
             .set(data)
             .where("shops.shopId = :shopId", { shopId: shopId })
             .execute();
     };
 
+    softDeleteShop = async (shopId: number) => {
+        return await this.createQueryBuilder("shops").where("shops.shopId = :shopId", { shopId: shopId }).softDelete().execute();
+    };
+
     deleteShop = async (shopId: number) => {
-        await this.createQueryBuilder("shops").where("shops.shopId = :shopId", { shopId: shopId }).softDelete().execute();
+        return await this.createQueryBuilder("shops").delete().where("shops.shopId = :shopId", { shopId: shopId }).execute();
     };
 }
