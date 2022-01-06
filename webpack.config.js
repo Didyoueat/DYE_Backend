@@ -44,6 +44,7 @@ module.exports = {
     resolve: {
         extensions: [".ts", ".tsx", ".js"],
         alias: {
+            "@middlewares": path.resolve(__dirname, "./src/middlewares/"),
             "@routes": path.resolve(__dirname, "./src/routes/"),
             "@controllers": path.resolve(__dirname, "./src/controllers/"),
             "@services": path.resolve(__dirname, "./src/services/"),

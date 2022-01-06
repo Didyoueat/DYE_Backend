@@ -14,6 +14,7 @@
         "baseUrl": ".",
         "skipLibCheck": true,
         "paths": {
+            "@middlewares/*": ["src/middlewares/*"],
             "@routes/*": ["src/routes/*"],
             "@controllers/*": ["src/controllers/*"],
             "@services/*": ["src/services/*"],

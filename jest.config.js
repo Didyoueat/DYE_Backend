@@ -1,6 +1,7 @@
 module.exports = {
     preset: "ts-jest",
     moduleNameMapper: {
+        "@middlewares/(.*)$": "<rootDir>/src/middlewares/$1",
         "@routes/(.*)$": "<rootDir>/src/routes/$1",
         "@controllers/(.*)$": "<rootDir>/src/controllers/$1",
         "@services/(.*)$": "<rootDir>/src/services/$1",
