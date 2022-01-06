@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { catchAsync } from "@modules/error";
+import { catchAsync } from "@middlewares/error";
 
 // JWT 검증 (사용자 확인)
 export const checkToken = catchAsync((req: Request, res: Response) => {});

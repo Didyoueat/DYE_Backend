@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { catchAsync } from "@modules/error";
+import { catchAsync } from "@middlewares/error";
 
 // 가게 공지사항 목록 조회
 export const getShopPostList = catchAsync((req: Request, res: Response) => {});

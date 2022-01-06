@@ -8,7 +8,7 @@ import * as apiRouter from "@routes/index";
 
 import env from "@modules/env";
 import logger from "@modules/logger";
-import { errorConverter, errorHandler } from "@modules/error";
+import { errorConverter, errorHandler } from "@middlewares/error";
 
 const app = express();
 const port = env.port || 5000;

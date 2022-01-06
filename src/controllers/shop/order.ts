@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
-import { catchAsync } from "@modules/error";
-import * as orderService from "@services/orderService";
+import { catchAsync } from "@middlewares/error";
+import * as orderService from "@services/order.service";
 
 // 가게 주문 목록 조회
 export const getShopOrderList = catchAsync(async (req: Request, res: Response) => {

@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
-import { catchAsync } from "@modules/error";
-import * as shopService from "@services/shopService";
-import * as subsService from "@services/subsService";
+import { catchAsync } from "@middlewares/error";
+import * as shopService from "@services/shop.service";
+import * as subsService from "@services/subs.service";
 
 /**
  * 전체 가게 목록 조회

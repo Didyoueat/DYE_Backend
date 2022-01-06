@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
-import { catchAsync } from "@modules/error";
-import * as subsService from "@services/subsService";
+import { catchAsync } from "@middlewares/error";
+import * as subsService from "@services/subs.service";
 
 // 회원 구독 목록 조회
 export const getUserSubsList = catchAsync(async (req: Request, res: Response) => {

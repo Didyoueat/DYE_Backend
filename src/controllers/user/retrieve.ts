@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
-import { catchAsync } from "@modules/error";
-import { findAllSubs } from "@services/subsService";
-import { findAllOrder } from "@services/orderService";
+import { catchAsync } from "@middlewares/error";
+import { findAllSubs } from "@services/subs.service";
+import { findAllOrder } from "@services/order.service";
 
 // 전체 회원 조회
 export const getAllUserList = catchAsync((req: Request, res: Response) => {});

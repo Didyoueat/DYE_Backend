@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { catchAsync } from "@modules/error";
+import { catchAsync } from "@middlewares/error";
 
 // 회원 정보 조회
 export const getUser = catchAsync((req: Request, res: Response) => {});
