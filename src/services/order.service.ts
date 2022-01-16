@@ -1,6 +1,6 @@
 import { OrderRepo } from "@repository/order.repository";
 import { repository, propertyCheck } from "@modules/property";
-import { infoTypes } from "infoTypes";
+import infoTypes from "infoTypes";
 
 export const findAllOrder = async () => {
     const orderRepo = repository(OrderRepo);

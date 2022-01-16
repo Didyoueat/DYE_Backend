@@ -1,5 +1,5 @@
 import { EntityRepository, Repository } from "typeorm";
-import { infoTypes } from "infoTypes";
+import infoTypes from "infoTypes";
 import { Shops } from "@entities/shops";
 
 @EntityRepository(Shops)

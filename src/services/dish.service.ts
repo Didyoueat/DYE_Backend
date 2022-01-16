@@ -1,6 +1,6 @@
 import { DishRepo } from "@repository/dish.repository";
 import { repository, propertyCheck, addProperty } from "@modules/property";
-import { infoTypes } from "infoTypes";
+import infoTypes from "infoTypes";
 
 export const findShopDishes = async (shopId: number) => {
     propertyCheck(shopId);

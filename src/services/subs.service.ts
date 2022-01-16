@@ -2,8 +2,8 @@ import { SubsRepo } from "@repository/subscription.repository";
 import { SubsDishRepo } from "@repository/subscription.dish.repository";
 import { DishRepo } from "@repository/dish.repository";
 import { repository, addProperty, propertyCheck } from "@modules/property";
-import tableCheck from "@modules/tableCheck";
-import { infoTypes } from "infoTypes";
+import tableCheck from "@modules/table.check";
+import infoTypes from "infoTypes";
 
 export const findAllSubs = async () => {
     const subsRepo = repository(SubsRepo);

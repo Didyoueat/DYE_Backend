@@ -1,5 +1,5 @@
 import { repository, addProperty, propertyCheck } from "@modules/property";
-import { infoTypes } from "infoTypes";
+import infoTypes from "infoTypes";
 import { ShopRepo } from "@repository/shop.repository";
 import { DishRepo } from "@repository/dish.repository";
 
@@ -30,6 +30,8 @@ export const findOneShop = async (shopId: number) => {
 
     const shopRepo = repository(ShopRepo);
     const shop = await shopRepo.findOneShop(shopId);
+
+    console.log(shop, shopId);
 
     return shop;
 };

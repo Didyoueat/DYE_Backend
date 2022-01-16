@@ -1,7 +1,7 @@
 import { ObjectType, getCustomRepository } from "typeorm";
 import httpStatus from "http-status";
-import ApiError from "@modules/apiError";
-import { infoTypes } from "infoTypes";
+import ApiError from "@modules/api.error";
+import infoTypes from "infoTypes";
 
 /**
  * Custom Repository
@@ -16,6 +16,20 @@ export const repository = <T>(repository: ObjectType<T>) => getCustomRepository(
  * @param data
  * @returns
  */
+
+const userProp: string[] = [
+    "staff",
+    "loginStatus",
+    "email",
+    "password",
+    "name",
+    "age",
+    "gender",
+    "phone",
+    "addrss",
+    "paymentState",
+    "paymentKey",
+];
 
 const shopProp: string[] = [
     "businessName",
@@ -48,8 +62,17 @@ const subsProp: string[] = [
     "dishes",
 ];
 
-export const addProperty = (data: infoTypes.shop | infoTypes.dish | infoTypes.subscription, type: string) => {
-    const prop: string[] = type === "shop" ? shopProp : type === "dish" ? dishProp : type === "subscription" ? subsProp : [];
+export const addProperty = (data: infoTypes.user | infoTypes.shop | infoTypes.dish | infoTypes.subscription, type: string) => {
+    const prop: string[] =
+        type === "user"
+            ? userProp
+            : type === "shop"
+            ? shopProp
+            : type === "dish"
+            ? dishProp
+            : type === "subscription"
+            ? subsProp
+            : [];
 
     for (let i = 0; i < prop.length; i++) {
         if (data[prop[i]] === undefined) {
@@ -64,6 +87,20 @@ export const addProperty = (data: infoTypes.shop | infoTypes.dish | infoTypes.su
  * @param data
  * @returns boolean
  */
+
+const userTypeCheck = (data: infoTypes.user): boolean => {
+    for (const key in data) {
+        if (data[key] === undefined) {
+            continue;
+        } else if (key === "age" && typeof data[key] !== "number") {
+            return false;
+        } else if (key === "loginStatus" || key === "email" || key === "phone" || key === "gender" || key === "address") {
+            if (typeof data[key] !== "string") return false;
+        } else {
+            if (typeof data[key] !== "string" && data[key] !== null) return false;
+        }
+    }
+};
 
 const shopTypeCheck = (data: infoTypes.shop): boolean => {
     for (const key in data) {
@@ -153,8 +190,12 @@ const changeTypeCheck = (data: infoTypes.changeDish): boolean => {
  * @returns boolean
  */
 
-const typeSeparate = (data: infoTypes.shop | infoTypes.dish | infoTypes.subscription | infoTypes.changeDish): boolean => {
-    if ("businessName" in data) {
+const typeSeparate = (
+    data: infoTypes.user | infoTypes.shop | infoTypes.dish | infoTypes.subscription | infoTypes.changeDish
+): boolean => {
+    if ("loginStatus" in data) {
+        return userTypeCheck(data);
+    } else if ("businessName" in data) {
         return shopTypeCheck(data);
     } else if ("thumbnail" in data) {
         return dishTypeCheck(data);
