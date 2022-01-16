@@ -7,7 +7,7 @@ import { SubscriptionDishes } from "@entities/subscription.dishes";
 import { SubscriptionOnetime } from "@entities/subscription.onetime";
 import { Orders } from "@entities/orders";
 import { OrderDishes } from "@entities/order.dishes";
-import ApiError from "@modules/apiError";
+import ApiError from "@modules/api.error";
 import httpStatus from "http-status";
 import { tableTypes } from "tableTypes";
 

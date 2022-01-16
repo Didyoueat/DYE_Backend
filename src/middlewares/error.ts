@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import ApiError from "@modules/apiError";
+import ApiError from "@modules/api.error";
 import logger from "@modules/logger";
 import env from "@modules/env";
 import slack from "@modules/slack";
@@ -40,8 +40,4 @@ export const errorHandler = (err: ApiError, req: Request, res: Response, next: N
     }
 
     res.status(statusCode).send(response);
-};
-
-export const catchAsync = (fn: Function) => (req: Request, res: Response, next: NextFunction) => {
-    Promise.resolve(fn(req, res, next)).catch((err) => next(err));
 };
