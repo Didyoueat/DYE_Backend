@@ -1,5 +1,19 @@
 declare module "infoTypes" {
-    export namespace infoTypes {
+    namespace infoTypes {
+        interface user {
+            staff?: boolean;
+            loginStatus: string;
+            email: string;
+            password?: string;
+            name: string;
+            age: number;
+            gender: string;
+            phone: string;
+            address: string;
+            paymentState?: string;
+            paymentKey?: string;
+        }
+
         interface shop {
             businessName: string;
             businessNumber: string;
@@ -57,4 +71,6 @@ declare module "infoTypes" {
             }>;
         }
     }
+
+    export default infoTypes;
 }

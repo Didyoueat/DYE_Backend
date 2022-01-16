@@ -19,19 +19,19 @@ export class Users {
     @Column("varchar", { length: 100, nullable: true, select: false })
     password!: string;
 
-    @Column("varchar", { length: 10 })
+    @Column("varchar", { length: 10, nullable: true })
     name: string;
 
-    @Column("int")
+    @Column("int", { nullable: true })
     age: number;
 
-    @Column("varchar", { length: 10 })
+    @Column("varchar", { length: 10, nullable: true })
     gender: string;
 
-    @Column("varchar", { length: 20 })
+    @Column("varchar", { length: 20, nullable: true })
     phone: string;
 
-    @Column("varchar", { length: 100 })
+    @Column("varchar", { length: 100, nullable: true })
     address: string;
 
     @Column("varchar", { length: 20, nullable: true })
