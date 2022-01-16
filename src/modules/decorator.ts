@@ -11,15 +11,22 @@ const COLUMN_KEY = Symbol("COLUMN_KEY");
 
 SelectQueryBuilder.prototype.getAroundShop = async function () {
     const { entities, raw } = await this.getRawAndEntities();
+    let flag = 0;
+    let idx = 0;
 
-    const items = entities.map((entitiy, index) => {
+    const items = entities.map((entitiy) => {
+        while (flag === raw[idx]["shops_shopId"]) {
+            idx++;
+        }
+
         const metaInfo = Reflect.getMetadata(COLUMN_KEY, entitiy) ?? {};
-        const item = raw[index];
+        const item = raw[idx];
 
         for (const [propertyKey, name] of Object.entries<string>(metaInfo)) {
             entitiy[propertyKey] = item[name];
         }
 
+        flag = item["shops_shopId"];
         return entitiy;
     });
 

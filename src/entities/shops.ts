@@ -27,10 +27,10 @@ export class Shops {
     @Column("varchar", { length: 100 })
     address: string;
 
-    @Column("float")
+    @Column("double")
     latitude: number;
 
-    @Column("float")
+    @Column("double")
     longitude: number;
 
     @Column("varchar", { length: 10 })
