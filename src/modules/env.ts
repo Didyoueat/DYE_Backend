@@ -17,6 +17,10 @@ const env = {
     port: parseInt(process.env.PORT, 10) || 5000,
     nodeEnv: process.env.NODE_ENV,
     slackWebhook: process.env.SLACK_WEBHOOK,
+    jwtSecret: {
+        access: process.env.JWT_ACCESS_SECRET,
+        refresh: process.env.JWT_REFRESH_SECRET,
+    },
     dbConfig: {
         username: process.env.DATABASE_USERNAME,
         password: process.env.DATABASE_PASSWORD,
@@ -29,6 +33,7 @@ const env = {
         secretKey: process.env.AWS_IAM_SECRET_KEY,
         region: process.env.AWS_S3_REGION,
         bucket: process.env.AWS_S3_BUCKET,
+        redisPort: process.env.REDIS_PORT,
     },
 };
 
