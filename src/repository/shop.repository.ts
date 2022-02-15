@@ -20,7 +20,7 @@ export class ShopRepo extends Repository<Shops> {
     findAroundShops = (lat: number, lon: number, radius: number) => {
         return this.createQueryBuilder("shops")
             .addSelect(
-                `6371 * acos(cos(radians(${lat})) * cos(radians(latitude)) * cos(radians(longitude) - radians(${lon})) + sin(radians(${lat})) * sin(radians(latitude)))`,
+                `FLOOR(1000 * 6371 * acos(cos(radians(${lat})) * cos(radians(latitude)) * cos(radians(longitude) - radians(${lon})) + sin(radians(${lat})) * sin(radians(latitude))))`,
                 "distance"
             )
             .leftJoinAndSelect("shops.dishes", "dishes")
