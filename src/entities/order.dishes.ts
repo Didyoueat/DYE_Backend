@@ -49,7 +49,7 @@ export class OrderDishes {
     @UpdateDateColumn()
     updatedAt: Date;
 
-    @DeleteDateColumn({ nullable: true })
+    @DeleteDateColumn({ nullable: true, select: false })
     deletedAt: Date;
 
     @ManyToOne(() => OrderDays, (orderDays) => orderDays.orderDishes, { nullable: false, onDelete: "CASCADE" })

@@ -52,7 +52,7 @@ export class Dishes {
     @UpdateDateColumn()
     updatedAt: Date;
 
-    @DeleteDateColumn({ nullable: true })
+    @DeleteDateColumn({ nullable: true, select: false })
     deletedAt: Date;
 
     @OneToMany(() => SubscriptionDishes, (subscriptionDishes) => subscriptionDishes.dishes)

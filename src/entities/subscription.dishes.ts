@@ -51,7 +51,7 @@ export class SubscriptionDishes {
     @UpdateDateColumn()
     updatedAt: Date;
 
-    @DeleteDateColumn({ nullable: true })
+    @DeleteDateColumn({ nullable: true, select: false })
     deletedAt: Date;
 
     // @OneToMany(() => SubscriptionOnetime, (subscriptionOnetime) => subscriptionOnetime.subscriptionDishes)
