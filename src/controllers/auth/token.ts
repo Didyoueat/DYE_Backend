@@ -2,25 +2,27 @@ import { Request, Response, NextFunction } from "express";
 import * as authService from "@services/auth.service";
 
 // JWT 검증 (사용자 확인)
+/**
+ * 뭘 리턴해야 할 지
+ * 성공 시 회원 정보, 실패시 오류?
+ * @param req
+ * @param res
+ * @returns
+ */
 export const checkToken = (req: Request, res: Response) => {
     const access = String(req.headers.access_token);
     const refresh = String(req.headers.refresh_token);
-    const userId = req.body.userId;
 
-    return authService.verityToken(access, refresh, userId);
+    return authService.verityToken(access, refresh);
 };
 
-// JWT 발급 (로그인)
-export const createToken = async (req: Request, res: Response) => {
+export const createToken = (req: Request, res: Response) => {
     const userId = parseInt(req.body.userId, 10);
-    return await authService.createToken(userId);
-};
+    const group = parseInt(req.body.group, 10);
 
-// JWT 삭제 (로그아웃)
-export const deleteToken = (req: Request, res: Response) => {};
+    req.body.requestId = userId;
+    req.body.group = group;
+    req.body.changedRequire = true;
 
-// 카카오 Login API를 통한 신규/기존 사용자 확인
-export const checkKakaoToken = async (req: Request, res: Response) => {
-    const kakaoToken = req.body.kakaoToken;
-    req.body.json = await authService.accessKakaoInfo(kakaoToken);
+    return {};
 };

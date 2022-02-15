@@ -1,28 +1,39 @@
 import { Request, Response, NextFunction } from "express";
-import JWT from "@modules/jwt";
+import JWT, { originId } from "@modules/jwt";
+import { errorGenerator } from "@modules/api.error";
 import httpStatus from "http-status";
 
-const originId = (id: number): string => String(id).substring(7);
+const authorization = async (req: Request, res: Response) => {
+    return;
+    // if (!req.headers.access_token || !req.headers.refresh_token) {
+    //     errorGenerator(httpStatus.BAD_REQUEST);
+    // }
 
-const authorization = async (req: Request, res: Response, next: NextFunction) => {
+    // const access = String(req.headers.access_token);
+    // const refresh = String(req.headers.refresh_token);
+    // const accessResult = JWT.accessVerify(access);
+    // const refreshResult = await JWT.refreshVerity(refresh, originId(accessResult.decoded["id"]), accessResult.decoded["group"]);
+
+    // if (refreshResult.valid && (accessResult.valid || accessResult.message === "jwt expired")) {
+    //     req.body.requestId = originId(accessResult.decoded["id"]);
+    //     req.body.group = accessResult.decoded["group"];
+    //     req.body.changedRequire = accessResult.message ? true : false;
+    //     return {
+    //         requestId: parseInt(req.body.requestId, 10),
+    //         group: parseInt(req.body.group, 10),
+    //     };
+    // } else {
+    //     errorGenerator(httpStatus.UNAUTHORIZED);
+    // }
+};
+
+const adminAuth = async (req: Request, res: Response) => {
+    if (!req.headers.access_token || !req.headers.refresh_token) {
+        errorGenerator(httpStatus.BAD_REQUEST);
+    }
+
     const access = String(req.headers.access_token);
     const refresh = String(req.headers.refresh_token);
-    const accessResult = JWT.accessVerify(access);
-    req.body.requestId = originId(accessResult.decoded["id"]);
-
-    if (!access || !refresh) {
-        res.send("잘못된 요청입니다.").status(httpStatus.BAD_REQUEST);
-    }
-
-    if (accessResult.valid || accessResult.message === "jwt expired") {
-        const refreshResult = await JWT.refreshVerity(refresh, req.body.requestId);
-        if (refreshResult.valid) {
-            req.body.changedRequire = accessResult.message ? true : false;
-            return;
-        } else res.send(refreshResult.message).status(httpStatus.UNAUTHORIZED);
-    } else {
-        res.send("권한이 없습니다.").status(httpStatus.UNAUTHORIZED);
-    }
 };
 
 export default authorization;
