@@ -1,8 +1,8 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany, DeleteDateColumn } from "typeorm";
 import { VirtualColumn } from "@modules/decorator";
 import { Dishes } from "@entities/dishes";
-import { Subscriptions } from "@entities/subscriptions";
-import { Orders } from "@entities/orders";
+import { SubscriptionDays } from "@entities/subscription.days";
+import { OrderDays } from "@entities/order.days";
 
 @Entity("shops")
 export class Shops {
@@ -15,13 +15,13 @@ export class Shops {
     @Column("varchar", { length: 50 })
     businessName: string;
 
-    @Column("varchar", { length: 20 })
+    @Column("varchar", { length: 20, nullable: true })
     businessPhone: string;
 
     @Column("varchar", { length: 100, select: false })
     password: string;
 
-    @Column("tinyint", { unsigned: true })
+    @Column("tinyint", { unsigned: true, nullable: true })
     dayOff: number;
 
     @Column("varchar", { length: 100 })
@@ -33,7 +33,7 @@ export class Shops {
     @Column("double")
     longitude: number;
 
-    @Column("varchar", { length: 10 })
+    @Column("varchar", { length: 10, nullable: true })
     name: string;
 
     @Column("varchar", { length: 20, nullable: true, select: false })
@@ -69,11 +69,11 @@ export class Shops {
     @OneToMany(() => Dishes, (dishes) => dishes.shops)
     dishes: Dishes[];
 
-    @OneToMany(() => Subscriptions, (subscriptions) => subscriptions.shops)
-    subscriptions: Subscriptions[];
+    @OneToMany(() => SubscriptionDays, (subscriptionDays) => subscriptionDays.shops)
+    subscriptionDays: SubscriptionDays[];
 
-    @OneToMany(() => Orders, (orders) => orders.shops)
-    orders: Orders[];
+    @OneToMany(() => OrderDays, (orderDays) => orderDays.shops)
+    orderDays: OrderDays[];
 
     @VirtualColumn()
     distance: number;

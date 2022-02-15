@@ -9,9 +9,9 @@ import {
     OneToMany,
     DeleteDateColumn,
 } from "typeorm";
-import { Subscriptions } from "@entities/subscriptions";
+import { SubscriptionDays } from "@entities/subscription.days";
 import { Dishes } from "@entities/dishes";
-import { SubscriptionOnetime } from "@entities/subscription.onetime";
+// import { SubscriptionOnetime } from "@entities/subscription.onetime";
 
 @Entity("subscription_dishes")
 export class SubscriptionDishes {
@@ -19,13 +19,10 @@ export class SubscriptionDishes {
     subscriptionDishId: number;
 
     @Column("int")
-    subscriptionId: number;
+    subscriptionDayId: number;
 
     @Column("int")
     dishId: number;
-
-    @Column("int", { default: null, nullable: true })
-    oldSubscriptionDishId: number;
 
     @Column("boolean", { default: false })
     oneTime: boolean;
@@ -57,16 +54,16 @@ export class SubscriptionDishes {
     @DeleteDateColumn({ nullable: true })
     deletedAt: Date;
 
-    @OneToMany(() => SubscriptionOnetime, (subscriptionOnetime) => subscriptionOnetime.subscriptionDishes)
-    subscriptionOnetime: SubscriptionOnetime[];
+    // @OneToMany(() => SubscriptionOnetime, (subscriptionOnetime) => subscriptionOnetime.subscriptionDishes)
+    // subscriptionOnetime: SubscriptionOnetime[];
 
-    @ManyToOne(() => Subscriptions, (subscriptions) => subscriptions.subscriptionDishes, {
+    @ManyToOne(() => SubscriptionDays, (subscriptionDays) => subscriptionDays.subscriptionDishes, {
         nullable: false,
         onDelete: "CASCADE",
         cascade: true,
     })
-    @JoinColumn({ name: "subscriptionId", referencedColumnName: "subscriptionId" })
-    subscriptions: Subscriptions;
+    @JoinColumn({ name: "subscriptionDayId", referencedColumnName: "subscriptionDayId" })
+    subscriptionDays: SubscriptionDays;
 
     @ManyToOne(() => Dishes, (dishes) => dishes.subscriptionDishes, { nullable: false })
     @JoinColumn({ name: "dishId", referencedColumnName: "dishId" })

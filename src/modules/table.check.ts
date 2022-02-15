@@ -3,11 +3,12 @@ import { Users } from "@entities/users";
 import { Shops } from "@entities/shops";
 import { Dishes } from "@entities/dishes";
 import { Subscriptions } from "@entities/subscriptions";
+import { SubscriptionDays } from "@entities/subscription.days";
 import { SubscriptionDishes } from "@entities/subscription.dishes";
-import { SubscriptionOnetime } from "@entities/subscription.onetime";
+// import { SubscriptionOnetime } from "@entities/subscription.onetime";
 import { Orders } from "@entities/orders";
 import { OrderDishes } from "@entities/order.dishes";
-import ApiError from "@modules/api.error";
+import { errorGenerator } from "@modules/api.error";
 import httpStatus from "http-status";
 import { tableTypes } from "tableTypes";
 
@@ -20,11 +21,13 @@ const getEntity = (arg: string): any => {
         ? Dishes
         : arg === "subscription"
         ? Subscriptions
+        : arg === "subscriptionDay"
+        ? SubscriptionDays
         : arg === "subscriptionDish"
         ? SubscriptionDishes
-        : arg === "subscriptionOnetime"
-        ? SubscriptionOnetime
-        : arg === "order"
+        : // : arg === "subscriptionOnetime"
+        // ? SubscriptionOnetime
+        arg === "order"
         ? Orders
         : arg === "orderDish"
         ? OrderDishes
@@ -40,7 +43,7 @@ const dataCheck = async (entity: any, key: string, value: number) => {
         .getOne();
 
     if (check == undefined) {
-        throw new ApiError(httpStatus.BAD_REQUEST, "잘못된 요청입니다. 없는 데이터를 참조 할 경우 이 오류가 발생합니다");
+        errorGenerator(httpStatus.NOT_FOUND);
     }
 };
 
@@ -49,18 +52,30 @@ const tableCheck = async (arg: tableTypes.tableId) => {
         const value: number | number[] = arg[key];
         const entitiy = getEntity(key);
 
-        if (entitiy === null) {
-            throw new ApiError(httpStatus.BAD_REQUEST, "잘못된 요청입니다.");
+        if (typeof value === "number") {
+            await dataCheck(entitiy, key, value);
         } else {
-            if (typeof value === "number") {
-                await dataCheck(entitiy, key, value);
-            } else {
-                for (let i = 0; i < value.length; i++) {
-                    await dataCheck(entitiy, key, value[i]);
-                }
+            for (let i = 0; i < value.length; i++) {
+                await dataCheck(entitiy, key, value[i]);
             }
         }
     }
 };
 
-export default tableCheck;
+export const dishCheck = async (shopId: number, dishId: number[]) => {
+    for (let i = 0; i < dishId.length; i++) {
+        const check = await getConnection()
+            .createQueryBuilder()
+            .select(`dish.dishId`)
+            .from(Dishes, "dish")
+            .where(`dish.shopId = :shopId AND dish.dishId = :dishId`, { shopId: shopId, dishId: dishId[i] })
+            .getOne();
+
+        if (check == undefined) {
+            errorGenerator(httpStatus.BAD_REQUEST);
+        }
+    }
+    return true;
+};
+
+// export default tableCheck;

@@ -2,7 +2,7 @@ declare module "infoTypes" {
     namespace infoTypes {
         interface user {
             staff?: boolean;
-            loginStatus: string;
+            loginStatus?: string;
             email: string;
             password?: string;
             name: string;
@@ -27,7 +27,7 @@ declare module "infoTypes" {
             phone: string;
             origin: string | null;
             content: string | null;
-            imageUrl: string | null;
+            imageUrl?: string | null;
             officeHour: string;
             temporaryDayStart: Date | null;
             temporaryDayEnd: Date | null;
@@ -42,25 +42,37 @@ declare module "infoTypes" {
             price: number;
             count: number;
             weight: number;
-            imageUrl: string;
+            imageUrl?: string;
+        }
+
+        interface dishInCart {
+            dishId: number;
+            orderCount: number;
         }
 
         interface subscriptionDish {
+            subscriptionId: number;
             dishId: number;
+            oldSubscriptionDishId?: number;
+            oneTime: boolean;
+            main: boolean;
+            title: string;
+            price: number;
+            weight: number;
             orderCount: number;
+            imageUrl?: string;
         }
 
         interface subscription {
             userId: number;
             shopId: number;
             weekLabel: number;
-            reciever: string;
+            receiver: string;
             address: string;
             deliveryCost: number;
             toShop: string | null;
             toDelivery: string | null;
-            dishes: Array<subscriptionDish>;
-            deleted: boolean;
+            dishes?: Array<subscriptionDish>;
         }
 
         interface changeDish {

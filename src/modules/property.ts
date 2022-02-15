@@ -1,7 +1,9 @@
 import { ObjectType, getCustomRepository } from "typeorm";
 import httpStatus from "http-status";
-import ApiError from "@modules/api.error";
+import { errorGenerator } from "@modules/api.error";
 import infoTypes from "infoTypes";
+import createTypes from "createTypes";
+import updateTypes from "updateTypes";
 
 /**
  * Custom Repository
@@ -12,200 +14,99 @@ import infoTypes from "infoTypes";
 export const repository = <T>(repository: ObjectType<T>) => getCustomRepository(repository);
 
 /**
- * 객체 빈 key = undefined 조합
  * @param data
  * @returns
  */
 
-const userProp: string[] = [
-    "staff",
-    "loginStatus",
-    "email",
-    "password",
-    "name",
-    "age",
-    "gender",
-    "phone",
-    "addrss",
-    "paymentState",
-    "paymentKey",
-];
+const createProp = {
+    user: ["staff", "loginStatus", "email", "password", "name", "age", "gender", "phone", "addrss", "paymentState", "paymentKey"],
+    shop: ["businessName", "businessNumber", "password", "address", "latitude", "longitude", "name", "phone"],
+    dish: ["main", "title", "price", "count", "weight"],
+    subscription: ["address", "receiver", "subscriptionDays"],
+    subscriptionDay: ["shopId", "weekLabel", "deliveryCost", "subscriptionDishes"],
+};
 
-const shopProp: string[] = [
-    "businessName",
-    "businessNumber",
-    "businessPhone",
-    "password",
-    "dayOff",
-    "latitude",
-    "longitude",
-    "name",
-    "phone",
-    "origin",
-    "content",
-    "officeHour",
-    "temporaryDayStart",
-    "temporaryDayEnd",
-];
-
-const dishProp: string[] = ["main", "thumbnail", "title", "content", "price", "count", "weight"];
-
-const subsProp: string[] = [
-    "shopId",
-    "weekLabel",
-    "reciever",
-    "address",
-    "paymentState",
-    "deliveryCost",
-    "toshop",
-    "toDelivery",
-    "dishes",
-];
-
-export const addProperty = (data: infoTypes.user | infoTypes.shop | infoTypes.dish | infoTypes.subscription, type: string) => {
+const createCheck = (data: createTypes.user | createTypes.shop | createTypes.dish | createTypes.subscription, type: string) => {
     const prop: string[] =
         type === "user"
-            ? userProp
+            ? createProp.user
             : type === "shop"
-            ? shopProp
+            ? createProp.shop
             : type === "dish"
-            ? dishProp
+            ? createProp.dish
             : type === "subscription"
-            ? subsProp
+            ? createProp.subscription
             : [];
 
     for (let i = 0; i < prop.length; i++) {
-        if (data[prop[i]] === undefined) {
-            data[prop[i]] = undefined;
-        }
-    }
-    return data;
-};
-
-/**
- * 데이터 타입 체크
- * @param data
- * @returns boolean
- */
-
-const userTypeCheck = (data: infoTypes.user): boolean => {
-    for (const key in data) {
-        if (data[key] === undefined) {
-            continue;
-        } else if (key === "age" && typeof data[key] !== "number") {
+        if (!data[prop[i]]) {
             return false;
-        } else if (key === "loginStatus" || key === "email" || key === "phone" || key === "gender" || key === "address") {
-            if (typeof data[key] !== "string") return false;
-        } else {
-            if (typeof data[key] !== "string" && data[key] !== null) return false;
+        }
+        if (type === "subscription" && prop[i] === "subscriptionDays") {
+            if (data[prop[i]].length === 0) {
+                return false;
+            }
+            data[prop[i]].map((value) => {
+                for (let j = 0; j < createProp.subscriptionDay.length; j++) {
+                    const subsDay = createProp.subscriptionDay[j];
+                    if (!value[subsDay]) {
+                        return false;
+                    }
+                    if (subsDay === "subscriptionDishes") {
+                        const subsDish = value[subsDay];
+                        if (value[subsDay].length === 0) {
+                            return false;
+                        }
+                        subsDish.map((dish) => {
+                            if (!dish.dishId || !dish.orderCount) {
+                                return false;
+                            }
+                        });
+                    }
+                }
+            });
         }
     }
-};
-
-const shopTypeCheck = (data: infoTypes.shop): boolean => {
-    for (const key in data) {
-        if (data[key] === undefined) {
-            continue;
-        } else if (!(key === "origin" || key === "content" || key === "temporaryDayStart" || key === "temporaryDayEnd")) {
-            if (key === "dayOff" || key === "latitude" || key === "longitude") {
-                if (isNaN(data[key])) return false;
-            } else {
-                if (typeof data[key] !== "string") return false;
-            }
-        } else {
-            if (key === "temporaryDayStart" || key === "temporaryDayEnd") {
-                if (typeof data[key] !== "object" && data[key] !== null) return false;
-            } else {
-                if (typeof data[key] !== "string" && data[key] !== null) return false;
-            }
-        }
-    }
-
     return true;
 };
 
-const dishTypeCheck = (data: infoTypes.dish): boolean => {
-    for (const key in data) {
-        if (data[key] === undefined) {
-            continue;
-        } else if (key === "price" || key === "count" || key === "weight") {
-            if (isNaN(data[key])) return false;
-        } else if (key === "main" || key === "thumbnail") {
-            if (typeof data[key] !== "boolean") return false;
-        } else {
-            if (key === "title") {
-                if (typeof data[key] !== "string") return false;
-            } else if (key === "content") {
-                if (typeof data[key] !== "string" && data[key] !== null) return false;
-            } else {
+/**
+ *
+ * @param arg
+ */
+
+const updateProp = {
+    user: ["staff", "loginStatus", "email", "password", "name", "age", "gender", "phone", "addrss", "paymentState", "paymentKey"],
+    shop: ["dayOff", "origin", "content", "officeHour", "temporaryDayStart", "temporaryDayEnd"],
+    dish: ["main", "title", "content", "price", "count", "weight"],
+    subscription: ["address", "receiver", "toShop", "toDelivery", "subscriptionDay"],
+    subscriptionDay: ["shopId", "weekLabel", "deliveryCost", "dishes"],
+};
+
+const updateCheck = (data: updateTypes.user | updateTypes.shop | updateTypes.dish | updateTypes.subscription, type: string) => {
+    const prop: string[] =
+        type === "user"
+            ? updateProp.user
+            : type === "shop"
+            ? updateProp.shop
+            : type === "dish"
+            ? updateProp.dish
+            : type === "subscription"
+            ? updateProp.subscription
+            : [];
+    const keys = Object.keys(data);
+
+    for (let i = 0; i < keys.length; i++) {
+        if (prop.indexOf(keys[i]) === -1) {
+            return false;
+        }
+        if (type === "subscription" && keys[i] === "subscriptionDay") {
+            if (data[keys[i]].length === 0 || data[keys[i]]["subscriptionDish"].length === 0) {
                 return false;
             }
         }
     }
-
     return true;
-};
-
-const subsTypeCheck = (data: infoTypes.subscription): boolean => {
-    for (const key in data) {
-        if (data[key] === undefined) {
-            continue;
-        } else if (key === "shopId" || key === "weekLabel" || key === "deliveryCost") {
-            if (isNaN(data[key])) return false;
-        } else if (key === "dishes") {
-            const dishes: Array<infoTypes.subscriptionDish> = data[key];
-            const option: string[] = ["dishId", "orderCount"];
-
-            if (dishes.length === 0) return false;
-            for (let i = 0; i < dishes.length; i++) {
-                if (JSON.stringify(option.sort()) !== JSON.stringify(Object.keys(dishes[i]).sort())) return false;
-                if (isNaN(dishes[i].dishId) || isNaN(dishes[i].orderCount)) return false;
-            }
-        } else {
-            if (key === "reciever" || key === "address") {
-                if (typeof data[key] !== "string") return false;
-            } else {
-                if (typeof data[key] !== "string" && data[key] !== null) return false;
-            }
-        }
-    }
-
-    return true;
-};
-
-const changeTypeCheck = (data: infoTypes.changeDish): boolean => {
-    if (data["changeDishes"].length === 0) return false;
-
-    for (let i = 0; i < data["changeDishes"].length; i++) {
-        const { subscriptionDishId, dishId, orderCount } = data["changeDishes"][i];
-        if (isNaN(subscriptionDishId) || isNaN(dishId) || isNaN(orderCount)) return false;
-    }
-
-    return true;
-};
-
-/**
- * 데이터 분리
- * @param data
- * @returns boolean
- */
-
-const typeSeparate = (
-    data: infoTypes.user | infoTypes.shop | infoTypes.dish | infoTypes.subscription | infoTypes.changeDish
-): boolean => {
-    if ("loginStatus" in data) {
-        return userTypeCheck(data);
-    } else if ("businessName" in data) {
-        return shopTypeCheck(data);
-    } else if ("thumbnail" in data) {
-        return dishTypeCheck(data);
-    } else if ("reciever" in data) {
-        return subsTypeCheck(data);
-    } else if ("changeDishes" in data) {
-        return changeTypeCheck(data);
-    } else {
-        return false;
-    }
 };
 
 /**
@@ -213,14 +114,21 @@ const typeSeparate = (
  * @param arg
  */
 
-export const propertyCheck = (...arg: any[]): void => {
+export const propertyCheck = (...arg: any): void => {
     for (let i = 0; i < arg.length; i++) {
         if (typeof arg[i] === "number") {
-            if (isNaN(arg[i])) throw new ApiError(httpStatus.BAD_REQUEST, "잘못된 요청입니다.");
+            if (isNaN(arg[i])) {
+                errorGenerator(httpStatus.BAD_REQUEST);
+            }
         } else {
-            if (!typeSeparate(arg[i])) throw new ApiError(httpStatus.BAD_REQUEST, "잘못된 요청입니다.");
-            for (const key in arg[i]) {
-                if (arg[i][key] === undefined) delete arg[i][key];
+            if (arg[i].mode === "create") {
+                if (!createCheck(arg[i].data, arg[i].type)) {
+                    errorGenerator(httpStatus.BAD_REQUEST);
+                }
+            } else if (arg[i].mode === "update") {
+                if (!updateCheck(arg[i].data, arg[i].type)) {
+                    errorGenerator(httpStatus.BAD_REQUEST);
+                }
             }
         }
     }

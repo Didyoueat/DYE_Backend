@@ -1,14 +1,16 @@
-import { EntityRepository, Repository } from "typeorm";
-import infoTypes from "infoTypes";
+import { EntityRepository, getConnection, Repository } from "typeorm";
+import createTypes from "createTypes";
+import updateTypes from "updateTypes";
 import { Subscriptions } from "@entities/subscriptions";
+import { SubscriptionDays } from "@entities/subscription.days";
 
 @EntityRepository(Subscriptions)
 export class SubsRepo extends Repository<Subscriptions> {
-    findAllUserSubs = () => {
+    findAllSubs = () => {
         return this.createQueryBuilder("subs")
             .select()
-            .leftJoinAndSelect("subs.subscriptionDishes", "subsDishes")
-            .leftJoinAndSelect("subsDishes.subscriptionOnetime", "subsOnetime")
+            .leftJoinAndSelect("subs.subscriptionDays", "subsDays")
+            .leftJoinAndSelect("subsDays.subscriptionDishes", "subsDishes")
             .orderBy("subs.userId", "ASC")
             .getMany();
     };
@@ -16,65 +18,89 @@ export class SubsRepo extends Repository<Subscriptions> {
     findShopSubs = (shopId: number) => {
         return this.createQueryBuilder("subs")
             .select()
-            .innerJoin("subs.users", "users", "users.userId = subs.userId")
-            .addSelect(["users.userId", "users.name", "users.phone", "users.paymentState"])
-            .leftJoinAndSelect("subs.subscriptionDishes", "subsDishes")
-            .leftJoinAndSelect("subsDishes.subscriptionOnetime", "subsOnetime")
-            .where("subs.shopId = :shopId", { shopId: shopId })
-            .orderBy("subs.userId", "ASC")
+            .leftJoinAndSelect("subs.subscriptionDays", "subsDays", "subsDays.shopId = :shopId", { shopId: shopId })
+            .leftJoinAndSelect("subsDays.subscriptionDishes", "subsDish")
+            .where("subsDays.shopId = :shopId", { shopId: shopId })
             .getMany();
     };
 
     findUserSubs = (userId: number) => {
         return this.createQueryBuilder("subs")
             .select()
-            .leftJoinAndSelect("subs.subscriptionDishes", "subsDishes")
-            .leftJoinAndSelect("subsDishes.subscriptionOnetime", "subsOnetime")
+            .leftJoinAndSelect("subs.subscriptionDays", "subsDays")
+            .leftJoinAndSelect("subsDays.subscriptionDishes", "subsDishes")
             .where("subs.userId = :userId", { userId: userId })
-            .getMany();
-    };
-
-    findOneSubs = (userId: number, subsId: number) => {
-        return this.createQueryBuilder("subs")
-            .select()
-            .leftJoinAndSelect("subs.subscriptionDishes", "subsDishes")
-            .leftJoinAndSelect("subsDishes.subscriptionOnetime", "subsOnetime")
-            .where("subs.userId = :userId", { userId: userId })
-            .andWhere("subs.subscriptionId = :subscriptionId", { subscriptionId: subsId })
             .getOne();
     };
 
-    createSubs = async (userId: number, data: infoTypes.subscription) => {
-        data.userId = userId;
-        return await this.createQueryBuilder().insert().into(Subscriptions).values(data).execute();
+    findUserSubsDay = (userId: number, subsDayId: number) => {
+        return this.createQueryBuilder("subs")
+            .select()
+            .leftJoinAndSelect("subs.subscriptionDays", "subsDays", "subsDays.subscriptionDayId = :subscriptionDayId", {
+                subscriptionDayId: subsDayId,
+            })
+            .leftJoinAndSelect("subsDays.subscriptionDishes", "subsDishes")
+            .where("subs.userId = :userId", { userId: userId })
+            .getOne();
     };
 
-    updateSubsInfo = async (userId: number, subsId: number, data: infoTypes.subscription) => {
-        await this.createQueryBuilder()
-            .update(Subscriptions)
-            .set(data)
-            .where("userId = :userId", { userId: userId })
-            .andWhere("subscriptionId = :subscriptionId", { subscriptionId: subsId })
+    findSoftDeletedSubs = (subsId: number) => {
+        return this.createQueryBuilder()
+            .withDeleted()
+            .where("subscriptionId = :subscriptionId", { subscriptionId: subsId })
+            .getOne();
+    };
+
+    createSubs = async (userId: number, data: createTypes.subscription) => {
+        return await this.createQueryBuilder()
+            .insert()
+            .into(Subscriptions)
+            .values({
+                userId: userId,
+                receiver: data.receiver,
+                address: data.address,
+                toShop: data.toShop,
+                toDelivery: data.toDelivery,
+            })
             .execute();
     };
 
-    deleteSubs = async (userId: number, subsId: number) => {
-        await this.createQueryBuilder("subs")
-            .where("userId = :userId AND subscriptionId = :subscriptionId", {
-                userId: userId,
+    createSubsDay = async (subsId: number, data: createTypes.subscriptionDay) => {
+        return await this.createQueryBuilder()
+            .insert()
+            .into(SubscriptionDays)
+            .values({
                 subscriptionId: subsId,
+                shopId: data.shopId,
+                weekLabel: data.weekLabel,
+                deliveryCost: data.deliveryCost,
             })
+            .execute();
+    };
+
+    // updateSubs = async (userId: number, data: updateTypes.subscription) => {
+    //     const updateData: updateTypes.subscription = {};
+
+    //     if (data.address) updateData.address = data.address;
+    //     if (data.receiver) updateData.receiver = data.receiver;
+    //     if (data.toShop) updateData.toShop = data.toShop;
+    //     data.toDelivery ? (updateData.toDelivery = data.toDelivery) : null;
+
+    //     return await this.createQueryBuilder()
+    //         .update(Subscriptions)
+    //         .set(data)
+    //         .where("userId = :userId", { userId: userId })
+    //         .execute();
+    // };
+
+    softDeleteSubs = async (subsId: number) => {
+        return await this.createQueryBuilder()
+            .where("subscriptionId = :subscriptionId", { subscriptionId: subsId })
             .softDelete()
             .execute();
     };
 
-    deleteCompletely = async (subsId: number) => {
-        await this.createQueryBuilder("subs")
-            .delete()
-            .from(Subscriptions)
-            .where("subscriptionId = :subscriptionId", {
-                subscriptionId: subsId,
-            })
-            .execute();
+    deleteSubs = async (userId: number) => {
+        return await this.createQueryBuilder().delete().where("userId = :userId", { userId: userId }).execute();
     };
 }

@@ -8,7 +8,7 @@ import {
     JoinColumn,
     DeleteDateColumn,
 } from "typeorm";
-import { Orders } from "@entities/orders";
+import { OrderDays } from "@entities/order.days";
 import { Dishes } from "@entities/dishes";
 
 @Entity("order_dishes")
@@ -17,7 +17,7 @@ export class OrderDishes {
     orderDishId: number;
 
     @Column("int")
-    orderId: number;
+    orderDayId: number;
 
     @Column("int")
     dishId: number;
@@ -28,11 +28,11 @@ export class OrderDishes {
     @Column("boolean", { default: false })
     main: boolean;
 
-    @Column("varchar", { length: 30 })
-    title: string;
-
     @Column("int")
     orderCount: number;
+
+    @Column("varchar", { length: 30 })
+    title: string;
 
     @Column("int")
     price: number;
@@ -52,9 +52,9 @@ export class OrderDishes {
     @DeleteDateColumn({ nullable: true })
     deletedAt: Date;
 
-    @ManyToOne(() => Orders, (orders) => orders.orderDishes, { nullable: false, onDelete: "CASCADE" })
-    @JoinColumn({ name: "orderId", referencedColumnName: "orderId" })
-    orders: Orders;
+    @ManyToOne(() => OrderDays, (orderDays) => orderDays.orderDishes, { nullable: false, onDelete: "CASCADE" })
+    @JoinColumn({ name: "orderDayId", referencedColumnName: "orderDayId" })
+    orderDays: OrderDays;
 
     @ManyToOne(() => Dishes, (dishes) => dishes.orderDishes, { nullable: false })
     @JoinColumn({ name: "dishId", referencedColumnName: "dishId" })

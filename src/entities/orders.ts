@@ -11,7 +11,7 @@ import {
 } from "typeorm";
 import { Users } from "@entities/users";
 import { Shops } from "@entities/shops";
-import { OrderDishes } from "./order.dishes";
+import { OrderDays } from "./order.days";
 
 @Entity("orders")
 export class Orders {
@@ -21,23 +21,14 @@ export class Orders {
     @Column("int")
     userId: number;
 
-    @Column("int")
-    shopId: number;
-
     @Column("varchar", { length: 10 })
     orderState: string;
-
-    @Column("tinyint", { unsigned: true })
-    weekLabel: number;
 
     @Column("varchar", { length: 10 })
     reciever: string;
 
     @Column("varchar", { length: 100 })
     address: string;
-
-    @Column("int")
-    deliveryCost: number;
 
     @Column("varchar", { length: 20, nullable: true })
     paymentState: string;
@@ -57,14 +48,10 @@ export class Orders {
     @DeleteDateColumn({ nullable: true })
     deletedAt: Date;
 
-    @OneToMany(() => OrderDishes, (orderDishes) => orderDishes.orders)
-    orderDishes: OrderDishes[];
+    @OneToMany(() => OrderDays, (orderDays) => orderDays.orders)
+    orderDays: OrderDays[];
 
     @ManyToOne(() => Users, (users) => users.orders, { nullable: false, onDelete: "CASCADE" })
     @JoinColumn({ name: "userId", referencedColumnName: "userId" })
     users: Users;
-
-    @ManyToOne(() => Shops, (shops) => shops.orders, { nullable: false })
-    @JoinColumn({ name: "shopId", referencedColumnName: "shopId" })
-    shops: Shops;
 }

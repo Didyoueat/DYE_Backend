@@ -4,7 +4,7 @@ import { OrderDishes } from "@entities/order.dishes";
 
 @EntityRepository(Orders)
 export class OrderRepo extends Repository<Orders> {
-    findAllOrder = () => {
+    findAllOrders = () => {
         return this.createQueryBuilder("orders")
             .select()
             .leftJoinAndSelect("orders.orderDishes", "orderDishes")
@@ -12,7 +12,7 @@ export class OrderRepo extends Repository<Orders> {
             .getMany();
     };
 
-    findShopOrder = (shopId: number) => {
+    findShopOrders = (shopId: number) => {
         return this.createQueryBuilder("orders")
             .select()
             .leftJoinAndSelect("orders.orderDishes", "orderDishes")
@@ -21,7 +21,7 @@ export class OrderRepo extends Repository<Orders> {
             .getMany();
     };
 
-    findUserOrder = (userId: number) => {
+    findUserOrders = (userId: number) => {
         return this.createQueryBuilder("orders")
             .select()
             .leftJoinAndSelect("orders.orderDishes", "orderDishes")
@@ -29,7 +29,7 @@ export class OrderRepo extends Repository<Orders> {
             .getMany();
     };
 
-    findOneOrder = (userId: number, orderId: number) => {
+    findOrder = (userId: number, orderId: number) => {
         return this.createQueryBuilder("orders")
             .select()
             .leftJoinAndSelect("orders.orderDishes", "orderDishes")
@@ -37,16 +37,18 @@ export class OrderRepo extends Repository<Orders> {
             .getOne();
     };
 
+    /** 수정 필요 */
     deleteOrder = async (userId: number, orderId: number) => {
-        await this.createQueryBuilder()
+        return await this.createQueryBuilder()
             .update(Orders)
             .where("userId = :userId AND orderId = :orderId", { userId: userId, orderId: orderId })
             .softDelete()
             .execute();
     };
 
+    /** 수정 필요 */
     deleteOrderDish = async (orderId: number) => {
-        await getConnection()
+        return await getConnection()
             .createQueryBuilder()
             .update(OrderDishes)
             .where("orderId = :orderId", { orderId: orderId })

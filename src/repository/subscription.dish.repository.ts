@@ -1,18 +1,53 @@
 import { EntityRepository, Repository, getRepository, getConnection } from "typeorm";
 import { SubscriptionDishes } from "@entities/subscription.dishes";
-import { SubscriptionOnetime } from "@entities/subscription.onetime";
+// import { SubscriptionOnetime } from "@entities/subscription.onetime";
 import { Dishes } from "@entities/dishes";
+import infoTypes from "infoTypes";
 
 @EntityRepository(SubscriptionDishes)
 export class SubsDishRepo extends Repository<SubscriptionDishes> {
-    createSubsDish = async (subsId: number, dish: Dishes, orderCount: number) => {
-        await this.createQueryBuilder()
+    findSubsDishes = (subsId: number) => {
+        return this.createQueryBuilder().select().where("subscriptionId = :subscriptionId", { subscriptionId: subsId }).getMany();
+    };
+
+    findSubsDish = (subsDishId: number) => {
+        return this.createQueryBuilder()
+            .select()
+            .where("subscriptionDishId = :subscriptionDishId", { subscriptionDishId: subsDishId })
+            .getOne();
+    };
+
+    findOnetimeSubsDish = (subsDishId: number) => {
+        return this.createQueryBuilder("subsDish")
+            .select()
+            .leftJoinAndSelect("subsDish.subscriptionOnetime", "subsOnetime")
+            .where("subsDish.subscriptionDishId = :subscriptionDishId", { subscriptionDishId: subsDishId })
+            .getOne();
+    };
+
+    findSoftDeletedSubsDishes = (subsId: number) => {
+        return this.createQueryBuilder()
+            .select()
+            .withDeleted()
+            .where("subscriptionId = :subscriptionId", { subscriptionId: subsId })
+            .getMany();
+    };
+
+    findSoftDeletedSubsDish = (subsDishId: number) => {
+        return this.createQueryBuilder()
+            .select()
+            .withDeleted()
+            .where("subscriptionDishId = :subscriptionDishId", { subscriptionDishId: subsDishId })
+            .getOne();
+    };
+
+    createSubsDish = async (subsDayId: number, dishId: number, dish: infoTypes.dish, orderCount: number) => {
+        return await this.createQueryBuilder()
             .insert()
             .into(SubscriptionDishes)
             .values({
-                subscriptionId: subsId,
-                dishId: dish.dishId,
-                oldSubscriptionDishId: null,
+                subscriptionDayId: subsDayId,
+                dishId: dishId,
                 oneTime: false,
                 main: dish.main,
                 title: dish.title,
@@ -24,7 +59,7 @@ export class SubsDishRepo extends Repository<SubscriptionDishes> {
             .execute();
     };
 
-    updateSubsDish = async (subsId: number, subsDishId: number, dish: Dishes, orderCount: number) => {
+    updateSubsDish = async (subsId: number, subsDishId: number, dishId: number, dish: infoTypes.dish, orderCount: number) => {
         await this.createQueryBuilder()
             .softDelete()
             .from(SubscriptionDishes)
@@ -34,81 +69,131 @@ export class SubsDishRepo extends Repository<SubscriptionDishes> {
             })
             .execute();
 
-        await this.createQueryBuilder()
-            .insert()
-            .into(SubscriptionDishes)
-            .values({
-                subscriptionId: subsId,
-                dishId: dish.dishId,
-                oldSubscriptionDishId: subsDishId,
-                oneTime: false,
-                main: dish.main,
-                title: dish.title,
-                price: dish.price,
-                orderCount: orderCount,
-                weight: dish.weight,
-                imageUrl: dish.imageUrl,
-            })
-            .execute();
+        // return await this.createQueryBuilder()
+        //     .insert()
+        //     .into(SubscriptionDishes)
+        //     .values({
+        //         subscriptionId: subsId,
+        //         dishId: dishId,
+        //         oldSubscriptionDishId: subsDishId,
+        //         oneTime: false,
+        //         main: dish.main,
+        //         title: dish.title,
+        //         price: dish.price,
+        //         orderCount: orderCount,
+        //         weight: dish.weight,
+        //         imageUrl: dish.imageUrl,
+        //     })
+        //     .execute();
     };
 
-    updateSubsOnetime = async (subsId: number, subsDishId: number, dish: Dishes, orderCount: number) => {
-        this.createQueryBuilder()
-            .update(SubscriptionDishes)
-            .set({ oneTime: true })
-            .where("subscriptionId = :subscriptionId AND subscriptionDishId = :subscriptionDishId", {
-                subscriptionId: subsId,
-                subscriptionDishId: subsDishId,
-            })
-            .execute();
+    /**
+     * 이번만 구독 일단 폐기
+     */
 
-        const onetime = await getRepository(SubscriptionOnetime)
-            .createQueryBuilder()
-            .select()
-            .where("subscriptionDishId = :subscriptionDishId", { subscriptionDishId: subsDishId })
-            .getOne();
+    // updateSubsOnetime = async (subsId: number, subsDishId: number, dishId: number, dish: infoTypes.dish, orderCount: number) => {
+    //     await this.createQueryBuilder()
+    //         .update(SubscriptionDishes)
+    //         .set({ oneTime: true })
+    //         .where("subscriptionId = :subscriptionId AND subscriptionDishId = :subscriptionDishId", {
+    //             subscriptionId: subsId,
+    //             subscriptionDishId: subsDishId,
+    //         })
+    //         .execute();
 
-        if (onetime.subscriptionOnetimeId !== undefined) {
-            getConnection()
-                .createQueryBuilder()
-                .softDelete()
-                .from(SubscriptionOnetime)
-                .where("subscriptionOnetimeId = :subscriptionOnetimeId", {
-                    subscriptionOnetimeId: onetime.subscriptionOnetimeId,
-                })
-                .execute();
-        }
+    //     const onetime = await getRepository(SubscriptionOnetime)
+    //         .createQueryBuilder()
+    //         .select()
+    //         .withDeleted()
+    //         .where("subscriptionDishId = :subscriptionDishId", {
+    //             subscriptionDishId: subsDishId,
+    //         })
+    //         .getOne();
 
-        await getConnection()
-            .createQueryBuilder()
-            .insert()
-            .into(SubscriptionOnetime)
-            .values({
-                subscriptionDishId: subsDishId,
-                dishId: dish.dishId,
-                main: dish.main,
-                title: dish.title,
-                price: dish.price,
-                orderCount: orderCount,
-                weight: dish.weight,
-                imageUrl: dish.imageUrl,
-            })
-            .execute();
-    };
+    //     if (onetime !== undefined) {
+    //         await getConnection()
+    //             .createQueryBuilder()
+    //             .softDelete()
+    //             .from(SubscriptionOnetime)
+    //             .where("subscriptionOnetimeId = :subscriptionOnetimeId", {
+    //                 subscriptionOnetimeId: onetime.subscriptionOnetimeId,
+    //             })
+    //             .execute();
+    //     }
 
-    deleteSubsDish = async (subsId: number) => {
-        await this.createQueryBuilder()
+    //     return await getConnection()
+    //         .createQueryBuilder()
+    //         .insert()
+    //         .into(SubscriptionOnetime)
+    //         .values({
+    //             subscriptionDishId: subsDishId,
+    //             dishId: dishId,
+    //             main: dish.main,
+    //             title: dish.title,
+    //             price: dish.price,
+    //             orderCount: orderCount,
+    //             weight: dish.weight,
+    //             imageUrl: dish.imageUrl,
+    //         })
+    //         .execute();
+    // };
+
+    // updateCancleOnetime = async (subsDishId: number) => {
+    //     const onetime = await this.findOnetimeSubsDish(subsDishId);
+
+    //     await getConnection()
+    //         .createQueryBuilder()
+    //         .softDelete()
+    //         .from(SubscriptionOnetime)
+    //         .where("subscriptionOnetimeId = :subscriptionOnetimeId", {
+    //             subscriptionOnetimeId: onetime.subscriptionOnetime[0].subscriptionOnetimeId,
+    //         })
+    //         .execute();
+
+    //     return await this.createQueryBuilder()
+    //         .update(SubscriptionDishes)
+    //         .set({ oneTime: false })
+    //         .where("subscriptionDishId = :subscriptionDishId", {
+    //             subscriptionDishId: subsDishId,
+    //         })
+    //         .execute();
+    // };
+
+    softDeleteSubsDishes = async (subsId: number) => {
+        return await this.createQueryBuilder()
             .softDelete()
             .from(SubscriptionDishes)
             .where("subscriptionId = :subscriptionId", { subscriptionId: subsId })
             .execute();
     };
 
-    deleteSubsOnetime = async (subsDishId: number) => {
-        await getConnection()
-            .createQueryBuilder()
+    softDeleteSubsDish = async (subsDishId: number) => {
+        return await this.createQueryBuilder()
             .softDelete()
-            .from(SubscriptionOnetime)
+            .from(SubscriptionDishes)
+            .where("subscriptionDishId = :subscriptionDishId", { subscriptionDishId: subsDishId })
+            .execute();
+    };
+
+    // softDeleteSubsOnetime = async (subsDishId: number) => {
+    //     return await getConnection()
+    //         .createQueryBuilder()
+    //         .softDelete()
+    //         .from(SubscriptionOnetime)
+    //         .where("subscriptionDishId = :subscriptionDishId", { subscriptionDishId: subsDishId })
+    //         .execute();
+    // };
+
+    deleteSubsDishes = async (subsId: number) => {
+        return await this.createQueryBuilder()
+            .delete()
+            .where("subscriptionId = :subscriptionId", { subscriptionId: subsId })
+            .execute();
+    };
+
+    deleteSubsDish = async (subsDishId: number) => {
+        return await this.createQueryBuilder()
+            .delete()
             .where("subscriptionDishId = :subscriptionDishId", { subscriptionDishId: subsDishId })
             .execute();
     };

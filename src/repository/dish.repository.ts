@@ -4,18 +4,18 @@ import { Dishes } from "@entities/dishes";
 
 @EntityRepository(Dishes)
 export class DishRepo extends Repository<Dishes> {
-    findShopDish = (shopId: number) => {
+    findShopAllDishes = (shopId: number) => {
         return this.createQueryBuilder("dishes").select().where("dishes.shopId = :shopId", { shopId: shopId }).getMany();
     };
 
-    findOneDish = (shopId: number, dishId: number) => {
+    findDish = (shopId: number, dishId: number) => {
         return this.createQueryBuilder("dishes")
             .select()
             .where("dishes.shopId = :shopId AND dishes.dishId = :dishId", { shopId: shopId, dishId: dishId })
             .getOne();
     };
 
-    findSoftDeletedShopDish = (shopId: number) => {
+    findSoftDeletedShopDishes = (shopId: number) => {
         return this.createQueryBuilder("dishes")
             .select()
             .withDeleted()
@@ -23,7 +23,7 @@ export class DishRepo extends Repository<Dishes> {
             .getMany();
     };
 
-    findSoftDeletedOneDish = (shopId: number, dishId: number) => {
+    findSoftDeletedDish = (shopId: number, dishId: number) => {
         return this.createQueryBuilder("dishes")
             .select()
             .withDeleted()
@@ -53,7 +53,7 @@ export class DishRepo extends Repository<Dishes> {
             .execute();
     };
 
-    softDeleteOneDish = async (shopId: number, dishId: number) => {
+    softDeleteDish = async (shopId: number, dishId: number) => {
         return await this.createQueryBuilder("dishes")
             .where("dishes.shopId = :shopId", { shopId: shopId })
             .andWhere("dishes.dishId = :dishId", { dishId: dishId })
@@ -65,7 +65,7 @@ export class DishRepo extends Repository<Dishes> {
         return await this.createQueryBuilder("dishes").where("dishes.shopId = :shopId", { shopId: shopId }).delete().execute();
     };
 
-    deleteOneDish = async (shopId: number, dishId: number) => {
+    deleteDish = async (shopId: number, dishId: number) => {
         return await this.createQueryBuilder("dishes")
             .where("dishes.shopId = :shopId", { shopId: shopId })
             .andWhere("dishes.dishId = :dishId", { dishId: dishId })

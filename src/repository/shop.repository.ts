@@ -4,11 +4,20 @@ import { Shops } from "@entities/shops";
 
 @EntityRepository(Shops)
 export class ShopRepo extends Repository<Shops> {
-    findAllShop = () => {
+    isExistShop = (businessNumber: string) => {
+        return this.createQueryBuilder("shops")
+            .select("shops.shopId")
+            .where("shops.businessNumber = :businessNumber", {
+                businessNumber: businessNumber,
+            })
+            .getOne();
+    };
+
+    findAllShops = () => {
         return this.createQueryBuilder("shops").leftJoinAndSelect("shops.dishes", "dishes").getMany();
     };
 
-    findAroundShop = (lat: number, lon: number, radius: number) => {
+    findAroundShops = (lat: number, lon: number, radius: number) => {
         return this.createQueryBuilder("shops")
             .addSelect(
                 `6371 * acos(cos(radians(${lat})) * cos(radians(latitude)) * cos(radians(longitude) - radians(${lon})) + sin(radians(${lat})) * sin(radians(latitude)))`,
@@ -20,18 +29,18 @@ export class ShopRepo extends Repository<Shops> {
             .getAroundShop();
     };
 
-    findOneShop = (shopId: number) => {
+    findShop = (shopId: number) => {
         return this.createQueryBuilder("shops")
             .leftJoinAndSelect("shops.dishes", "dishes")
             .where("shops.shopId = :shopId", { shopId: shopId })
             .getOne();
     };
 
-    findDeletedAllShop = () => {
+    findSoftDeletedAllShops = () => {
         return this.createQueryBuilder("shops").where("shops.deletedAt = :deletedAt", { deletedAt: true }).getMany();
     };
 
-    findDeletedOneShop = (shopId: number) => {
+    findSoftDeletedShop = (shopId: number) => {
         return this.createQueryBuilder("shops")
             .select()
             .withDeleted()

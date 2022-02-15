@@ -1,55 +1,65 @@
-import { repository, addProperty, propertyCheck } from "@modules/property";
+import { repository, propertyCheck } from "@modules/property";
+import { errorGenerator } from "@modules/api.error";
+import httpStatus from "http-status";
 import infoTypes from "infoTypes";
 import { ShopRepo } from "@repository/shop.repository";
 import { DishRepo } from "@repository/dish.repository";
 
 export const findAllShop = async () => {
     const shopRepo = repository(ShopRepo);
-    const allShop = await shopRepo.findAllShop();
+    const allShop = await shopRepo.findAllShops();
 
-    return {
-        shopCount: allShop.length,
-        shops: allShop,
-    };
+    if (!allShop || allShop.length === 0) {
+        errorGenerator(httpStatus.NOT_FOUND);
+    }
+
+    return allShop;
 };
 
 export const findAroundShop = async (lat: number, lon: number, radius: number) => {
     propertyCheck(lat, lon, radius);
 
     const shopRepo = repository(ShopRepo);
-    const aroundShop = await shopRepo.findAroundShop(lat, lon, radius);
+    const aroundShop = await shopRepo.findAroundShops(lat, lon, radius);
 
-    return {
-        shopCount: aroundShop.length,
-        shops: aroundShop,
-    };
+    if (!aroundShop || aroundShop.length === 0) {
+        errorGenerator(httpStatus.NOT_FOUND);
+    }
+
+    return aroundShop;
 };
 
 export const findOneShop = async (shopId: number) => {
     propertyCheck(shopId);
 
     const shopRepo = repository(ShopRepo);
-    const shop = await shopRepo.findOneShop(shopId);
+    const shop = await shopRepo.findShop(shopId);
 
-    console.log(shop, shopId);
+    if (!shop) {
+        errorGenerator(httpStatus.NOT_FOUND);
+    }
 
     return shop;
 };
 
 export const createShop = async (data: infoTypes.shop) => {
-    propertyCheck(data);
+    propertyCheck({ data: data, type: "shop", mode: "create" });
 
     const shopRepo = repository(ShopRepo);
 
-    await shopRepo.createShop(data);
+    if (!(await shopRepo.createShop(data)).raw.insertId) {
+        errorGenerator(httpStatus.BAD_REQUEST);
+    }
 };
 
 export const updateShop = async (shopId: number, data: infoTypes.shop) => {
-    propertyCheck(shopId, addProperty(data, "shop"));
+    propertyCheck(shopId, { data: data, type: "shop", mode: "update" });
 
     const shopRepo = repository(ShopRepo);
 
-    await shopRepo.updateShop(shopId, data);
+    if ((await shopRepo.updateShop(shopId, data)).affected !== 1) {
+        errorGenerator(httpStatus.BAD_REQUEST);
+    }
 };
 
 export const deleteShop = async (shopId: number) => {
@@ -58,6 +68,7 @@ export const deleteShop = async (shopId: number) => {
     const shopRepo = repository(ShopRepo);
     const dishRepo = repository(DishRepo);
 
-    await shopRepo.softDeleteShop(shopId);
-    await dishRepo.softDeleteShopDishes(shopId);
+    if ((await shopRepo.softDeleteShop(shopId)).affected !== 1 || (await dishRepo.softDeleteShopDishes(shopId)).affected !== 1) {
+        errorGenerator(httpStatus.BAD_REQUEST);
+    }
 };

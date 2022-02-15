@@ -4,14 +4,13 @@ import {
     Column,
     CreateDateColumn,
     UpdateDateColumn,
-    ManyToOne,
+    OneToOne,
     JoinColumn,
     OneToMany,
     DeleteDateColumn,
 } from "typeorm";
 import { Users } from "@entities/users";
-import { Shops } from "@entities/shops";
-import { SubscriptionDishes } from "@entities/subscription.dishes";
+import { SubscriptionDays } from "@entities/subscription.days";
 
 @Entity("subscriptions")
 export class Subscriptions {
@@ -21,20 +20,11 @@ export class Subscriptions {
     @Column("int")
     userId: number;
 
-    @Column("int")
-    shopId: number;
-
-    @Column("tinyint", { unsigned: true })
-    weekLabel: number;
-
     @Column("varchar", { length: 10 })
-    reciever: string;
+    receiver: string;
 
     @Column("varchar", { length: 100 })
     address: string;
-
-    @Column("int")
-    deliveryCost: number;
 
     @Column("varchar", { length: 50, nullable: true })
     toShop!: string;
@@ -48,17 +38,13 @@ export class Subscriptions {
     @UpdateDateColumn()
     updatedAt: Date;
 
-    @DeleteDateColumn({ nullable: true })
+    @DeleteDateColumn({ nullable: true, select: false })
     deletedAt: Date;
 
-    @OneToMany(() => SubscriptionDishes, (subscriptionDishes) => subscriptionDishes.subscriptions)
-    subscriptionDishes: SubscriptionDishes[];
+    @OneToMany(() => SubscriptionDays, (subscriptionDays) => subscriptionDays.subscriptions)
+    subscriptionDays: SubscriptionDays[];
 
-    @ManyToOne(() => Users, (users) => users.subscriptions, { nullable: false, onDelete: "CASCADE" })
+    @OneToOne(() => Users, (users) => users.subscriptions, { nullable: false, onDelete: "CASCADE" })
     @JoinColumn({ name: "userId", referencedColumnName: "userId" })
     users: Users;
-
-    @ManyToOne(() => Shops, (shops) => shops.subscriptions, { nullable: false })
-    @JoinColumn({ name: "shopId", referencedColumnName: "shopId" })
-    shops: Shops;
 }
