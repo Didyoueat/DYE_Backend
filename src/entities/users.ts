@@ -1,4 +1,14 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from "typeorm";
+import {
+    Entity,
+    PrimaryGeneratedColumn,
+    JoinColumn,
+    Column,
+    CreateDateColumn,
+    UpdateDateColumn,
+    DeleteDateColumn,
+    OneToMany,
+    OneToOne,
+} from "typeorm";
 import { Subscriptions } from "@entities/subscriptions";
 import { Orders } from "@entities/orders";
 
@@ -11,10 +21,10 @@ export class Users {
     staff: boolean;
 
     @Column("varchar", { length: 20, nullable: true })
-    loginState!: string;
+    loginState?: string;
 
-    @Column("varchar", { length: 50, nullable: true })
-    email!: string;
+    @Column("varchar", { length: 50, unique: true, nullable: true })
+    email: string;
 
     @Column("varchar", { length: 100, nullable: true, select: false })
     password!: string;
@@ -46,8 +56,12 @@ export class Users {
     @UpdateDateColumn()
     updatedAt: Date;
 
-    @OneToMany(() => Subscriptions, (subscriptions) => subscriptions.users)
-    subscriptions: Subscriptions[];
+    @DeleteDateColumn({ nullable: true })
+    deletedAt: Date;
+
+    @OneToOne(() => Subscriptions, (subscriptions) => subscriptions.users)
+    @JoinColumn({ name: "subcriptionId", referencedColumnName: "subscriptionId" })
+    subscriptions: Subscriptions;
 
     @OneToMany(() => Orders, (orders) => orders.users)
     orders: Orders[];
