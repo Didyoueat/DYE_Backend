@@ -12,20 +12,20 @@ const afterware = (fn: Function) => (req: Request, res: Response, next: NextFunc
                 is_changed: false,
             };
 
-            if (req.body.changedRequire) {
-                response.access_token = JWT.accessSign(requestId, group);
-                response.refresh_token = await JWT.refreshSign(requestId, group);
-                response.is_changed = true;
-            }
+            // if (req.body.changedRequire) {
+            //     response.access_token = JWT.accessSign(requestId, group);
+            //     response.refresh_token = await JWT.refreshSign(requestId, group);
+            //     response.is_changed = true;
+            // }
 
-            if (response.is_changed) {
-                if (group === 1) {
-                    res.cookie("access_token", response.access_token, { httpOnly: true, secure: true, sameSite: "none" });
-                    res.cookie("refresh_token", response.refresh_token, { httpOnly: true, secure: true, sameSite: "none" });
-                } else {
-                    res.header(response);
-                }
-            }
+            // if (response.is_changed) {
+            //     if (group === 1) {
+            //         res.cookie("access_token", response.access_token, { httpOnly: true, secure: true, sameSite: "none" });
+            //         res.cookie("refresh_token", response.refresh_token, { httpOnly: true, secure: true, sameSite: "none" });
+            //     } else {
+            //         res.header(response);
+            //     }
+            // }
 
             res.status(200).json(data);
         })
