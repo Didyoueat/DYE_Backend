@@ -1,6 +1,8 @@
+import httpStatus from "http-status";
+
 Error.stackTraceLimit = 10;
 
-export default class ApiError extends Error {
+export class ApiError extends Error {
     statusCode: number;
     isFatal: boolean;
     constructor(statusCode: number, message: string, option?: { stack?: string; isFatal: boolean }) {
@@ -19,3 +21,23 @@ export default class ApiError extends Error {
         }
     }
 }
+
+export const errorGenerator = (httpCode: number, msg?: string) => {
+    const badRequest = httpCode === httpStatus.BAD_REQUEST;
+    const unAuthorized = httpCode === httpStatus.UNAUTHORIZED;
+    const forbidden = httpCode === httpStatus.FORBIDDEN;
+    const notFound = httpCode === httpStatus.NOT_FOUND;
+    const message = msg
+        ? msg
+        : badRequest
+        ? "잘못된 요청입니다."
+        : unAuthorized
+        ? "인증에 실패했습니다."
+        : forbidden
+        ? "권한이 없습니다."
+        : notFound
+        ? "없는 데이터를 참조하였거나 존재하지 않는 API 입니다."
+        : "";
+
+    throw new ApiError(httpCode, message);
+};

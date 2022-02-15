@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import ApiError from "@modules/api.error";
+import { ApiError } from "@modules/api.error";
 import logger from "@modules/logger";
 import env from "@modules/env";
 import slack from "@modules/slack";
@@ -18,10 +18,9 @@ export const errorConverter = (err: any, req: Request, res: Response, next: Next
 export const errorHandler = (err: ApiError, req: Request, res: Response, next: NextFunction) => {
     let { statusCode, message, stack } = err;
 
-    const response: { code: number; message: string; stack: string } = {
+    const response: { code: number; message: string; stack?: string } = {
         code: statusCode,
-        message,
-        stack: undefined,
+        message: message,
     };
 
     if (env.nodeEnv !== "production") {
@@ -33,6 +32,7 @@ export const errorHandler = (err: ApiError, req: Request, res: Response, next: N
         }
     } else {
         if (statusCode === httpStatus.INTERNAL_SERVER_ERROR) {
+            response.message = "서버 오류";
             slack({ log: logger.error(stack), statusCode, stack, message });
         } else {
             logger.warn(stack);
