@@ -3,8 +3,9 @@ import * as userService from "@services/user.service";
 
 // 회원 정보 조회
 export const getUser = async (req: Request, res: Response) => {
-    const userId = parseInt(req.body.userId, 10);
-    return await userService.findOneUser(userId);
+    const userId = parseInt(req.params.userId, 10);
+
+    return await userService.findUser(userId);
 };
 
 // 회원 생성

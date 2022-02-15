@@ -4,14 +4,16 @@ import * as orderService from "@services/order.service";
 // 회원 주문 목록 조회
 export const getUserOrderList = async (req: Request, res: Response) => {
     const userId: number = parseInt(req.params.userId, 10);
-    req.body.json = await orderService.findUserOrder(userId);
+
+    return await orderService.findUserOrder(userId);
 };
 
 // 회원 주문 상세 조회
 export const getUserOrderDetail = async (req: Request, res: Response) => {
     const userId: number = parseInt(req.params.userId, 10);
     const orderId: number = parseInt(req.params.orderId, 10);
-    req.body.json = await orderService.findOneOrder(userId, orderId);
+
+    return await orderService.findOneOrder(userId, orderId);
 };
 
 // 회원 주문 수정 (왜 필요할까?)
@@ -24,5 +26,5 @@ export const deleteUserOrder = async (req: Request, res: Response) => {
 
     await orderService.deleteOrder(userId, orderId);
 
-    req.body.json = {};
+    return {};
 };

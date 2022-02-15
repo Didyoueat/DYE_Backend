@@ -10,7 +10,8 @@ export const getShop = async (req: Request, res: Response) => {
 // 가게 생성
 export const createShop = async (req: Request, res: Response) => {
     await shopService.createShop(req.body);
-    req.body.json = {};
+
+    return {};
 };
 
 // 가게 정보 수정
@@ -18,7 +19,8 @@ export const updateShop = async (req: Request, res: Response) => {
     const shopId: number = parseInt(req.params.shopId, 10);
 
     await shopService.updateShop(shopId, req.body);
-    req.body.json = {};
+
+    return {};
 };
 
 // 가게 탈퇴
@@ -26,5 +28,6 @@ export const deleteUser = async (req: Request, res: Response) => {
     const shopId: number = parseInt(req.params.shopId, 10);
 
     await shopService.deleteShop(shopId);
-    req.body.json = {};
+
+    return {};
 };
