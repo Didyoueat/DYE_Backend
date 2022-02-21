@@ -33,6 +33,7 @@ const env = {
         secretKey: process.env.AWS_IAM_SECRET_KEY,
         region: process.env.AWS_S3_REGION,
         bucket: process.env.AWS_S3_BUCKET,
+        redisHost: process.env.REDIS_HOST,
         redisPort: process.env.REDIS_PORT,
     },
 };
