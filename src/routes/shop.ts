@@ -5,7 +5,6 @@ import * as post from "@controllers/shop/post";
 import * as order from "@controllers/shop/order";
 import * as retrieve from "@controllers/shop/overall";
 
-// import catchPrivilege from "@middlewares/privilege";
 import afterware from "@middlewares/afterware";
 import authorization from "@middlewares/authorization";
 import catchPrivilege from "@middlewares/privilege";
