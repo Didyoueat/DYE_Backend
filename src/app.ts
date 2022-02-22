@@ -30,7 +30,7 @@ app.use(notFound);
 app.use(errorConverter);
 app.use(errorHandler);
 
-if (env.nodeEnv !== "test") {
+if (env.nodeEnv !== "jest") {
     app.listen(port, async () => {
         console.log(`======= ENV: ${env.nodeEnv} =======`);
         console.log(`🚀 App listening on the port ${port}`);

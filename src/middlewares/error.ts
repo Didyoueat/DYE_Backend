@@ -31,7 +31,7 @@ export const errorHandler = (err: ApiError, req: Request, res: Response, next: N
         message: message,
     };
 
-    if (env.nodeEnv !== "production") {
+    if (env.nodeEnv === "development") {
         response.stack = err.stack;
         if (statusCode === httpStatus.INTERNAL_SERVER_ERROR) {
             logger.error(stack);

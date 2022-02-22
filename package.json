@@ -11,10 +11,12 @@
         "build-dev-ts": "cross-env NODE_ENV=development webpack-dev-server",
         "prestart": "tsc",
         "serve-prod": "cross-env NODE_ENV=production nodemon --exec ts-node -r tsconfig-paths/register --files ./src/app.ts",
+        "serve-test": "cross-env NODE_OPTIONS=--max-old-space-size=2048 NODE_ENV=test ts-node -r tsconfig-paths/register --files ./src/app.ts &",
         "serve-dev": "cross-env NODE_ENV=development nodemon --exec ts-node -r tsconfig-paths/register --files ./src/app.ts",
         "start": "yarn run serve-prod",
+        "test": "yarn run serve-test",
         "dev": "yarn run serve-dev",
-        "test": "cross-env NODE_ENV=test jest --setupFiles dotenv/config --config jest.config.js --detectOpenHandles --forceExit"
+        "jest": "cross-env NODE_ENV=jest jest --setupFiles dotenv/config --config jest.config.js --detectOpenHandles --forceExit"
     },
     "dependencies": {
         "@types/cors": "^2.8.12",
