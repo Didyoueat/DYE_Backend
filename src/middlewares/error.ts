@@ -1,9 +1,17 @@
 import { Request, Response, NextFunction } from "express";
-import { ApiError } from "@modules/api.error";
+import { ApiError, errorGenerator } from "@modules/api.error";
 import logger from "@modules/logger";
 import env from "@modules/env";
 import slack from "@modules/slack";
 import httpStatus from "http-status";
+
+export const notFound = (req: Request, res: Response, next: NextFunction) => {
+    try {
+        errorGenerator(httpStatus.NOT_FOUND);
+    } catch (err) {
+        next(err);
+    }
+};
 
 export const errorConverter = (err: any, req: Request, res: Response, next: NextFunction) => {
     let error = err;

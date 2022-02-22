@@ -8,7 +8,7 @@ import * as apiRouter from "@routes/index";
 
 import env from "@modules/env";
 import logger from "@modules/logger";
-import { errorConverter, errorHandler } from "@middlewares/error";
+import { errorConverter, errorHandler, notFound } from "@middlewares/error";
 
 const app = express();
 const port = env.port || 5000;
@@ -26,6 +26,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(apiRouter.path, apiRouter.router);
+app.use(notFound);
 app.use(errorConverter);
 app.use(errorHandler);
 
