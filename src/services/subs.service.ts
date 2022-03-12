@@ -7,7 +7,6 @@ import { errorGenerator } from "@modules/api.error";
 import httpStatus from "http-status";
 import infoTypes from "infoTypes";
 import createTypes from "createTypes";
-import { Subscriptions } from "@entities/subscriptions";
 
 export const findAllSubs = async () => {
     const subsRepo = repository(SubsRepo);
@@ -71,9 +70,13 @@ export const createSubs = async (userId: number, data: createTypes.subscription)
         })
     );
 
-    const { createSubs, createSubsDay } = repository(SubsRepo);
+    const { findUserSubs, createSubs, createSubsDay } = repository(SubsRepo);
     const { createSubsDish } = repository(SubsDishRepo);
     const { findDish } = repository(DishRepo);
+
+    if (await findUserSubs(userId)) {
+        errorGenerator(httpStatus.BAD_REQUEST);
+    }
 
     const subs = await createSubs(userId, data);
 

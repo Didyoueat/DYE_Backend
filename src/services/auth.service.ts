@@ -31,7 +31,7 @@ export const accessKakaoInfo = async (kakaoToken: string) => {
             return user;
         })
         .catch((err) => {
-            errorGenerator(httpStatus.UNAUTHORIZED, err.response.data.msg);
+            errorGenerator(httpStatus.BAD_REQUEST, err.response.data.msg);
         });
 };
 
