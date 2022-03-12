@@ -8,11 +8,12 @@
     "scripts": {
         "build-ts": "cross-env NODE_ENV=production webpack --config webpack.config.js",
         "build-test-ts": "cross-env NODE_ENV=test webpack --config webpack.config.js",
-        "build-dev-ts": "cross-env NODE_ENV=development webpack-dev-server",
+        "build-dev-ts": "cross-env NODE_ENV=development webpack --config webpack.config.js",
+        "debug": "cd dist && cross-env NODE_ENV=development nodemon --inspect app.js",
         "prestart": "tsc",
         "serve-prod": "cross-env NODE_ENV=production nodemon --exec ts-node -r tsconfig-paths/register --files ./src/app.ts",
         "serve-test": "cross-env NODE_OPTIONS=--max-old-space-size=2048 NODE_ENV=test ts-node -r tsconfig-paths/register --files ./src/app.ts &",
-        "serve-dev": "cross-env NODE_ENV=development nodemon --exec ts-node -r tsconfig-paths/register --files ./src/app.ts",
+        "serve-dev": "cross-env NODE_ENV=development nodemon --exec ts-node -- --type-check -r tsconfig-paths/register --files ./src/app.ts",
         "start": "yarn run serve-prod",
         "test": "yarn run serve-test",
         "dev": "yarn run serve-dev",
@@ -20,6 +21,7 @@
     },
     "dependencies": {
         "@types/cors": "^2.8.12",
+        "app-root-path": "^3.0.0",
         "aws-sdk": "^2.1046.0",
         "axios": "^0.24.0",
         "cookie-parser": "^1.4.6",
@@ -42,6 +44,7 @@
         "yamljs": "^0.3.0"
     },
     "devDependencies": {
+        "@types/app-root-path": "^1.2.4",
         "@types/cookie-parser": "^1.4.2",
         "@types/express": "^4.17.13",
         "@types/jest": "^27.4.0",
