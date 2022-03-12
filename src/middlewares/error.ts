@@ -6,11 +6,7 @@ import slack from "@modules/slack";
 import httpStatus from "http-status";
 
 export const notFound = (req: Request, res: Response, next: NextFunction) => {
-    try {
-        errorGenerator(httpStatus.NOT_FOUND);
-    } catch (err) {
-        next(err);
-    }
+    next(new ApiError(httpStatus.NOT_FOUND, "Not Found"));
 };
 
 export const errorConverter = (err: any, req: Request, res: Response, next: NextFunction) => {

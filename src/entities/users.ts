@@ -60,7 +60,6 @@ export class Users {
     deletedAt: Date;
 
     @OneToOne(() => Subscriptions, (subscriptions) => subscriptions.users)
-    @JoinColumn({ name: "subcriptionId", referencedColumnName: "subscriptionId" })
     subscriptions: Subscriptions;
 
     @OneToMany(() => Orders, (orders) => orders.users)
