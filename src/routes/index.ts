@@ -1,14 +1,14 @@
 import { Router } from "express";
 import swaggerUI from "swagger-ui-express";
 import YAML from "yamljs";
-import dir from "path";
+import appDir from "app-root-path";
 
 import * as authRouter from "@routes/auth";
 import * as userRouter from "@routes/user";
 import * as adminRouter from "@routes/admin";
 import * as shopRouter from "@routes/shop";
 
-const swaggerSpec = YAML.load(dir.join(__dirname, "/../swagger/openapi.yaml"));
+const swaggerSpec = YAML.load(appDir.path + "/src/swagger/openapi.yaml");
 
 export const path: string = "/v0";
 export const router: Router = Router();
