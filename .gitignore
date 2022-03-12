@@ -4,6 +4,7 @@
 logs/
 yarn-error.log
 ormlogs.log
+.DS_Store
 
 # Dependency directories
 node_modules/
