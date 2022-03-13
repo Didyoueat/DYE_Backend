@@ -8,11 +8,11 @@ import {
     JoinColumn,
     DeleteDateColumn,
 } from "typeorm";
-import { OrderDays } from "@entities/order.days";
-import { Dishes } from "@entities/dishes";
+import OrderDays from "@entities/order.days";
+import Dishes from "@entities/dishes";
 
 @Entity("order_dishes")
-export class OrderDishes {
+export default class OrderDishes {
     @PrimaryGeneratedColumn()
     orderDishId: number;
 

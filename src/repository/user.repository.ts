@@ -1,6 +1,6 @@
 import { EntityRepository, Repository } from "typeorm";
 import infoTypes from "infoTypes";
-import { Users } from "@entities/users";
+import Users from "@entities/users";
 
 @EntityRepository(Users)
 export class UserRepo extends Repository<Users> {

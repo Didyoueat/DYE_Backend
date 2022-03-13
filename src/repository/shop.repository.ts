@@ -1,6 +1,6 @@
 import { EntityRepository, Repository } from "typeorm";
 import infoTypes from "infoTypes";
-import { Shops } from "@entities/shops";
+import Shops from "@entities/shops";
 
 @EntityRepository(Shops)
 export class ShopRepo extends Repository<Shops> {

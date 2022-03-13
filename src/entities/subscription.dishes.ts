@@ -9,12 +9,12 @@ import {
     OneToMany,
     DeleteDateColumn,
 } from "typeorm";
-import { SubscriptionDays } from "@entities/subscription.days";
-import { Dishes } from "@entities/dishes";
+import SubscriptionDays from "@entities/subscription.days";
+import Dishes from "@entities/dishes";
 // import { SubscriptionOnetime } from "@entities/subscription.onetime";
 
 @Entity("subscription_dishes")
-export class SubscriptionDishes {
+export default class SubscriptionDishes {
     @PrimaryGeneratedColumn()
     subscriptionDishId: number;
 

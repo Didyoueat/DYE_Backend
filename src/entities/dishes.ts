@@ -9,13 +9,13 @@ import {
     JoinColumn,
     OneToMany,
 } from "typeorm";
-import { Shops } from "@entities/shops";
-import { SubscriptionDishes } from "@entities/subscription.dishes";
+import Shops from "@entities/shops";
+import SubscriptionDishes from "@entities/subscription.dishes";
 // import { SubscriptionOnetime } from "@entities/subscription.onetime";
-import { OrderDishes } from "@entities/order.dishes";
+import OrderDishes from "@entities/order.dishes";
 
 @Entity("dishes")
-export class Dishes {
+export default class Dishes {
     @PrimaryGeneratedColumn()
     dishId: number;
 

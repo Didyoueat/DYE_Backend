@@ -1,8 +1,8 @@
 import { EntityRepository, getConnection, Repository } from "typeorm";
 import createTypes from "createTypes";
 import updateTypes from "updateTypes";
-import { Subscriptions } from "@entities/subscriptions";
-import { SubscriptionDays } from "@entities/subscription.days";
+import Subscriptions from "@entities/subscriptions";
+import SubscriptionDays from "@entities/subscription.days";
 
 @EntityRepository(Subscriptions)
 export class SubsRepo extends Repository<Subscriptions> {

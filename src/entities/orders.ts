@@ -9,12 +9,12 @@ import {
     OneToMany,
     DeleteDateColumn,
 } from "typeorm";
-import { Users } from "@entities/users";
-import { Shops } from "@entities/shops";
-import { OrderDays } from "./order.days";
+import Users from "@entities/users";
+import Shops from "@entities/shops";
+import OrderDays from "./order.days";
 
 @Entity("orders")
-export class Orders {
+export default class Orders {
     @PrimaryGeneratedColumn()
     orderId: number;
 

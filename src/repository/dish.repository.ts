@@ -1,6 +1,6 @@
 import { EntityRepository, Repository } from "typeorm";
 import infoTypes from "infoTypes";
-import { Dishes } from "@entities/dishes";
+import Dishes from "@entities/dishes";
 
 @EntityRepository(Dishes)
 export class DishRepo extends Repository<Dishes> {

@@ -1,6 +1,6 @@
 import { EntityRepository, getConnection, Repository } from "typeorm";
-import { Orders } from "@entities/orders";
-import { OrderDishes } from "@entities/order.dishes";
+import Orders from "@entities/orders";
+import OrderDishes from "@entities/order.dishes";
 
 @EntityRepository(Orders)
 export class OrderRepo extends Repository<Orders> {

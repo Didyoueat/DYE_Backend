@@ -9,11 +9,11 @@ import {
     OneToMany,
     OneToOne,
 } from "typeorm";
-import { Subscriptions } from "@entities/subscriptions";
-import { Orders } from "@entities/orders";
+import Subscriptions from "@entities/subscriptions";
+import Orders from "@entities/orders";
 
 @Entity("users")
-export class Users {
+export default class Users {
     @PrimaryGeneratedColumn()
     userId: number;
 

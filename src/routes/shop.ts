@@ -13,7 +13,7 @@ export const path: string = "/shops";
 export const router: Router = Router();
 
 // 전체 가게 조회 API
-router.get("/", catchPrivilege(authorization), afterware(retrieve.getAllShopList));
+router.get("/", afterware(retrieve.getAllShopList));
 
 // 동네 가게 조회 API
 router.get("/around", catchPrivilege(authorization, { user: true }), afterware(retrieve.getAroundShopList));

@@ -1,11 +1,11 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany, DeleteDateColumn } from "typeorm";
 import { VirtualColumn } from "@modules/decorator";
-import { Dishes } from "@entities/dishes";
-import { SubscriptionDays } from "@entities/subscription.days";
-import { OrderDays } from "@entities/order.days";
+import Dishes from "@entities/dishes";
+import SubscriptionDays from "@entities/subscription.days";
+import OrderDays from "@entities/order.days";
 
 @Entity("shops")
-export class Shops {
+export default class Shops {
     @PrimaryGeneratedColumn()
     shopId: number;
 
