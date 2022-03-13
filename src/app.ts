@@ -6,6 +6,7 @@ import { createConnection } from "typeorm";
 
 import * as apiRouter from "@routes/index";
 
+import dbLoader from "@modules/orm.config";
 import env from "@modules/env";
 import logger from "@modules/logger";
 import { errorConverter, errorHandler, notFound } from "@middlewares/error";
@@ -34,9 +35,7 @@ if (env.nodeEnv !== "jest") {
     app.listen(port, async () => {
         console.log(`======= ENV: ${env.nodeEnv} =======`);
         console.log(`🚀 App listening on the port ${port}`);
-        await createConnection()
-            .then(() => console.log("🚀 DB Connected"))
-            .catch((err) => console.log(err));
+        await dbLoader();
     });
 }
 
