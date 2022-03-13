@@ -2,13 +2,11 @@ import path from "path";
 import dotenv from "dotenv";
 import appDir from "app-root-path";
 
-const { NODE_ENV } = process.env;
-
-if (NODE_ENV === "production") {
+if (process.env.NODE_ENV === "production") {
     dotenv.config({ path: path.join(appDir.path, "/.env.prod") });
-} else if (NODE_ENV === "development") {
+} else if (process.env.NODE_ENV === "development") {
     dotenv.config({ path: path.join(appDir.path, "/.env.dev") });
-} else if (NODE_ENV === "test") {
+} else if (process.env.NODE_ENV === "test") {
     dotenv.config({ path: path.join(appDir.path, "/.env.test") });
 } else {
     throw new Error("process.env.NODE_ENV를 설정하지 않았습니다.");
