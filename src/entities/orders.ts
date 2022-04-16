@@ -10,16 +10,19 @@ import {
     DeleteDateColumn,
 } from "typeorm";
 import Users from "@entities/users";
-import Shops from "@entities/shops";
+import Addresses from "@entities/addresses";
 import OrderDays from "./order.days";
 
 @Entity("orders")
 export default class Orders {
     @PrimaryGeneratedColumn()
-    orderId: number;
+    id: number;
 
     @Column("int")
     userId: number;
+
+    @Column("int")
+    addressId: number;
 
     @Column("varchar", { length: 10 })
     orderState: string;
@@ -27,10 +30,7 @@ export default class Orders {
     @Column("varchar", { length: 10 })
     reciever: string;
 
-    @Column("varchar", { length: 100 })
-    address: string;
-
-    @Column("varchar", { length: 20, nullable: true })
+    @Column("varchar", { length: 10, nullable: true })
     paymentState: string;
 
     @Column("varchar", { length: 50, nullable: true })
@@ -52,6 +52,10 @@ export default class Orders {
     orderDays: OrderDays[];
 
     @ManyToOne(() => Users, (users) => users.orders, { nullable: false, onDelete: "CASCADE" })
-    @JoinColumn({ name: "userId", referencedColumnName: "userId" })
+    @JoinColumn({ name: "userId" })
     users: Users;
+
+    @ManyToOne(() => Addresses, (addresses) => addresses.orders, { nullable: false, onDelete: "CASCADE" })
+    @JoinColumn({ name: "addressId" })
+    addresses: Addresses;
 }

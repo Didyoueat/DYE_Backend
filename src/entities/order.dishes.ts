@@ -14,7 +14,7 @@ import Dishes from "@entities/dishes";
 @Entity("order_dishes")
 export default class OrderDishes {
     @PrimaryGeneratedColumn()
-    orderDishId: number;
+    id: number;
 
     @Column("int")
     orderDayId: number;
@@ -40,7 +40,7 @@ export default class OrderDishes {
     @Column("int")
     weight: number;
 
-    @Column("varchar", { length: 500, nullable: true })
+    @Column("varchar", { length: 255, nullable: true })
     imageUrl: string;
 
     @CreateDateColumn()
@@ -53,10 +53,10 @@ export default class OrderDishes {
     deletedAt: Date;
 
     @ManyToOne(() => OrderDays, (orderDays) => orderDays.orderDishes, { nullable: false, onDelete: "CASCADE" })
-    @JoinColumn({ name: "orderDayId", referencedColumnName: "orderDayId" })
+    @JoinColumn({ name: "orderDayId" })
     orderDays: OrderDays;
 
     @ManyToOne(() => Dishes, (dishes) => dishes.orderDishes, { nullable: false })
-    @JoinColumn({ name: "dishId", referencedColumnName: "dishId" })
+    @JoinColumn({ name: "dishId" })
     dishes: Dishes;
 }

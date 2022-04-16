@@ -16,7 +16,7 @@ import SubscriptionDishes from "@entities/subscription.dishes";
 @Entity("subscription_days")
 export default class SubscriptionDays {
     @PrimaryGeneratedColumn()
-    subscriptionDayId: number;
+    id: number;
 
     @Column("int")
     subscriptionId: number;
@@ -47,10 +47,10 @@ export default class SubscriptionDays {
         onDelete: "CASCADE",
         cascade: true,
     })
-    @JoinColumn({ name: "subscriptionId", referencedColumnName: "subscriptionId" })
+    @JoinColumn({ name: "subscriptionId" })
     subscriptions: Subscriptions;
 
     @ManyToOne(() => Shops, (shops) => shops.subscriptionDays, { nullable: false })
-    @JoinColumn({ name: "shopId", referencedColumnName: "shopId" })
+    @JoinColumn({ name: "shopId" })
     shops: Shops;
 }

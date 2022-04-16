@@ -16,7 +16,7 @@ import Dishes from "@entities/dishes";
 @Entity("subscription_dishes")
 export default class SubscriptionDishes {
     @PrimaryGeneratedColumn()
-    subscriptionDishId: number;
+    id: number;
 
     @Column("int")
     subscriptionDayId: number;
@@ -42,7 +42,7 @@ export default class SubscriptionDishes {
     @Column("int")
     weight: number;
 
-    @Column("varchar", { length: 500, nullable: true })
+    @Column("varchar", { length: 255, nullable: true })
     imageUrl: string;
 
     @CreateDateColumn()
@@ -54,18 +54,15 @@ export default class SubscriptionDishes {
     @DeleteDateColumn({ nullable: true, select: false })
     deletedAt: Date;
 
-    // @OneToMany(() => SubscriptionOnetime, (subscriptionOnetime) => subscriptionOnetime.subscriptionDishes)
-    // subscriptionOnetime: SubscriptionOnetime[];
-
     @ManyToOne(() => SubscriptionDays, (subscriptionDays) => subscriptionDays.subscriptionDishes, {
         nullable: false,
         onDelete: "CASCADE",
         cascade: true,
     })
-    @JoinColumn({ name: "subscriptionDayId", referencedColumnName: "subscriptionDayId" })
+    @JoinColumn({ name: "subscriptionDayId" })
     subscriptionDays: SubscriptionDays;
 
     @ManyToOne(() => Dishes, (dishes) => dishes.subscriptionDishes, { nullable: false })
-    @JoinColumn({ name: "dishId", referencedColumnName: "dishId" })
+    @JoinColumn({ name: "dishId" })
     dishes: Dishes;
 }

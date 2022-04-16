@@ -16,7 +16,7 @@ import OrderDishes from "./order.dishes";
 @Entity("orders_days")
 export default class OrderDays {
     @PrimaryGeneratedColumn()
-    orderDayId: number;
+    id: number;
 
     @Column("int")
     orderId: number;
@@ -43,10 +43,10 @@ export default class OrderDays {
     orderDishes: OrderDishes[];
 
     @ManyToOne(() => Shops, (shops) => shops.orderDays, { nullable: false })
-    @JoinColumn({ name: "shopId", referencedColumnName: "shopId" })
+    @JoinColumn({ name: "shopId" })
     shops: Shops;
 
     @ManyToOne(() => Orders, (orders) => orders.orderDays, { nullable: false })
-    @JoinColumn({ name: "orderId", referencedColumnName: "orderId" })
+    @JoinColumn({ name: "orderId" })
     orders: Orders;
 }

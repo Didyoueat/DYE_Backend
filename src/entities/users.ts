@@ -11,11 +11,13 @@ import {
 } from "typeorm";
 import Subscriptions from "@entities/subscriptions";
 import Orders from "@entities/orders";
+import Addresses from "@entities/addresses";
+import Payments from "@entities/payments";
 
 @Entity("users")
 export default class Users {
     @PrimaryGeneratedColumn()
-    userId: number;
+    id: number;
 
     @Column("boolean", { default: false })
     staff: boolean;
@@ -41,14 +43,14 @@ export default class Users {
     @Column("varchar", { length: 20, nullable: true })
     phone: string;
 
-    @Column("varchar", { length: 100, nullable: true })
-    address: string;
+    // @Column("varchar", { length: 100, nullable: true })
+    // address: string;
 
-    @Column("varchar", { length: 20, nullable: true })
-    paymentState: string;
+    // @Column("varchar", { length: 20, nullable: true })
+    // paymentState: string;
 
-    @Column("varchar", { length: 255, nullable: true, select: false })
-    paymentKey: string;
+    // @Column("varchar", { length: 255, nullable: true, select: false })
+    // paymentKey: string;
 
     @CreateDateColumn()
     createdAt: Date;
@@ -64,4 +66,10 @@ export default class Users {
 
     @OneToMany(() => Orders, (orders) => orders.users)
     orders: Orders[];
+
+    @OneToMany(() => Addresses, (addresses) => addresses.users)
+    addresses: Addresses[];
+
+    @OneToMany(() => Payments, (payments) => payments.users)
+    payments: Payments[];
 }

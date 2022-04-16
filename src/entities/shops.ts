@@ -1,13 +1,15 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany, DeleteDateColumn } from "typeorm";
 import { VirtualColumn } from "@modules/decorator";
 import Dishes from "@entities/dishes";
+import Addresses from "@entities/addresses";
+import ShopTemporaryDays from "@entities/shop.temporary.days";
 import SubscriptionDays from "@entities/subscription.days";
 import OrderDays from "@entities/order.days";
 
 @Entity("shops")
 export default class Shops {
     @PrimaryGeneratedColumn()
-    shopId: number;
+    id: number;
 
     @Column("varchar", { length: 30 })
     businessNumber: string;
@@ -24,15 +26,6 @@ export default class Shops {
     @Column("tinyint", { unsigned: true, nullable: true })
     dayOff: number;
 
-    @Column("varchar", { length: 100 })
-    address: string;
-
-    @Column("double")
-    latitude: number;
-
-    @Column("double")
-    longitude: number;
-
     @Column("varchar", { length: 10, nullable: true })
     name: string;
 
@@ -45,17 +38,11 @@ export default class Shops {
     @Column("varchar", { length: 300, nullable: true })
     content!: string;
 
-    @Column("varchar", { length: 500, nullable: true })
+    @Column("varchar", { length: 255, nullable: true })
     imageUrl: string;
 
     @Column("varchar", { length: 11, nullable: true })
     officeHour!: string;
-
-    @Column("datetime", { nullable: true })
-    temporaryDayStart!: Date;
-
-    @Column("datetime", { nullable: true })
-    temporaryDayEnd!: Date;
 
     @CreateDateColumn()
     createdAt: Date;
@@ -68,6 +55,12 @@ export default class Shops {
 
     @OneToMany(() => Dishes, (dishes) => dishes.shops)
     dishes: Dishes[];
+
+    @OneToMany(() => Addresses, (addresses) => addresses.users)
+    addresses: Addresses[];
+
+    @OneToMany(() => ShopTemporaryDays, (shopTemporaryDays) => shopTemporaryDays.shops)
+    shopTemporaryDays: ShopTemporaryDays[];
 
     @OneToMany(() => SubscriptionDays, (subscriptionDays) => subscriptionDays.shops)
     subscriptionDays: SubscriptionDays[];

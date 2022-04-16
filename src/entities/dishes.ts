@@ -11,13 +11,12 @@ import {
 } from "typeorm";
 import Shops from "@entities/shops";
 import SubscriptionDishes from "@entities/subscription.dishes";
-// import { SubscriptionOnetime } from "@entities/subscription.onetime";
 import OrderDishes from "@entities/order.dishes";
 
 @Entity("dishes")
 export default class Dishes {
     @PrimaryGeneratedColumn()
-    dishId: number;
+    id: number;
 
     @Column("int")
     shopId: number;
@@ -43,7 +42,7 @@ export default class Dishes {
     @Column("int")
     weight: number;
 
-    @Column("varchar", { length: 500 })
+    @Column("varchar", { length: 255 })
     imageUrl: string;
 
     @CreateDateColumn()
@@ -58,13 +57,10 @@ export default class Dishes {
     @OneToMany(() => SubscriptionDishes, (subscriptionDishes) => subscriptionDishes.dishes)
     subscriptionDishes: SubscriptionDishes[];
 
-    // @OneToMany(() => SubscriptionOnetime, (subscriptionOnetime) => subscriptionOnetime.dishes)
-    // subscriptionOnetime: SubscriptionOnetime[];
-
     @OneToMany(() => OrderDishes, (orderDishes) => orderDishes.dishes)
     orderDishes: OrderDishes[];
 
     @ManyToOne(() => Shops, (shops) => shops.dishes, { nullable: false, onDelete: "CASCADE" })
-    @JoinColumn({ name: "shopId", referencedColumnName: "shopId" })
+    @JoinColumn({ name: "shopId" })
     shops: Shops;
 }

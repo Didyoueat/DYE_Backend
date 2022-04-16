@@ -9,6 +9,9 @@ import SubscriptionDishes from "@entities/subscription.dishes";
 import Orders from "@entities/orders";
 import OrderDays from "@entities/order.days";
 import OrderDishes from "@entities/order.dishes";
+import Addresses from "@entities/addresses";
+import Payments from "@entities/payments";
+import ShopTemporaryDays from "@entities/shop.temporary.days";
 
 const defaultOrmConfig: ConnectionOptions = {
     type: "mysql",
@@ -23,14 +26,27 @@ const defaultOrmConfig: ConnectionOptions = {
     logging: ["error"],
     logger: "file",
     maxQueryExecutionTime: 2000,
-    entities: [Users, Shops, Dishes, Subscriptions, SubscriptionDays, SubscriptionDishes, Orders, OrderDays, OrderDishes],
+    entities: [
+        Users,
+        Shops,
+        Addresses,
+        Payments,
+        ShopTemporaryDays,
+        Dishes,
+        Subscriptions,
+        SubscriptionDays,
+        SubscriptionDishes,
+        Orders,
+        OrderDays,
+        OrderDishes,
+    ],
 };
 
-const dbLoader = async (ormConfig: ConnectionOptions = defaultOrmConfig) =>
+const databaseLoader = async (ormConfig: ConnectionOptions = defaultOrmConfig) =>
     await createConnection(ormConfig)
         .then(() => console.log("🚀 DB Connected"))
         .catch((err) => console.log(err));
 
 export const clearDatabase = () => getConnection().close();
 
-export default dbLoader;
+export default databaseLoader;

@@ -2,11 +2,10 @@ import express from "express";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import { createConnection } from "typeorm";
 
 import * as apiRouter from "@routes/index";
 
-import dbLoader from "@modules/orm.config";
+import databaseLoader from "@modules/orm.config";
 import env from "@modules/env";
 import logger from "@modules/logger";
 import { errorConverter, errorHandler, notFound } from "@middlewares/error";
@@ -35,7 +34,7 @@ if (env.nodeEnv !== "jest") {
     app.listen(port, async () => {
         console.log(`======= ENV: ${env.nodeEnv} =======`);
         console.log(`🚀 App listening on the port ${port}`);
-        await dbLoader();
+        await databaseLoader();
     });
 }
 
