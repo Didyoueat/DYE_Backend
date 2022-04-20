@@ -5,12 +5,15 @@ import httpStatus from "http-status";
 
 const authorization = async (req: Request, res: Response) => {
     if (!req.headers.access_token || !req.headers.refresh_token) {
-        errorGenerator(httpStatus.BAD_REQUEST);
+        errorGenerator(httpStatus.UNAUTHORIZED);
     }
 
     const access = String(req.headers.access_token);
     const refresh = String(req.headers.refresh_token);
     const accessResult = JWT.accessVerify(access);
+
+    if (!accessResult.valid) errorGenerator(httpStatus.UNAUTHORIZED);
+
     const refreshResult = await JWT.refreshVerity(refresh, originId(accessResult.decoded["id"]), accessResult.decoded["group"]);
 
     if (refreshResult.valid && (accessResult.valid || accessResult.message === "jwt expired")) {
