@@ -16,7 +16,7 @@ import SubscriptionDishes from "@entities/subscription.dishes";
 @Entity("subscription_days")
 export default class SubscriptionDays {
     @PrimaryGeneratedColumn()
-    id: number;
+    subscriptionDayId: number;
 
     @Column("int")
     subscriptionId: number;

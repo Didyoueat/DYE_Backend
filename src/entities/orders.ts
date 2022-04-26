@@ -16,7 +16,7 @@ import OrderDays from "./order.days";
 @Entity("orders")
 export default class Orders {
     @PrimaryGeneratedColumn()
-    id: number;
+    orderId: number;
 
     @Column("int")
     userId: number;

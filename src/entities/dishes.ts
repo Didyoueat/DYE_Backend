@@ -16,7 +16,7 @@ import OrderDishes from "@entities/order.dishes";
 @Entity("dishes")
 export default class Dishes {
     @PrimaryGeneratedColumn()
-    id: number;
+    dishId: number;
 
     @Column("int")
     shopId: number;

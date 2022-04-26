@@ -15,7 +15,7 @@ import Subscriptions from "@entities/subscriptions";
 @Entity("payments")
 export default class Payments {
     @PrimaryGeneratedColumn()
-    id: Number;
+    paymentId: Number;
 
     @Column("int")
     userId: Number;

@@ -17,13 +17,16 @@ import Orders from "@entities/orders";
 @Entity("addresses")
 export default class Addresses {
     @PrimaryGeneratedColumn()
-    id: Number;
+    addressId: Number;
 
-    @Column("int", { nullable: true })
+    @Column("int", { default: null, nullable: true })
     userId: Number;
 
-    @Column("int", { nullable: true })
+    @Column("int", { default: null, nullable: true })
     shopId: Number;
+
+    @Column("boolean", { default: true })
+    main: boolean;
 
     @Column("varchar", { length: 100 })
     address: String;

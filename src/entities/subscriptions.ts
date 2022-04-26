@@ -18,7 +18,7 @@ import SubscriptionDays from "@entities/subscription.days";
 @Entity("subscriptions")
 export default class Subscriptions {
     @PrimaryGeneratedColumn()
-    id: number;
+    subscriptionId: number;
 
     @Column("int")
     userId: number;

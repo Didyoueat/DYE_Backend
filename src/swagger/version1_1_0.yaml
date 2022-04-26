@@ -1,0 +1,2276 @@
+openapi: 3.0.0
+info:
+    description: "DYE api docs"
+    version: "1.1.0"
+    title: "DYE"
+    termsOfService: "https://"
+    contact:
+        email: "nfl1ryxditimo12@gmail.com"
+    license:
+        name: "Apache 2.0"
+        url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+servers:
+    - url: "https://api.babmuk.com/v0"
+
+# API 카테고리
+tags:
+    - name: Auth
+      description: 사용자 인증 API
+    - name: Users
+      description: 사용자 & 관리자 정보 API
+    - name: Shops
+      description: 가게 API
+    - name: Dishes
+      description: 가게 반찬 API
+    - name: Subscriptions
+      description: 구독 API
+    - name: Orders
+      description: 주문내역 API
+    - name: Addresses
+      description: 주소 API
+    - name: Payments
+      description:
+          결제 API
+
+          # - in: header
+          #   name: access_token
+          #   schema:
+          #     type: "string"
+          #     example: 발급받은 Access Toekn 입력
+          #   required: true
+          # - in: header
+          #   name: refresh_token
+          #   schema:
+          #     type: "string"
+          #     example: 발급받은 Refresh Toekn 입력
+          #   required: true
+
+          # tags:
+          # -
+          # summary:
+          # description: <h1></h1><br><br><h2>Permission</h2>`사용자` `사장님` `관리자`<br><br><h2>이 Api는 현재</h2>`기획중` `개발중` `완료`
+          # parameters:
+          #   - in: header
+          #     name: access_token
+          #     schema:
+          #       type: "string"
+          #       example: 발급받은 Access Toekn 입력
+          #     required: true
+          #   - in: header
+          #     name: refresh_token
+          #     schema:
+          #       type: "string"
+          #       example: 발급받은 Refresh Toekn 입력
+          #     required: true
+          # requestBody:
+          #   description:
+          #   required: true
+          #   content:
+          #     application/json:
+          #       schema:
+          # responses:
+          #   200:
+          #     $ref: "#/components/responses/Ok"
+          #   400:
+          #     $ref: "#/components/responses/BadRequest"
+          #   401:
+          #     $ref: "#/components/responses/Unauthorized"
+          #   500:
+          #     $ref: "#/components/responses/ServerError"
+
+# API 문서
+paths:
+    # 인증 API
+    /auth/sign:
+        get:
+            tags:
+                - Auth
+            summary: 사용자 확인
+            description: <h1>JWT를 검사해 회원인지 아닌지 확인한다.<h1/>
+            parameters:
+                - in: header
+                  name: access_token
+                  schema:
+                      type: string
+                      example: 발급받은 Access Toekn 입력
+                  required: true
+                - in: header
+                  name: refresh_token
+                  schema:
+                      type: string
+                      example: 발급받은 Refresh Toekn 입력
+                  required: true
+            responses:
+                200:
+                    $ref: "#/components/responses/Ok"
+                400:
+                    $ref: "#/components/responses/BadRequest"
+                401:
+                    $ref: "#/components/responses/Unauthorized"
+                500:
+                    $ref: "#/components/responses/ServerError"
+
+        # post:
+        #   tags:
+        #   - Auth
+        #   summary:
+        #   description: <h1>토큰을 발급합니다.</h1><br><br><h2>Permission</h2>`관리자`<br><br><h2>이 Api는 현재</h2>`기획중` `개발중` `완료`
+        #   parameters:
+        #     - in: header
+        #       name: access_token
+        #       schema:
+        #         type: "string"
+        #         example: 발급받은 Access Toekn 입력
+        #       required: true
+        #     - in: header
+        #       name: refresh_token
+        #       schema:
+        #         type: "string"
+        #         example: 발급받은 Refresh Toekn 입력
+        #       required: true
+        #   requestBody:
+        #     description:
+        #     required: true
+        #     content:
+        #       application/json:
+        #         schema:
+        #   responses:
+        #     200:
+        #       $ref: "#/components/responses/Ok"
+        #     400:
+        #       $ref: "#/components/responses/BadRequest"
+        #     401:
+        #       $ref: "#/components/responses/Unauthorized"
+        #     500:
+        #       $ref: "#/components/responses/ServerError"
+
+        delete:
+            tags:
+                - Auth
+            summary: 로그아웃
+            description: <h1>호출 시 redis에 저장된 Refresh Token을 소멸해 Token 인증을 중단한다</h1>
+            parameters:
+                - in: header
+                  name: access_token
+                  schema:
+                      type: string
+                      example: 발급받은 Access Toekn 입력
+                  required: true
+                - in: header
+                  name: refresh_token
+                  schema:
+                      type: string
+                      example: 발급받은 Refresh Toekn 입력
+                  required: true
+            responses:
+                200:
+                    $ref: "#/components/responses/Ok"
+                400:
+                    $ref: "#/components/responses/BadRequest"
+                401:
+                    $ref: "#/components/responses/Unauthorized"
+                500:
+                    $ref: "#/components/responses/ServerError"
+
+    /auth/sign/kakao:
+        post:
+            tags:
+                - Auth
+            summary: 카카오 로그인
+            description: <h1>카카오 Access Token으로 카카오 API를 이용해 사용자 조회 후<br/>데이터베이스에 존재하는 사용자인지 확인<br/>존재하면 <u>200 Ok</u> 존재하지 않으면 <u>401 Unauthorized</u> 응답<h1/>
+            requestBody:
+                description: <h2>발급받은 카카오 Access Token을 넣어 요청해야함<h2>
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/KakaoToken"
+            responses:
+                200:
+                    description: <h2>회원 존재 시 토큰을 발행해 Header로 전송한다.</h2>
+                    headers:
+                        access_token:
+                            schema:
+                                $ref: "#/components/schemas/access_token"
+                        refresh_token:
+                            schema:
+                                $ref: "#/components/schemas/refresh_token"
+                    content:
+                        application/json:
+                            schema:
+                                type: "object"
+                                properties:
+                                    userId:
+                                        type: "integer"
+                                        example: 1
+                                    staff:
+                                        type: "boolean"
+                                        example: true
+                401:
+                    $ref: "#/components/responses/Unauthorized"
+                500:
+                    $ref: "#/components/responses/ServerError"
+
+    # 사용자 & 관리자 API
+    /users:
+        get:
+            tags:
+                - Users
+            summary: 전체 회원 리스트 조회
+            description: <h1>모든 사용자 정보를 조회한다.</h1><br/><br/><h2>Permission</h2>`관리자`
+            parameters:
+                - in: header
+                  name: access_token
+                  schema:
+                      type: string
+                      example: 발급받은 Access Toekn 입력
+                  required: true
+                - in: header
+                  name: refresh_token
+                  schema:
+                      type: string
+                      example: 발급받은 Refresh Toekn 입력
+                  required: true
+            responses:
+                # 수정해야함
+                200:
+                    $ref: "#/components/responses/Ok"
+                400:
+                    $ref: "#/components/responses/BadRequest"
+                401:
+                    $ref: "#/components/responses/Unauthorized"
+                403:
+                    $ref: "#/components/responses/Forbidden"
+                404:
+                    $ref: "#/components/responses/NotFound"
+                500:
+                    $ref: "#/components/responses/ServerError"
+
+    # Users, Admin 나중에 추가 필요
+
+    # 가게 API
+    /shops/create:
+        post:
+            tags:
+                - Shops
+            summary: 가게 계정 생성
+            description: <h1>가게 계정을 생성한다.</h1><br><br><h2>Permission</h2>`관리자`<br><br><h2>이 Api는 현재</h2>`완료`
+            parameters:
+                - in: header
+                  name: access_token
+                  schema:
+                      type: "string"
+                      example: 발급받은 Access Toekn 입력
+                  required: true
+                - in: header
+                  name: refresh_token
+                  schema:
+                      type: "string"
+                      example: 발급받은 Refresh Toekn 입력
+                  required: true
+            requestBody:
+                description: <h2>사업장 정보를 기입한다.</h2>
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: "object"
+                            properties:
+                                businessName:
+                                    type: "string"
+                                    maxLength: 30
+                                    example: "동찬이네"
+                                businessNumber:
+                                    type: "string"
+                                    maxLength: 30
+                                    example: "17-1234-1234"
+                                password:
+                                    type: "string"
+                                    maxLength: 20
+                                    example: "qwer1234"
+                                address:
+                                    type: "string"
+                                    maxLength: 100
+                                    example: "서울시 서초구 강남대로 327"
+                                addressDetail:
+                                    type: "string"
+                                    maxLength: 100
+                                    example: "대륭서초타워 4층"
+                                dong:
+                                    type: "string"
+                                    maxLength: 20
+                                    example: "서초동"
+                                latitude:
+                                    type: "integer"
+                                    format: "double"
+                                    example: 37.123
+                                longitude:
+                                    type: "integer"
+                                    format: "double"
+                                    example: 127.123
+                                name:
+                                    type: "string"
+                                    maxLength: 10
+                                    example: "김성수"
+                                phone:
+                                    type: "string"
+                                    maxLength: 20
+                                    example: "010-1234-1234"
+            responses:
+                200:
+                    $ref: "#/components/responses/Ok"
+                400:
+                    $ref: "#/components/responses/BadRequest"
+                401:
+                    $ref: "#/components/responses/Unauthorized"
+                403:
+                    $ref: "#/components/responses/Forbidden"
+                500:
+                    $ref: "#/components/responses/ServerError"
+
+    /shops:
+        get:
+            tags:
+                - Shops
+            summary: 전체 가게 리스트 조회
+            description: <h1>모든 가게 정보를 조회한다.</h1><br><br><h2>Permission</h2>`관리자`<br><br><h2>이 Api는 현재</h2>`완료`
+            parameters:
+                - in: header
+                  name: access_token
+                  schema:
+                      type: "string"
+                      example: 발급받은 Access Toekn 입력
+                  required: true
+                - in: header
+                  name: refresh_token
+                  schema:
+                      type: "string"
+                      example: 발급받은 Refresh Toekn 입력
+                  required: true
+            responses:
+                200:
+                    description: <h2>모든 가게 리스트 반환</h2>
+                    headers:
+                        access_token:
+                            schema:
+                                $ref: "#/components/schemas/access_token"
+                        refresh_token:
+                            schema:
+                                $ref: "#/components/schemas/refresh_token"
+                        is_changed:
+                            description: "true일 경우 새로운 토큰이 담긴다."
+                            schema:
+                                $ref: "#/components/schemas/is_changed"
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/AllShop"
+                400:
+                    $ref: "#/components/responses/BadRequest"
+                401:
+                    $ref: "#/components/responses/Unauthorized"
+                403:
+                    $ref: "#/components/responses/Forbidden"
+                404:
+                    $ref: "#/components/responses/NotFound"
+                500:
+                    $ref: "#/components/responses/ServerError"
+
+    /shops/around:
+        get:
+            tags:
+                - Shops
+            summary: 주변 가게 리스트 조회
+            description: <h1>지정한 반경 이내의 가게 리스트를 조회한다.</h1><br><br><h2>Permission</h2>`사용자` `관리자`<br><br><h2>이 Api는 현재</h2>`완료`
+            parameters:
+                - in: header
+                  name: access_token
+                  schema:
+                      type: "string"
+                      example: 발급받은 Access Toekn 입력
+                  required: true
+                - in: header
+                  name: refresh_token
+                  schema:
+                      type: "string"
+                      example: 발급받은 Refresh Toekn 입력
+                  required: true
+                - in: query
+                  name: latitude
+                  schema:
+                      type: "integer"
+                      format: "double"
+                      example: 현재 사용자의 위도 입력
+                  required: true
+                - in: query
+                  name: longitude
+                  schema:
+                      type: "integer"
+                      format: "double"
+                      example: 현재 사용자의 경도 입력
+                  required: true
+                - in: query
+                  name: radius
+                  schema:
+                      type: "integer"
+                      example: 조회할 반경 입력
+                  required: true
+            responses:
+                200:
+                    description: <h2>주변 가게 리스트 반환</h2>
+                    headers:
+                        access_token:
+                            schema:
+                                $ref: "#/components/schemas/access_token"
+                        refresh_token:
+                            schema:
+                                $ref: "#/components/schemas/refresh_token"
+                        is_changed:
+                            description: "true일 경우 새로운 토큰이 담긴다."
+                            schema:
+                                $ref: "#/components/schemas/is_changed"
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/AroundShop"
+                400:
+                    $ref: "#/components/responses/BadRequest"
+                401:
+                    $ref: "#/components/responses/Unauthorized"
+                403:
+                    $ref: "#/components/responses/Forbidden"
+                404:
+                    $ref: "#/components/responses/NotFound"
+                500:
+                    $ref: "#/components/responses/ServerError"
+
+    /shops/{shop_id}:
+        get:
+            tags:
+                - Shops
+            summary: 한 가게 정보 조회
+            description: <h1>가게 하나의 정보를 조회한다.</h1><br><br><h2>Permission</h2>`사용자` `사장님` `관리자`<br><br><h2>이 Api는 현재</h2>`완료`
+            parameters:
+                - in: header
+                  name: access_token
+                  schema:
+                      type: "string"
+                      example: 발급받은 Access Toekn 입력
+                  required: true
+                - in: header
+                  name: refresh_token
+                  schema:
+                      type: "string"
+                      example: 발급받은 Refresh Toekn 입력
+                  required: true
+                - in: path
+                  name: shop_id
+                  schema:
+                      type: integer
+                      example: 가게 id 입력
+                  required: true
+            responses:
+                200:
+                    description: <h2>해당 가게 정보 반환</h2>
+                    headers:
+                        access_token:
+                            schema:
+                                $ref: "#/components/schemas/access_token"
+                        refresh_token:
+                            schema:
+                                $ref: "#/components/schemas/refresh_token"
+                        is_changed:
+                            description: "true일 경우 새로운 토큰이 담긴다."
+                            schema:
+                                $ref: "#/components/schemas/is_changed"
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Shop"
+                400:
+                    $ref: "#/components/responses/BadRequest"
+                401:
+                    $ref: "#/components/responses/Unauthorized"
+                404:
+                    $ref: "#/components/responses/NotFound"
+                500:
+                    $ref: "#/components/responses/ServerError"
+
+        patch:
+            tags:
+                - Shops
+            summary: 가게 정보 변경
+            description: <h1>가게 정보를 변경한다.</h1><br><br><h2>Permission</h2>`사장님` `관리자`<br><br><h2>이 Api는 현재</h2>`완료`
+            parameters:
+                - in: header
+                  name: access_token
+                  schema:
+                      type: "string"
+                      example: 발급받은 Access Toekn 입력
+                  required: true
+                - in: header
+                  name: refresh_token
+                  schema:
+                      type: "string"
+                      example: 발급받은 Refresh Toekn 입력
+                  required: true
+                - in: path
+                  name: shop_id
+                  schema:
+                      type: integer
+                      example: 가게 id 입력
+                  required: true
+            requestBody:
+                description: <h2>사업장 정보를 수정한다.</h2>
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: "object"
+                            properties:
+                                dayoff:
+                                    type: "integer"
+                                    example: 9
+                                origin:
+                                    type: "string"
+                                    maxLength: 300
+                                    nullable: true
+                                    example: "김치: 국내산, 돼지고기: 국내산, 소고기: 호주산, ..."
+                                content:
+                                    type: "string"
+                                    maxLength: 300
+                                    nullable: true
+                                    example: "안녕하세요 동찬이네 입니다."
+                                officeHour:
+                                    type: "string"
+                                    maxLength: 11
+                                    nullable: true
+                                    example: "09:00-18:00"
+                                temporaryDayStart:
+                                    type: "string"
+                                    format: "date-time"
+                                    nullable: true
+                                    example: "2021-12-07T09:36:14.076Z"
+                                temporaryDayEnd:
+                                    type: "string"
+                                    format: "date-time"
+                                    nullable: true
+                                    example: "2021-12-07T09:36:14.076Z"
+            responses:
+                200:
+                    $ref: "#/components/responses/Ok"
+                400:
+                    $ref: "#/components/responses/BadRequest"
+                401:
+                    $ref: "#/components/responses/Unauthorized"
+                403:
+                    $ref: "#/components/responses/Forbidden"
+                500:
+                    $ref: "#/components/responses/ServerError"
+
+        delete:
+            tags:
+                - Shops
+            summary: 가게 탈퇴 (논리적 삭제)
+            description: <h1>가게 탈퇴를 실행한다.</h1><br><br><h2>Permission</h2>`관리자`<br><br><h2>이 Api는 현재</h2>`완료`
+            parameters:
+                - in: header
+                  name: access_token
+                  schema:
+                      type: "string"
+                      example: 발급받은 Access Toekn 입력
+                  required: true
+                - in: header
+                  name: refresh_token
+                  schema:
+                      type: "string"
+                      example: 발급받은 Refresh Toekn 입력
+                  required: true
+                - in: path
+                  name: shop_id
+                  schema:
+                      type: integer
+                      example: 가게 id 입력
+                  required: true
+            responses:
+                200:
+                    $ref: "#/components/responses/Ok"
+                400:
+                    $ref: "#/components/responses/BadRequest"
+                401:
+                    $ref: "#/components/responses/Unauthorized"
+                403:
+                    $ref: "#/components/responses/Forbidden"
+                500:
+                    $ref: "#/components/responses/ServerError"
+
+    /shops/{shop_id}/dishes/create:
+        post:
+            tags:
+                - Dishes
+            summary: 가게 반찬 등록
+            description: <h1>가게 반찬을 등록합니다.</h1><br><br><h2>Permission</h2>`사장님` `관리자`<br><br><h2>이 Api는 현재</h2>`완료`
+            parameters:
+                - in: header
+                  name: access_token
+                  schema:
+                      type: "string"
+                      example: 발급받은 Access Toekn 입력
+                  required: true
+                - in: header
+                  name: refresh_token
+                  schema:
+                      type: "string"
+                      example: 발급받은 Refresh Toekn 입력
+                  required: true
+                - in: path
+                  name: shop_id
+                  schema:
+                      type: "integer"
+                      example: 가게 id 입력
+                  required: true
+            requestBody:
+                description: 가게 정보를 기입합니다.
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/DishData"
+            responses:
+                200:
+                    $ref: "#/components/responses/Ok"
+                400:
+                    $ref: "#/components/responses/BadRequest"
+                401:
+                    $ref: "#/components/responses/Unauthorized"
+                403:
+                    $ref: "#/components/responses/Forbidden"
+                500:
+                    $ref: "#/components/responses/ServerError"
+
+    /shops/{shop_id}/dishes:
+        get:
+            tags:
+                - Dishes
+            summary: 가게 반찬 리스트 조회
+            description: <h1>특정 가게의 모든 반찬 정보를 조회합니다.</h1><br><br><h2>Permission</h2>`사용자` `사장님` `관리자`<br><br><h2>이 Api는 현재</h2>`완료`
+            parameters:
+                - in: header
+                  name: access_token
+                  schema:
+                      type: "string"
+                      example: 발급받은 Access Toekn 입력
+                  required: true
+                - in: header
+                  name: refresh_token
+                  schema:
+                      type: "string"
+                      example: 발급받은 Refresh Toekn 입력
+                  required: true
+                - in: path
+                  name: shop_id
+                  schema:
+                      type: "integer"
+                      example: 가게 id 입력
+                  required: true
+            responses:
+                200:
+                    description: <h2>가게의 모든 반찬 정보 반환</h2>
+                    headers:
+                        access_token:
+                            schema:
+                                $ref: "#/components/schemas/access_token"
+                        refresh_token:
+                            schema:
+                                $ref: "#/components/schemas/refresh_token"
+                        is_changed:
+                            description: "true일 경우 새로운 토큰이 담긴다."
+                            schema:
+                                $ref: "#/components/schemas/is_changed"
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/ShopDishes"
+                400:
+                    $ref: "#/components/responses/BadRequest"
+                401:
+                    $ref: "#/components/responses/Unauthorized"
+                404:
+                    $ref: "#/components/responses/NotFound"
+                500:
+                    $ref: "#/components/responses/ServerError"
+
+    /shops/{shop_id}/dishes/{dish_id}:
+        get:
+            tags:
+                - Dishes
+            summary: 가게 반찬 정보 조회
+            description: <h1>가게의 반찬 정보를 조회합니다.</h1><br><br><h2>Permission</h2>`사용자` `사장님` `관리자`<br><br><h2>이 Api는 현재</h2>`완료`
+            parameters:
+                - in: header
+                  name: access_token
+                  schema:
+                      type: "string"
+                      example: 발급받은 Access Toekn 입력
+                  required: true
+                - in: header
+                  name: refresh_token
+                  schema:
+                      type: "string"
+                      example: 발급받은 Refresh Toekn 입력
+                  required: true
+                - in: path
+                  name: shop_id
+                  schema:
+                      type: "integer"
+                      example: 가게 id 입력
+                  required: true
+                - in: path
+                  name: dish_id
+                  schema:
+                      type: "integer"
+                      example: 반찬 id 입력
+                  required: true
+            responses:
+                200:
+                    description: <h2>가게 반찬 정보 반환</h2>
+                    headers:
+                        access_token:
+                            schema:
+                                $ref: "#/components/schemas/access_token"
+                        refresh_token:
+                            schema:
+                                $ref: "#/components/schemas/refresh_token"
+                        is_changed:
+                            description: "true일 경우 새로운 토큰이 담긴다."
+                            schema:
+                                $ref: "#/components/schemas/is_changed"
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Dish"
+                400:
+                    $ref: "#/components/responses/BadRequest"
+                401:
+                    $ref: "#/components/responses/Unauthorized"
+                404:
+                    $ref: "#/components/responses/NotFound"
+                500:
+                    $ref: "#/components/responses/ServerError"
+
+        put:
+            tags:
+                - Dishes
+            summary: 가게 반찬 정보 수정
+            description: <h1>가게의 반찬 정보를 수정합니다.</h1><br><br><h2>Permission</h2>`사장님` `관리자`<br><br><h2>이 Api는 현재</h2>`완료`
+            parameters:
+                - in: header
+                  name: access_token
+                  schema:
+                      type: "string"
+                      example: 발급받은 Access Toekn 입력
+                  required: true
+                - in: header
+                  name: refresh_token
+                  schema:
+                      type: "string"
+                      example: 발급받은 Refresh Toekn 입력
+                  required: true
+                - in: path
+                  name: shop_id
+                  schema:
+                      type: "integer"
+                      example: 가게 id 입력
+                  required: true
+                - in: path
+                  name: dish_id
+                  schema:
+                      type: "integer"
+                      example: 반찬 id 입력
+                  required: true
+            requestBody:
+                description: 수정할 반찬 데이터 기입
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/DishData"
+            responses:
+                200:
+                    $ref: "#/components/responses/Ok"
+                400:
+                    $ref: "#/components/responses/BadRequest"
+                401:
+                    $ref: "#/components/responses/Unauthorized"
+                403:
+                    $ref: "#/components/responses/Forbidden"
+                500:
+                    $ref: "#/components/responses/ServerError"
+
+        patch:
+            tags:
+                - Dishes
+            summary: 가게 대표사진 등록 / 취소
+            description: <h1>가게의 대표사진을 등록/취소 합니다.</h1><br><br><h2>Permission</h2>`사장님` `관리자`<br><br><h2>이 Api는 현재</h2>`완료`
+            parameters:
+                - in: header
+                  name: access_token
+                  schema:
+                      type: "string"
+                      example: 발급받은 Access Toekn 입력
+                  required: true
+                - in: header
+                  name: refresh_token
+                  schema:
+                      type: "string"
+                      example: 발급받은 Refresh Toekn 입력
+                  required: true
+                - in: path
+                  name: shop_id
+                  schema:
+                      type: "integer"
+                      example: 가게 id 입력
+                  required: true
+                - in: path
+                  name: dish_id
+                  schema:
+                      type: "integer"
+                      example: 반찬 id 입력
+                  required: true
+            requestBody:
+                description: 수정할 반찬 데이터 기입
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: "object"
+                            properties:
+                                thumbnail:
+                                    type: "boolean"
+                                    example: true or false
+            responses:
+                200:
+                    $ref: "#/components/responses/Ok"
+                400:
+                    $ref: "#/components/responses/BadRequest"
+                401:
+                    $ref: "#/components/responses/Unauthorized"
+                403:
+                    $ref: "#/components/responses/Forbidden"
+                500:
+                    $ref: "#/components/responses/ServerError"
+
+        delete:
+            tags:
+                - Dishes
+            summary: 가게 반찬 삭제 (논리적 삭제))
+            description: <h1>가게의 반찬 정보를 삭제합니다.</h1><br><br><h2>Permission</h2>`사장님` `관리자`<br><br><h2>이 Api는 현재</h2>`완료`
+            parameters:
+                - in: header
+                  name: access_token
+                  schema:
+                      type: "string"
+                      example: 발급받은 Access Toekn 입력
+                  required: true
+                - in: header
+                  name: refresh_token
+                  schema:
+                      type: "string"
+                      example: 발급받은 Refresh Toekn 입력
+                  required: true
+                - in: path
+                  name: shop_id
+                  schema:
+                      type: "integer"
+                      example: 가게 id 입력
+                  required: true
+                - in: path
+                  name: dish_id
+                  schema:
+                      type: "integer"
+                      example: 반찬 id 입력
+                  required: true
+            responses:
+                200:
+                    $ref: "#/components/responses/Ok"
+                400:
+                    $ref: "#/components/responses/BadRequest"
+                401:
+                    $ref: "#/components/responses/Unauthorized"
+                403:
+                    $ref: "#/components/responses/Forbidden"
+                500:
+                    $ref: "#/components/responses/ServerError"
+
+    # 구독 관련 API
+    /users/{user_id}/subscriptions/create:
+        post:
+            tags:
+                - Subscriptions
+            summary: 회원 구독 신청
+            description: <h1>구독 신청 API 입니다</h1><br><br><h2>Permission</h2>`사용자` `관리자`<br><br><h2>이 Api는 현재</h2>`기획중` `개발중` `완료`
+            parameters:
+                - in: header
+                  name: access_token
+                  schema:
+                      type: "string"
+                      example: 발급받은 Access Toekn 입력
+                  required: true
+                - in: header
+                  name: refresh_token
+                  schema:
+                      type: "string"
+                      example: 발급받은 Refresh Toekn 입력
+                  required: true
+                - in: path
+                  name: user_id
+                  schema:
+                      type: "integer"
+                      example: 회원 id 기입
+                  required: true
+            requestBody:
+                description: 구독 신청에 관한 데이터 기입
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/SubsRegister"
+            responses:
+                200:
+                    $ref: "#/components/responses/Ok"
+                400:
+                    $ref: "#/components/responses/BadRequest"
+                401:
+                    $ref: "#/components/responses/Unauthorized"
+                403:
+                    $ref: "#/components/responses/Forbidden"
+                500:
+                    $ref: "#/components/responses/ServerError"
+
+    /users/subscriptions:
+        get:
+            tags:
+                - Subscriptions
+            summary: 전체 회원 구독 조회
+            description: <h1>전체 회원의 구독 내역을 조회합니다.</h1><br><br><h2>Permission</h2>`관리자`<br><br><h2>이 Api는 현재</h2>`기획중` `개발중` `완료`
+            parameters:
+                - in: header
+                  name: access_token
+                  schema:
+                      type: "string"
+                      example: 발급받은 Access Toekn 입력
+                  required: true
+                - in: header
+                  name: refresh_token
+                  schema:
+                      type: "string"
+                      example: 발급받은 Refresh Toekn 입력
+                  required: true
+            responses:
+                200:
+                    description: 모든 회원 구독 내역 반환
+                    content:
+                        application/json:
+                            schema:
+                                type: "array"
+                                items:
+                                    $ref: "#/components/schemas/AllSubscription"
+                400:
+                    $ref: "#/components/responses/BadRequest"
+                401:
+                    $ref: "#/components/responses/Unauthorized"
+                403:
+                    $ref: "#/components/responses/Forbidden"
+                404:
+                    $ref: "#/components/responses/NotFound"
+                500:
+                    $ref: "#/components/responses/ServerError"
+
+    /shops/{shop_id}/subscriptions:
+        get:
+            tags:
+                - Subscriptions
+            summary: 가게 구독 내역 조회
+            description: <h1>가게의 현재 구독 내역을 조회합니다.</h1><br><br><h2>Permission</h2>`사장님` `관리자`<br><br><h2>이 Api는 현재</h2>`기획중` `개발중` `완료`
+            parameters:
+                - in: header
+                  name: access_token
+                  schema:
+                      type: "string"
+                      example: 발급받은 Access Toekn 입력
+                  required: true
+                - in: header
+                  name: refresh_token
+                  schema:
+                      type: "string"
+                      example: 발급받은 Refresh Toekn 입력
+                  required: true
+                - in: path
+                  name: shop_id
+                  schema:
+                      type: "integer"
+                      example: 가게 id 기입
+                  required: true
+            responses:
+                200:
+                    description: 해당 가게에 구독중인 내역을 반환
+                    content:
+                        application/json:
+                            schema:
+                                type: "array"
+                                items:
+                                    $ref: "#/components/schemas/AllSubscription"
+                400:
+                    $ref: "#/components/responses/BadRequest"
+                401:
+                    $ref: "#/components/responses/Unauthorized"
+                403:
+                    $ref: "#/components/responses/Forbidden"
+                404:
+                    $ref: "#/components/responses/NotFound"
+                500:
+                    $ref: "#/components/responses/ServerError"
+
+    /users/{user_id}/subscriptions/{subscription_day_id}:
+        get:
+            tags:
+                - Subscriptions
+            summary: 회원 요일별 구독 조회
+            description: <h1>회원의 특정 요일 구독 조회하는 API 입니다.</h1><br><br><h2>Permission</h2>`사용자` `사장님` `관리자`<br><br><h2>이 Api는 현재</h2>`기획중` `개발중` `완료`
+            parameters:
+                - in: header
+                  name: access_token
+                  schema:
+                      type: "string"
+                      example: 발급받은 Access Toekn 입력
+                  required: true
+                - in: header
+                  name: refresh_token
+                  schema:
+                      type: "string"
+                      example: 발급받은 Refresh Toekn 입력
+                  required: true
+                - in: path
+                  name: user_id
+                  schema:
+                      type: "integer"
+                      example: 회원 id 기입
+                  required: true
+                - in: path
+                  name: subscription_day_id
+                  schema:
+                      type: "integer"
+                      example: 회원 구독 id 기입
+                  required: true
+                - in: query
+                  name: weekLabel
+                  schema:
+                      type: "integer"
+                      example: 요일 2진수 -> 10진수 변환 후 기입
+                      description: 16 => 00010000 => 수요일
+                  required: true
+                - in: query
+                  name: shopId
+                  schema:
+                      type: "integer"
+                      example: 가게 id 기입 (옵션)
+            responses:
+                200:
+                    description: <h2>성공시 구독 정보 반환되며</h2><h2>반찬 이번만 변경이 활성화 되어있는 경우</h2><h2>`subscriptionOnetimeDishes` 값이 추가됨</h2>
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Subscription"
+                400:
+                    $ref: "#/components/responses/BadRequest"
+                401:
+                    $ref: "#/components/responses/Unauthorized"
+                404:
+                    $ref: "#/components/responses/NotFound"
+                500:
+                    $ref: "#/components/responses/ServerError"
+
+    # 모든 구독 내역 조회
+    /users/{user_id}/subscriptions:
+        get:
+            tags:
+                - Subscriptions
+            summary: 회원 전체 구독 조회
+            description: <h1>회원의 모든 구독 내역을 조회합니다.</h1><br><br><h2>Permission</h2>`사용자` `관리자`<br><br><h2>이 Api는 현재</h2>`기획중` `개발중` `완료`
+            parameters:
+                - in: header
+                  name: access_token
+                  schema:
+                      type: "string"
+                      example: 발급받은 Access Toekn 입력
+                  required: true
+                - in: header
+                  name: refresh_token
+                  schema:
+                      type: "string"
+                      example: 발급받은 Refresh Toekn 입력
+                  required: true
+                - in: path
+                  name: user_id
+                  schema:
+                      type: "integer"
+                      example: 회원 id 기입
+                  required: true
+            responses:
+                200:
+                    description: <h2>성공시 구독 정보 반환되며</h2><h2>반찬 이번만 변경이 활성화 되어있는 경우</h2><h2>`subscriptionOnetimeDishes` 값이 추가됨</h2>
+                    headers:
+                        access_token:
+                            schema:
+                                $ref: "#/components/schemas/access_token"
+                        refresh_token:
+                            schema:
+                                $ref: "#/components/schemas/refresh_token"
+                        is_changed:
+                            description: "true일 경우 새로운 토큰이 담긴다."
+                            schema:
+                                $ref: "#/components/schemas/is_changed"
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/AllSubscription"
+                400:
+                    $ref: "#/components/responses/BadRequest"
+                401:
+                    $ref: "#/components/responses/Unauthorized"
+                403:
+                    $ref: "#/components/responses/Forbidden"
+                404:
+                    $ref: "#/components/responses/NotFound"
+                500:
+                    $ref: "#/components/responses/ServerError"
+
+        # 이번만 변경 -> 이번주 변경 Subscription 테이블에 flag를 세워 결제 전 후로 관리한다.
+        # 구독 변경 시 구독 신청 처럼 구독에 관한 데이터가 모두 들어오고 기존 데이터 삭제 후 새로 Row를 생성한다.
+
+        put:
+            tags:
+                - Subscriptions
+            summary: 구독 수정
+            description: <h1>구독 수정 API 입니다.</h1><br><br><h2>Permission</h2>`사용자` `관리자`<br><br><h2>이 Api는 현재</h2>`기획중` `개발중` `완료`
+            parameters:
+                - in: header
+                  name: access_token
+                  schema:
+                      type: "string"
+                      example: 발급받은 Access Toekn 입력
+                  required: true
+                - in: header
+                  name: refresh_token
+                  schema:
+                      type: "string"
+                      example: 발급받은 Refresh Toekn 입력
+                  required: true
+                - in: path
+                  name: user_id
+                  schema:
+                      type: "integer"
+                      example: "회원 id 기입"
+                  required: true
+            requestBody:
+                description: 구독 수정에 관한 데이터 기입
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/SubsRegister"
+            responses:
+                200:
+                    $ref: "#/components/responses/Ok"
+                400:
+                    $ref: "#/components/responses/BadRequest"
+                401:
+                    $ref: "#/components/responses/Unauthorized"
+                403:
+                    $ref: "#/components/responses/Forbidden"
+                500:
+                    $ref: "#/components/responses/ServerError"
+
+        patch:
+            tags:
+                - Subscriptions
+            summary: 사용 ❌ 구독 특정 요일 삭제
+            description: <h1>원하는 요일 구독을 취소합니다.</h1><br><br><h2>Permission</h2>`사용자` `관리자`<br><br><h2>이 Api는 현재</h2>`기획중` `개발중` `완료`
+            parameters:
+                - in: header
+                  name: access_token
+                  schema:
+                      type: "string"
+                      example: 발급받은 Access Toekn 입력
+                  required: true
+                - in: header
+                  name: refresh_token
+                  schema:
+                      type: "string"
+                      example: 발급받은 Refresh Toekn 입력
+                  required: true
+                - in: path
+                  name: user_id
+                  schema:
+                      type: "integer"
+                      example: 회원 id 기입
+                  required: true
+            requestBody:
+                description: <h2>16 => 00010000 => 수요일 취소<br>2진수 => 10진수 변환 후 `weekLabel`에 기입</h2>
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: "object"
+                            properties:
+                                weekLabel:
+                                    type: "integer"
+                                    example: 16
+            responses:
+                200:
+                    $ref: "#/components/responses/Ok"
+                400:
+                    $ref: "#/components/responses/BadRequest"
+                401:
+                    $ref: "#/components/responses/Unauthorized"
+                403:
+                    $ref: "#/components/responses/Forbidden"
+                500:
+                    $ref: "#/components/responses/ServerError"
+
+        delete:
+            tags:
+                - Subscriptions
+            summary: 구독 전체 취소
+            description: <h1>현재 등록되어있는 구독 내역을 전부 취소합니다.</h1><br><br><h2>Permission</h2>`사용자` `관리자`<br><br><h2>이 Api는 현재</h2>`기획중` `개발중` `완료`
+            parameters:
+                - in: header
+                  name: access_token
+                  schema:
+                      type: "string"
+                      example: 발급받은 Access Toekn 입력
+                  required: true
+                - in: header
+                  name: refresh_token
+                  schema:
+                      type: "string"
+                      example: 발급받은 Refresh Toekn 입력
+                  required: true
+                - in: path
+                  name: user_id
+                  schema:
+                      type: "integer"
+                      example: 회원 id 기입
+                  required: true
+            responses:
+                200:
+                    $ref: "#/components/responses/Ok"
+                400:
+                    $ref: "#/components/responses/BadRequest"
+                401:
+                    $ref: "#/components/responses/Unauthorized"
+                403:
+                    $ref: "#/components/responses/Forbidden"
+                500:
+                    $ref: "#/components/responses/ServerError"
+
+    # 주문 관련 API
+    /users/orders:
+        get:
+            tags:
+                - Orders
+            summary: 전체 회원 주문 내역 조회
+            description: <h1>모든 회원의 주문 내역을 조회합니다.</h1><br><br><h2>Permission</h2>`관리자`<br><br><h2>이 Api는 현재</h2>`기획중` `개발중` `완료`
+            parameters:
+                - in: header
+                  name: access_token
+                  schema:
+                      type: "string"
+                      example: 발급받은 Access Toekn 입력
+                  required: true
+                - in: header
+                  name: refresh_token
+                  schema:
+                      type: "string"
+                      example: 발급받은 Refresh Toekn 입력
+                  required: true
+            responses:
+                200:
+                    description: 모든 회원의 모든 주문 내역 반환
+                    content:
+                        application/json:
+                            schema:
+                                type: "array"
+                                items:
+                                    type: "object"
+                                    properties:
+                                        userId:
+                                            type: "integer"
+                                            example: 1
+                                        userOrders:
+                                            type: "array"
+                                            items:
+                                                $ref: "#/components/schemas/Order"
+                400:
+                    $ref: "#/components/responses/BadRequest"
+                401:
+                    $ref: "#/components/responses/Unauthorized"
+                403:
+                    $ref: "#/components/responses/Forbidden"
+                404:
+                    $ref: "#/components/responses/NotFound"
+                500:
+                    $ref: "#/components/responses/ServerError"
+
+    /shops/{shop_id}/orders:
+        get:
+            tags:
+                - Orders
+            summary: 가게 주문 내역 조회
+            description: <h1>현재까지 등록된 가게의 주문 내역을 조회합니다.</h1><br><br><h2>Permission</h2>`사장님` `관리자`<br><br><h2>이 Api는 현재</h2>`기획중` `개발중` `완료`
+            parameters:
+                - in: header
+                  name: access_token
+                  schema:
+                      type: "string"
+                      example: 발급받은 Access Toekn 입력
+                  required: true
+                - in: header
+                  name: refresh_token
+                  schema:
+                      type: "string"
+                      example: 발급받은 Refresh Toekn 입력
+                  required: true
+                - in: path
+                  name: shop_id
+                  schema:
+                      type: "integer"
+                      example: 가게 id 기입
+                  required: true
+            responses:
+                200:
+                    description: 가게의 모든 주문 내역 반환
+                    content:
+                        application/json:
+                            schema:
+                                type: "array"
+                                items:
+                                    type: "object"
+                                    properties:
+                                        userId:
+                                            type: "integer"
+                                            example: 1
+                                        userOrders:
+                                            type: "array"
+                                            items:
+                                                $ref: "#/components/schemas/Order"
+                400:
+                    $ref: "#/components/responses/BadRequest"
+                401:
+                    $ref: "#/components/responses/Unauthorized"
+                403:
+                    $ref: "#/components/responses/Forbidden"
+                404:
+                    $ref: "#/components/responses/NotFound"
+                500:
+                    $ref: "#/components/responses/ServerError"
+
+    /users/{user_id}/orders:
+        get:
+            tags:
+                - Orders
+            summary: 회원 주문 내역 조회
+            description: <h1>한 회원의 모든 주문 내역을 불러온다.</h1><br><br><h2>Permission</h2>`사용자` `관리자`<br><br><h2>이 Api는 현재</h2>`기획중` `개발중` `완료`
+            parameters:
+                - in: header
+                  name: access_token
+                  schema:
+                      type: "string"
+                      example: 발급받은 Access Toekn 입력
+                  required: true
+                - in: header
+                  name: refresh_token
+                  schema:
+                      type: "string"
+                      example: 발급받은 Refresh Toekn 입력
+                  required: true
+                - in: path
+                  name: user_id
+                  schema:
+                      type: "integer"
+                      example: 회원 id 기입
+                  required: true
+            responses:
+                200:
+                    description: 한 회원의 모든 주문 내역 반환
+                    content:
+                        application/json:
+                            schema:
+                                type: "array"
+                                items:
+                                    $ref: "#/components/schemas/Order"
+                400:
+                    $ref: "#/components/responses/BadRequest"
+                401:
+                    $ref: "#/components/responses/Unauthorized"
+                403:
+                    $ref: "#/components/responses/Forbidden"
+                404:
+                    $ref: "#/components/responses/NotFound"
+                500:
+                    $ref: "#/components/responses/ServerError"
+
+    /users/{user_id}/orders/{order_id}:
+        get:
+            tags:
+                - Orders
+            summary: 회원 주문 조회
+            description: <h1>한 회원의 주문 하나를 조회합니다.</h1><br><br><h2>Permission</h2>`사용자` `사장님` `관리자`<br><br><h2>이 Api는 현재</h2>`기획중` `개발중` `완료`
+            parameters:
+                - in: header
+                  name: access_token
+                  schema:
+                      type: "string"
+                      example: 발급받은 Access Toekn 입력
+                  required: true
+                - in: header
+                  name: refresh_token
+                  schema:
+                      type: "string"
+                      example: 발급받은 Refresh Toekn 입력
+                  required: true
+                - in: path
+                  name: user_id
+                  schema:
+                      type: "integer"
+                      example: 회원 id 기입
+                  required: true
+                - in: path
+                  name: order_id
+                  schema:
+                      type: "integer"
+                      example: 주문 id 기입
+                  required: true
+            responses:
+                200:
+                    description: 회원의 주문 반환
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Order"
+                400:
+                    $ref: "#/components/responses/BadRequest"
+                401:
+                    $ref: "#/components/responses/Unauthorized"
+                404:
+                    $ref: "#/components/responses/NotFound"
+                500:
+                    $ref: "#/components/responses/ServerError"
+
+        patch:
+            tags:
+                - Orders
+            summary: 회원 주문 상태 변경
+            description: <h1>회원의 주문 상태를 변경합니다.</h1><br><br><h2>Permission</h2>`사장님` `관리자`<br><br><h2>이 Api는 현재</h2>`기획중` `개발중` `완료`
+            parameters:
+                - in: header
+                  name: access_token
+                  schema:
+                      type: "string"
+                      example: 발급받은 Access Toekn 입력
+                  required: true
+                - in: header
+                  name: refresh_token
+                  schema:
+                      type: "string"
+                      example: 발급받은 Refresh Toekn 입력
+                  required: true
+                - in: path
+                  name: user_id
+                  schema:
+                      type: "integer"
+                      example: 회원 id 기입
+                  required: true
+                - in: path
+                  name: order_id
+                  schema:
+                      type: "integer"
+                      example: 주문 id 기입
+                  required: true
+            requestBody:
+                description: 상태 입력
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: "object"
+                            properties:
+                                orderState:
+                                    type: "string"
+                                    maxLength: 10
+                                    example: 배송중
+            responses:
+                200:
+                    $ref: "#/components/responses/Ok"
+                400:
+                    $ref: "#/components/responses/BadRequest"
+                401:
+                    $ref: "#/components/responses/Unauthorized"
+                403:
+                    $ref: "#/components/responses/Forbidden"
+                500:
+                    $ref: "#/components/responses/ServerError"
+
+        delete:
+            tags:
+                - Orders
+            summary: 회원 주문 삭제
+            description: <h1>회원의 주문 기록을 삭제합니다.</h1><br><br><h2>Permission</h2>`사용자` `관리자`<br><br><h2>이 Api는 현재</h2>`기획중` `개발중` `완료`
+            parameters:
+                - in: header
+                  name: access_token
+                  schema:
+                      type: "string"
+                      example: 발급받은 Access Toekn 입력
+                  required: true
+                - in: header
+                  name: refresh_token
+                  schema:
+                      type: "string"
+                      example: 발급받은 Refresh Toekn 입력
+                  required: true
+                - in: path
+                  name: user_id
+                  schema:
+                      type: "integer"
+                      example: 회원 id 기입
+                  required: true
+                - in: path
+                  name: order_id
+                  schema:
+                      type: "integer"
+                      example: 주문 id 기입
+                  required: true
+            responses:
+                200:
+                    $ref: "#/components/responses/Ok"
+                400:
+                    $ref: "#/components/responses/BadRequest"
+                401:
+                    $ref: "#/components/responses/Unauthorized"
+                403:
+                    $ref: "#/components/responses/Forbidden"
+                500:
+                    $ref: "#/components/responses/ServerError"
+
+# 컴포넌트 정의
+components:
+    # 응답
+    responses:
+        Ok:
+            description: <h2>성공</h2>
+            headers:
+                access_token:
+                    schema:
+                        $ref: "#/components/schemas/access_token"
+                refresh_token:
+                    schema:
+                        $ref: "#/components/schemas/refresh_token"
+                is_changed:
+                    description: "true일 경우 새로운 토큰이 담긴다."
+                    schema:
+                        $ref: "#/components/schemas/is_changed"
+            content:
+                application/json:
+                    schema:
+                        type: "object"
+
+        BadRequest:
+            description: <h2>잘못된 요청</h2><br>`필수 인자 누락, 타입 오류 등`
+            content:
+                application/json:
+                    schema:
+                        type: "object"
+                        properties:
+                            code:
+                                type: "integer"
+                                format: "int64"
+                                example: 400
+                            message:
+                                type: "string"
+                                example: "잘못된 요청으로 서버에서 처리가 불가합니다."
+
+        Unauthorized:
+            description: <h2>사용자 인증 실패</h2><br>`존재하지 않는 사용자, JWT 만료, 비정상 토큰`
+            content:
+                application/json:
+                    schema:
+                        type: "object"
+                        properties:
+                            code:
+                                type: "integer"
+                                format: "int64"
+                                example: 401
+                            message:
+                                type: "string"
+                                example: "인증에 실패했습니다."
+
+        Forbidden:
+            description: <h2>권한 없음</h2><br>`권한없는 API 요청`
+            content:
+                application/json:
+                    schema:
+                        type: "object"
+                        properties:
+                            code:
+                                type: "integer"
+                                format: "int64"
+                                example: 403
+                            message:
+                                type: "string"
+                                example: "권한이 없습니다."
+
+        NotFound:
+            description: <h2>리소스 없음</h2><br>`존재하지 않는 API를 요청하였거나 존재하지 않는 데이터를 요청`
+            content:
+                application/json:
+                    schema:
+                        type: "object"
+                        properties:
+                            code:
+                                type: "integer"
+                                format: "int64"
+                                example: 404
+                            message:
+                                type: "string"
+                                example: "없는 데이터를 참조하였거나 존재하지 않는 API 입니다."
+
+        ServerError:
+            description: <h2>서버 오류</h2><br>`서버 연결상태 불량, 특정 코드 오류 등`
+            content:
+                application/json:
+                    schema:
+                        type: "object"
+                        properties:
+                            code:
+                                type: "integer"
+                                example: 500
+                            message:
+                                type: "string"
+                                example: "알 수 없는 오류입니다."
+
+    # 스키마
+    schemas:
+        # 유틸 스키마
+        access_token:
+            type: "string"
+            example: "Access Token"
+
+        refresh_token:
+            type: "string"
+            example: "Refresh Token"
+
+        is_changed:
+            type: "boolean"
+            example: true or false
+
+        KakaoToken:
+            type: "object"
+            properties:
+                kakao_token:
+                    type: "string"
+                    example: "발급받은 카카오 토큰"
+
+        EmptyBody:
+            type: "object"
+
+        # 실제 데이터
+        AllShop:
+            type: "array"
+            items:
+                $ref: "#/components/schemas/Shop"
+
+        AroundShop:
+            type: "array"
+            items:
+                properties:
+                    shopId:
+                        type: "integer"
+                        example: 1
+                    businessNumber:
+                        type: "string"
+                        maxLength: 30
+                        example: "17-1234-1234"
+                    businessName:
+                        type: "string"
+                        maxLength: 50
+                        example: "동찬이네"
+                    businessPhone:
+                        type: "string"
+                        maxLength: 20
+                        example: "02-124-1234"
+                    dayoff:
+                        type: "integer"
+                        example: 9
+                    location:
+                        $ref: "#/components/schemas/Location"
+                    name:
+                        type: "string"
+                        maxLength: 10
+                        example: "김성수"
+                    origin:
+                        type: "string"
+                        maxLength: 300
+                        nullable: true
+                        example: "김치: 국내산, 돼지고기: 국내산, 소고기: 호주산, ..."
+                    content:
+                        type: "string"
+                        maxLength: 300
+                        nullable: true
+                        example: "안녕하세요 동찬이네 입니다."
+                    imageUrl:
+                        type: "string"
+                        maxLength: 500
+                        nullable: true
+                        example: "S3 이미지 url"
+                    officeHour:
+                        type: "string"
+                        maxLength: 11
+                        nullable: true
+                        example: "09:00-18:00"
+                    temporaryDayStart:
+                        type: "string"
+                        format: "date-time"
+                        nullable: true
+                        example: "2021-12-07T09:36:14.076Z"
+                    temporaryDayEnd:
+                        type: "string"
+                        format: "date-time"
+                        nullable: true
+                        example: "2021-12-07T09:36:14.076Z"
+                    createdAt:
+                        type: "string"
+                        format: "date-time"
+                        example: "2021-12-07T09:36:14.076Z"
+                    updatedAt:
+                        type: "string"
+                        format: "date-time"
+                        example: "2021-12-07T09:36:14.076Z"
+                    dishes:
+                        type: "array"
+                        items:
+                            $ref: "#/components/schemas/Dish"
+                    distance:
+                        type: "integer"
+                        example: 300
+                        description: "사용자와 가게 사이의 거리 (기준: 미터)"
+
+        Shop:
+            type: "object"
+            properties:
+                shopId:
+                    type: "integer"
+                    example: 1
+                businessNumber:
+                    type: "string"
+                    maxLength: 30
+                    example: "17-1234-1234"
+                businessName:
+                    type: "string"
+                    maxLength: 50
+                    example: "동찬이네"
+                businessPhone:
+                    type: "string"
+                    maxLength: 20
+                    example: "02-124-1234"
+                dayoff:
+                    type: "integer"
+                    example: 9
+                location:
+                    $ref: "#/components/schemas/Location"
+                name:
+                    type: "string"
+                    maxLength: 10
+                    example: "김성수"
+                origin:
+                    type: "string"
+                    maxLength: 300
+                    nullable: true
+                    example: "김치: 국내산, 돼지고기: 국내산, 소고기: 호주산, ..."
+                content:
+                    type: "string"
+                    maxLength: 300
+                    nullable: true
+                    example: "안녕하세요 동찬이네 입니다."
+                imageUrl:
+                    type: "string"
+                    maxLength: 500
+                    nullable: true
+                    example: "S3 이미지 url"
+                officeHour:
+                    type: "string"
+                    maxLength: 11
+                    nullable: true
+                    example: "09:00-18:00"
+                temporaryDayStart:
+                    type: "string"
+                    format: "date-time"
+                    nullable: true
+                    example: "2021-12-07T09:36:14.076Z"
+                temporaryDayEnd:
+                    type: "string"
+                    format: "date-time"
+                    nullable: true
+                    example: "2021-12-07T09:36:14.076Z"
+                createdAt:
+                    type: "string"
+                    format: "date-time"
+                    example: "2021-12-07T09:36:14.076Z"
+                updatedAt:
+                    type: "string"
+                    format: "date-time"
+                    example: "2021-12-07T09:36:14.076Z"
+                dishes:
+                    type: "array"
+                    items:
+                        $ref: "#/components/schemas/Dish"
+
+        ShopDishes:
+            type: "array"
+            items:
+                $ref: "#/components/schemas/Dish"
+
+        Dish:
+            type: "object"
+            properties:
+                dishId:
+                    type: "integer"
+                    example: 123
+                shopId:
+                    type: "integer"
+                    example: 1
+                main:
+                    type: "boolean"
+                    example: true
+                thumbnail:
+                    type: "boolean"
+                    example: true
+                title:
+                    type: "string"
+                    maxLength: 30
+                    example: "가지 볶음"
+                content:
+                    type: "string"
+                    maxLength: 150
+                    nullable: true
+                    example: "말랑말랑한 가지볶음!"
+                price:
+                    type: "integer"
+                    example: 3000
+                count:
+                    type: "integer"
+                    example: 30
+                weight:
+                    type: "integer"
+                    example: 150
+                imageUrl:
+                    type: "string"
+                    maxLength: 500
+                    nullable: true
+                    example: "S3 이미지 url"
+                createdAt:
+                    type: "string"
+                    format: "date-time"
+                    example: "2021-12-07T09:36:14.076Z"
+                updatedAt:
+                    type: "string"
+                    format: "date-time"
+                    example: "2021-12-07T09:36:14.076Z"
+
+        DishData:
+            type: "object"
+            properties:
+                main:
+                    type: "boolean"
+                    example: true
+                title:
+                    type: "string"
+                    maxLength: 30
+                    example: "가지 볶음"
+                content:
+                    type: "string"
+                    maxLength: 150
+                    nullable: true
+                    example: "말랑말랑한 가지볶음!"
+                price:
+                    type: "integer"
+                    example: 3000
+                count:
+                    type: "integer"
+                    example: 30
+                weight:
+                    type: "integer"
+                    example: 150
+
+        AllSubscription:
+            type: "object"
+            properties:
+                subscriptionId:
+                    type: "integer"
+                    example: 1
+                userId:
+                    type: "integer"
+                    example: 1
+                receiver:
+                    type: "string"
+                    maxLength: 10
+                    example: "김성수"
+                address:
+                    type: "string"
+                    maxLength: 100
+                    example: "서울시 서초구 강남대로 327, 대륭서초타워 4층"
+                toShop:
+                    type: "string"
+                    maxLength: 50
+                    nullable: true
+                    example: "리뷰이벤트 해주세요"
+                toDelivery:
+                    type: "string"
+                    maxLength: 50
+                    nullable: true
+                    example: "조심히 와주세요"
+                createdAt:
+                    type: "string"
+                    format: "date-time"
+                    example: "2021-12-07T09:36:14.076Z"
+                updatedAt:
+                    type: "string"
+                    format: "date-time"
+                    example: "2021-12-07T09:36:14.076Z"
+                SubscriptionDays:
+                    type: "array"
+                    items:
+                        $ref: "#/components/schemas/SubscriptionDays"
+
+        Subscription:
+            type: "object"
+            properties:
+                subscriptionId:
+                    type: "integer"
+                    example: 1
+                userId:
+                    type: "integer"
+                    example: 1
+                receiver:
+                    type: "string"
+                    maxLength: 10
+                    example: "김성수"
+                address:
+                    type: "string"
+                    maxLength: 100
+                    example: "서울시 서초구 강남대로 327, 대륭서초타워 4층"
+                toShop:
+                    type: "string"
+                    maxLength: 50
+                    nullable: true
+                    example: "리뷰이벤트 해주세요"
+                toDelivery:
+                    type: "string"
+                    maxLength: 50
+                    nullable: true
+                    example: "조심히 와주세요"
+                createdAt:
+                    type: "string"
+                    format: "date-time"
+                    example: "2021-12-07T09:36:14.076Z"
+                updatedAt:
+                    type: "string"
+                    format: "date-time"
+                    example: "2021-12-07T09:36:14.076Z"
+                subscriptionDays:
+                    $ref: "#/components/schemas/SubscriptionDays"
+
+        SubscriptionDays:
+            type: "object"
+            properties:
+                SubscriptionDayId:
+                    type: "integer"
+                    example: 1
+                shopId:
+                    type: "integer"
+                    example: 1
+                oneTime:
+                    type: "boolean"
+                    example: false
+                weekLabel:
+                    type: "integer"
+                    example: 128
+                deliveryCost:
+                    type: "integer"
+                    example: 3000
+                subscriptionDishes:
+                    type: "array"
+                    items:
+                        $ref: "#/components/schemas/SubscriptionDish"
+
+        SubscriptionDish:
+            type: "object"
+            properties:
+                subscriptionDishId:
+                    type: "integer"
+                    example: 1
+                subscriptionDataId:
+                    type: "integer"
+                    example: 1
+                dishId:
+                    type: "integer"
+                    example: 1
+                main:
+                    type: "boolean"
+                    example: false
+                title:
+                    type: "string"
+                    maxLength: 30
+                    example: "가지 볶음"
+                price:
+                    type: "integer"
+                    example: 3000
+                orderCount:
+                    type: "integer"
+                    example: 5
+                weight:
+                    type: "integer"
+                    example: 150
+                imageUrl:
+                    type: "string"
+                    maxLength: 500
+                    nullable: true
+                    example: "S3 이미지 URL"
+                isChanged:
+                    type: "boolean"
+                    example: false
+                    description: "반찬 정보가 변경되었으면 true로 바뀜"
+                subscriptionOnetimeDish:
+                    type: "array"
+                    items:
+                        $ref: "#/components/schemas/SubscriptionOnetime"
+
+        SubscriptionOnetime:
+            type: "object"
+            properties:
+                subscriptionOnetimeId:
+                    type: "integer"
+                    example: 1
+                subscriptionDishId:
+                    type: "integer"
+                    example: 1
+                dishId:
+                    type: "integer"
+                    example: 1
+                main:
+                    type: "boolean"
+                    example: false
+                title:
+                    type: "string"
+                    maxLength: 30
+                    example: "가지 볶음"
+                price:
+                    type: "integer"
+                    example: 3000
+                orderCount:
+                    type: "integer"
+                    example: 5
+                weight:
+                    type: "integer"
+                    example: 150
+                imageUrl:
+                    type: "string"
+                    maxLength: 500
+                    nullable: true
+                    example: "S3 이미지 URL"
+
+        SubsRegister:
+            type: "object"
+            properties:
+                address:
+                    type: "string"
+                    maxLength: 100
+                    example: "서울시 서초구 강남대로 327, 대륭서초타워 4층"
+                receiver:
+                    type: "string"
+                    maxLength: 10
+                    example: "김성수"
+                toShop:
+                    type: "string"
+                    maxLength: 50
+                    nullable: true
+                    example: "리뷰이벤트 해주세요"
+                toDelivery:
+                    type: "string"
+                    maxLength: 50
+                    nullable: true
+                    example: "조심히 와주세요"
+                subscriptionDays:
+                    type: "array"
+                    items:
+                        $ref: "#/components/schemas/SubsData"
+
+        SubsData:
+            type: "object"
+            properties:
+                shopId:
+                    type: "integer"
+                    example: 1
+                weekLabel:
+                    type: "integer"
+                    example: 128
+                    description: "128 => 01000000 월요일"
+                deliveryCost:
+                    type: "integer"
+                    example: 3000
+                subscriptionDishes:
+                    type: "array"
+                    items:
+                        $ref: "#/components/schemas/SubsDish"
+
+        SubsDish:
+            type: "object"
+            properties:
+                dishId:
+                    type: "integer"
+                    example: 1
+                orderCount:
+                    type: "integer"
+                    example: 10
+
+        Order:
+            type: "object"
+            properties:
+                orderId:
+                    type: "integer"
+                    example: 1
+                userId:
+                    type: "integer"
+                    example: 1
+                orderState:
+                    type: "string"
+                    maxLength: 10
+                    example: "결제 완료"
+                receiver:
+                    type: "string"
+                    maxLength: 10
+                    example: "김성수"
+                address:
+                    type: "string"
+                    maxLength: 100
+                    example: "서울시 서초구 강남대로 327, 대륭서초타워 4층"
+                totalPayment:
+                    type: "integer"
+                    example: 15000
+                paymentState:
+                    type: "string"
+                    maxLength: 50
+                    nullable: true
+                    example: "카카오 페이"
+                toShop:
+                    type: "string"
+                    maxLength: 50
+                    nullable: true
+                    example: "리뷰이벤트 해주세요"
+                toDelivery:
+                    type: "string"
+                    maxLength: 50
+                    nullable: true
+                    example: "조심히 와주세요"
+                createdAt:
+                    type: "string"
+                    format: "date-time"
+                    example: "2021-12-07T09:36:14.076Z"
+                updatedAt:
+                    type: "string"
+                    format: "date-time"
+                    example: "2021-12-07T09:36:14.076Z"
+                orderDays:
+                    type: "array"
+                    items:
+                        $ref: "#/components/schemas/OrderDay"
+
+        OrderDay:
+            type: "object"
+            properties:
+                orderDayId:
+                    type: "integer"
+                    example: 1
+                shopId:
+                    type: "integer"
+                    example: 1
+                weekLabel:
+                    type: "integer"
+                    example: 128
+                deliveryCost:
+                    type: "integer"
+                    example: 3000
+                orderDishes:
+                    type: "array"
+                    items:
+                        $ref: "#/components/schemas/OrderDish"
+
+        OrderDish:
+            type: "object"
+            properties:
+                orderDishId:
+                    type: "integer"
+                    example: 1
+                orderDataId:
+                    type: "integer"
+                    example: 1
+                dishId:
+                    type: "integer"
+                    example: 1
+                oneTime:
+                    type: "boolean"
+                    example: true
+                main:
+                    type: "boolean"
+                    example: false
+                title:
+                    type: "string"
+                    maxLength: 30
+                    example: "가지 볶음"
+                price:
+                    type: "integer"
+                    example: 3000
+                orderCount:
+                    type: "integer"
+                    example: 5
+                weight:
+                    type: "integer"
+                    example: 150
+                imageUrl:
+                    type: "string"
+                    maxLength: 500
+                    nullable: true
+                    example: "S3 이미지 URL"
+
+        Location:
+            type: "object"
+            properties:
+                address:
+                    type: "string"
+                    example: "서울시 서초구 강남대로 327"
+                addressDetail:
+                    type: "string"
+                    example: "대륭서초타워 4층"
+                dong:
+                    type: "string"
+                    example: "서초동"
+                latitude:
+                    type: "number"
+                    example: 37.1
+                longitude:
+                    type: "number"
+                    example: 123
+
+externalDocs:
+    description: "Find out more about Swagger"
+    url: "http://swagger.io"

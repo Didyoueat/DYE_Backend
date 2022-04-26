@@ -13,7 +13,7 @@ import Shops from "@entities/shops";
 @Entity("shop_temporary_days")
 export default class ShopTemporaryDays {
     @PrimaryGeneratedColumn()
-    id: Number;
+    shopTemporaryDayId: Number;
 
     @Column("int")
     shopId: Number;

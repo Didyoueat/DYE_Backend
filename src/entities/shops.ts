@@ -9,7 +9,7 @@ import OrderDays from "@entities/order.days";
 @Entity("shops")
 export default class Shops {
     @PrimaryGeneratedColumn()
-    id: number;
+    shopId: number;
 
     @Column("varchar", { length: 30 })
     businessNumber: string;

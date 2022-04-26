@@ -11,12 +11,11 @@ import {
 } from "typeorm";
 import SubscriptionDays from "@entities/subscription.days";
 import Dishes from "@entities/dishes";
-// import { SubscriptionOnetime } from "@entities/subscription.onetime";
 
 @Entity("subscription_dishes")
 export default class SubscriptionDishes {
     @PrimaryGeneratedColumn()
-    id: number;
+    subscriptionDishId: number;
 
     @Column("int")
     subscriptionDayId: number;

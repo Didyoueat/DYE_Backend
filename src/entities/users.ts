@@ -17,7 +17,7 @@ import Payments from "@entities/payments";
 @Entity("users")
 export default class Users {
     @PrimaryGeneratedColumn()
-    id: number;
+    userId: number;
 
     @Column("boolean", { default: false })
     staff: boolean;
