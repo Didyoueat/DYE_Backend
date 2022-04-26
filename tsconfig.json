@@ -1,0 +1,29 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "target": "ES2017",
+        "moduleResolution": "node",
+        "sourceMap": true,
+        "outDir": "./dist",
+        // "strict": true,
+        "rootDir": "src",
+        "baseUrl": ".",
+        "skipLibCheck": true,
+        "paths": {
+            "@middlewares/*": ["src/middlewares/*"],
+            "@routes/*": ["src/routes/*"],
+            "@controllers/*": ["src/controllers/*"],
+            "@services/*": ["src/services/*"],
+            "@repository/*": ["src/repository/*"],
+            "@entities/*": ["src/entities/*"],
+            "@modules/*": ["src/modules/*"]
+        },
+        "lib": ["dom", "dom.iterable"]
+    },
+    "include": ["src"],
+    "exclude": ["node_modules"]
+}

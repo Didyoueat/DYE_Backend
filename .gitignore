@@ -1,0 +1,27 @@
+### Node ###
+
+# Logs
+logs/
+yarn-error.log
+ormlogs.log
+.DS_Store
+
+# Dependency directories
+node_modules/
+
+
+# dotenv environment variables file
+.env.test
+.env.prod
+.env.dev
+
+# TypeScript build / generate output
+dist/
+
+# Database directories
+migrations/
+
+# Development test directories
+dummy/
+coverage/
+test/
