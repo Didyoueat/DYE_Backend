@@ -6,28 +6,26 @@ import {
     CreateDateColumn,
     UpdateDateColumn,
     DeleteDateColumn,
-    OneToMany,
     ManyToOne,
 } from "typeorm";
 import Users from "@entities/users";
-import Subscriptions from "@entities/subscriptions";
 
-@Entity("payments")
-export default class Payments {
+@Entity("signs")
+export default class Signs {
     @PrimaryGeneratedColumn()
-    paymentId: Number;
+    signId: Number;
 
-    @Column("int")
+    @Column("int", { default: null, nullable: true })
     userId: Number;
 
-    @Column("varchar", { length: 10 })
-    paymentState: String;
+    @Column("varchar", { length: 20 })
+    loginStatus: string;
 
-    @Column("varchar", { length: 300 })
-    paymentKeyA: String;
+    @Column("varchar", { length: 50, nullable: true, default: null })
+    email?: string;
 
-    @Column("varchar", { length: 300 })
-    paymentKeyB: String;
+    @Column("varchar", { length: 255, nullable: true, default: null })
+    uid?: string;
 
     @CreateDateColumn()
     createdAt: Date;
@@ -38,11 +36,8 @@ export default class Payments {
     @DeleteDateColumn({ nullable: true, select: false })
     deletedAt: Date;
 
-    @OneToMany(() => Subscriptions, (subscriptions) => subscriptions.payments)
-    subscriptions: Subscriptions[];
-
-    @ManyToOne(() => Users, (users) => users.payments, {
-        nullable: false,
+    @ManyToOne(() => Users, (users) => users.signs, {
+        nullable: true,
         onDelete: "CASCADE",
         cascade: true,
     })

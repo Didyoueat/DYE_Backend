@@ -23,7 +23,7 @@ export default class Shops {
     @Column("varchar", { length: 100, select: false })
     password: string;
 
-    @Column("tinyint", { unsigned: true, nullable: true })
+    @Column("tinyint", { unsigned: true, default: 0, nullable: true })
     dayOff: number;
 
     @Column("varchar", { length: 10, nullable: true })

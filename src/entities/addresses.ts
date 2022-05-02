@@ -12,7 +12,6 @@ import {
 import Users from "@entities/users";
 import Shops from "@entities/shops";
 import Subscriptions from "@entities/subscriptions";
-import Orders from "@entities/orders";
 
 @Entity("addresses")
 export default class Addresses {
@@ -38,10 +37,10 @@ export default class Addresses {
     dong: String;
 
     @Column("double")
-    latitude: String;
+    latitude: number;
 
     @Column("double")
-    longitude: String;
+    longitude: number;
 
     @CreateDateColumn()
     createdAt: Date;
@@ -70,7 +69,4 @@ export default class Addresses {
 
     @OneToMany(() => Subscriptions, (subscriptions) => subscriptions.addresses)
     subscriptions: Subscriptions[];
-
-    @OneToMany(() => Orders, (orders) => orders.addresses)
-    orders: Orders[];
 }

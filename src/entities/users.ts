@@ -13,44 +13,30 @@ import Subscriptions from "@entities/subscriptions";
 import Orders from "@entities/orders";
 import Addresses from "@entities/addresses";
 import Payments from "@entities/payments";
+import Signs from "@entities/signs";
 
 @Entity("users")
 export default class Users {
     @PrimaryGeneratedColumn()
     userId: number;
 
+    @Column("int")
+    subscriptionId: number;
+
     @Column("boolean", { default: false })
     staff: boolean;
-
-    @Column("varchar", { length: 20, nullable: true })
-    loginState?: string;
-
-    @Column("varchar", { length: 50, unique: true, nullable: true })
-    email: string;
-
-    @Column("varchar", { length: 100, nullable: true, select: false })
-    password!: string;
 
     @Column("varchar", { length: 10, nullable: true })
     name: string;
 
-    @Column("int", { nullable: true })
-    age: number;
+    @Column("varchar", { length: 8, nullable: true })
+    birth: string;
 
     @Column("varchar", { length: 10, nullable: true })
     gender: string;
 
     @Column("varchar", { length: 20, nullable: true })
     phone: string;
-
-    // @Column("varchar", { length: 100, nullable: true })
-    // address: string;
-
-    // @Column("varchar", { length: 20, nullable: true })
-    // paymentState: string;
-
-    // @Column("varchar", { length: 255, nullable: true, select: false })
-    // paymentKey: string;
 
     @CreateDateColumn()
     createdAt: Date;
@@ -72,4 +58,7 @@ export default class Users {
 
     @OneToMany(() => Payments, (payments) => payments.users)
     payments: Payments[];
+
+    @OneToMany(() => Signs, (signs) => signs.users)
+    signs: Payments[];
 }

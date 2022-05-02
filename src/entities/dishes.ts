@@ -42,7 +42,7 @@ export default class Dishes {
     @Column("int")
     weight: number;
 
-    @Column("varchar", { length: 255 })
+    @Column("varchar", { length: 255, nullable: true })
     imageUrl: string;
 
     @CreateDateColumn()
