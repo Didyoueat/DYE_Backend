@@ -29,9 +29,7 @@ tags:
     - name: Addresses
       description: 주소 API
     - name: Payments
-      description:
-          결제 API
-
+      description: 결제 API
           # - in: header
           #   name: access_token
           #   schema:

@@ -11,12 +11,13 @@
         "build-dev-ts": "cross-env NODE_ENV=development webpack --config webpack.config.js",
         "debug": "cd dist && cross-env NODE_ENV=development nodemon --inspect app.js",
         "prestart": "tsc",
-        "serve-prod": "cross-env NODE_ENV=production nodemon --exec ts-node -- --type-check -r tsconfig-paths/register --files ./src/app.ts",
+        "serve": "cross-env NODE_ENV=development nodemon --exec ts-node -- --type-check -r tsconfig-paths/register --files ./src/app.ts",
+        "serve-dev": "cross-env NODE_ENV=refactoring nodemon --exec ts-node -- --type-check -r tsconfig-paths/register --files ./src/app.ts",
         "serve-test": "cross-env NODE_OPTIONS=--max-old-space-size=2048 NODE_ENV=test ts-node -r tsconfig-paths/register --files ./src/app.ts &",
-        "serve-dev": "cross-env NODE_ENV=development nodemon --exec ts-node -- --type-check -r tsconfig-paths/register --files ./src/app.ts",
-        "start": "yarn run serve-prod",
-        "test": "yarn run serve-test",
+        "prod": "yarn run serve-prod && pm2 start build/app.js",
+        "start": "yarn run serve",
         "dev": "yarn run serve-dev",
+        "test": "yarn run serve-test",
         "jest": "cross-env NODE_ENV=jest jest --setupFiles dotenv/config --config jest.config.js --detectOpenHandles --forceExit"
     },
     "dependencies": {
