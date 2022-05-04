@@ -12,6 +12,10 @@ export const findUser = async (userId: number) => {
 };
 
 export const createUser = async (data: infoTypes.user) => {
+    data.password = null;
+    data.paymentState = null;
+    data.paymentKey = null;
+
     const userRepo = repository(UserRepo);
 
     await userRepo.createUser(data);

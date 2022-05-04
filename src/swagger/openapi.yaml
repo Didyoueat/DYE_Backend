@@ -208,6 +208,55 @@ paths:
           $ref: "#/components/responses/ServerError"
   
   # 사용자 & 관리자 API
+  /users/create:
+    post:
+      tags:
+      - Users
+      summary: 회원가입
+      description: <h1>회원가입 API 입니다.</h1><br><br><h2>Permission</h2>`관리자`<br><br><h2>이 Api는 현재</h2>`기획중` `개발중` `완료`
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                loginStatus:
+                  type: "string"
+                  maxLength: 20
+                  example: "kakao"
+                email:
+                  type: "string"
+                  maxLength: 50
+                  example: "test@example.com"
+                name:
+                  type: "string"
+                  maxLength: 30
+                  example: "김성수"
+                age:
+                  type: "integer"
+                  example: 19971223
+                gender:
+                  type: "string"
+                  maxLength: 10
+                  example: "male or female"
+                phone:
+                  type: "string"
+                  maxLength: 20
+                  example: "010-7722-8123"
+                address:
+                  type: "string"
+                  maxLength: 100
+                  example: "서울시 강남구 개포로 416, 개포디지털혁신파크 새롬관"
+      responses:
+        200:
+          $ref: "#/components/responses/Ok"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        500:
+          $ref: "#/components/responses/ServerError"
+      
+  
   /users:
     get:
       tags:
