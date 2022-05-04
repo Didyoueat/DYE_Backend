@@ -11,6 +11,7 @@ import OrderDays from "@entities/order.days";
 import OrderDishes from "@entities/order.dishes";
 import Addresses from "@entities/addresses";
 import Payments from "@entities/payments";
+import Signs from "@entities/signs";
 import ShopTemporaryDays from "@entities/shop.temporary.days";
 
 const defaultOrmConfig: ConnectionOptions = {
@@ -31,6 +32,7 @@ const defaultOrmConfig: ConnectionOptions = {
         Shops,
         Addresses,
         Payments,
+        Signs,
         ShopTemporaryDays,
         Dishes,
         Subscriptions,

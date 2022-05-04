@@ -34,7 +34,18 @@ export default class Addresses {
     addressDetail: String;
 
     @Column("varchar", { length: 20 })
-    dong: String;
+    sido: String;
+
+    @Column("varchar", { length: 20, nullable: true })
+    sigungu: String;
+
+    // 동, 리
+    @Column("varchar", { length: 20, nullable: true })
+    bname: String;
+
+    // 읍, 면
+    @Column("varchar", { length: 20, nullable: true })
+    bname1: String;
 
     @Column("double")
     latitude: number;

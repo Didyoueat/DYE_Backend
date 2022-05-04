@@ -48,7 +48,6 @@ export class SubsDishRepo extends Repository<SubscriptionDishes> {
             .values({
                 subscriptionDayId: subsDayId,
                 dishId: dishId,
-                oneTime: false,
                 main: dish.main,
                 title: dish.title,
                 price: dish.price,

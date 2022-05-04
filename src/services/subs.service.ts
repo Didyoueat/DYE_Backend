@@ -1,3 +1,4 @@
+import { UserRepo } from "@repository/user.repository";
 import { SubsRepo } from "@repository/subscription.repository";
 import { SubsDishRepo } from "@repository/subscription.dish.repository";
 import { DishRepo } from "@repository/dish.repository";
@@ -73,12 +74,13 @@ export const createSubs = async (userId: number, data: createTypes.subscription)
     const { findUserSubs, createSubs, createSubsDay } = repository(SubsRepo);
     const { createSubsDish } = repository(SubsDishRepo);
     const { findDish } = repository(DishRepo);
+    const { findUserAddress } = repository(UserRepo);
 
     if (await findUserSubs(userId)) {
         errorGenerator(httpStatus.BAD_REQUEST);
     }
-
-    const subs = await createSubs(userId, data);
+    const addressId = parseInt(String((await findUserAddress(userId)).addressId), 10);
+    const subs = await createSubs(userId, addressId, data);
 
     await Promise.all(
         data.subscriptionDays.map(async (dayValue: createTypes.subscriptionDay) => {

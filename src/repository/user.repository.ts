@@ -1,6 +1,7 @@
-import { EntityRepository, Repository } from "typeorm";
+import { EntityRepository, getConnection, Repository } from "typeorm";
 import infoTypes from "infoTypes";
 import Users from "@entities/users";
+import Addresses from "@entities/addresses";
 
 @EntityRepository(Users)
 export class UserRepo extends Repository<Users> {
@@ -23,6 +24,14 @@ export class UserRepo extends Repository<Users> {
 
     findUser = (userId: number) => {
         return this.createQueryBuilder("users").where("users.userId = :userId", { userId: userId }).getOne();
+    };
+
+    findUserAddress = (userId: number) => {
+        return getConnection()
+            .createQueryBuilder()
+            .from(Addresses, "addresses")
+            .where("addresses.userId = :userId AND addresses.main = :main", { userId: userId, main: true })
+            .getOne();
     };
 
     findDeletedUser = (userId: number) => {

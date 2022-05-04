@@ -23,9 +23,6 @@ export default class OrderDishes {
     dishId: number;
 
     @Column("boolean", { default: false })
-    oneTime: boolean;
-
-    @Column("boolean", { default: false })
     main: boolean;
 
     @Column("int")

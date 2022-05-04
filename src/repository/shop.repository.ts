@@ -1,6 +1,7 @@
-import { EntityRepository, Repository } from "typeorm";
+import { EntityRepository, getConnection, Repository } from "typeorm";
 import infoTypes from "infoTypes";
 import Shops from "@entities/shops";
+import Addresses from "@entities/addresses";
 
 @EntityRepository(Shops)
 export class ShopRepo extends Repository<Shops> {
@@ -13,8 +14,12 @@ export class ShopRepo extends Repository<Shops> {
             .getOne();
     };
 
-    findAllShops = () => {
-        return this.createQueryBuilder("shops").leftJoinAndSelect("shops.dishes", "dishes").getMany();
+    findAllShops = async () => {
+        return this.createQueryBuilder("shops")
+            .leftJoinAndSelect("shops.dishes", "dishes")
+            .leftJoinAndSelect("shops.addresses", "addresses")
+            .leftJoinAndSelect("shops.shopTemporaryDays", "shopTemporaryDays")
+            .getMany();
     };
 
     findAroundShops = (lat: number, lon: number, radius: number) => {
@@ -24,6 +29,7 @@ export class ShopRepo extends Repository<Shops> {
                 "distance"
             )
             .leftJoinAndSelect("shops.dishes", "dishes")
+            .leftJoinAndSelect("shops.addresses", "addresses")
             .having(`distance <= ${radius}`)
             .orderBy("distance", "ASC")
             .getAroundShop();
@@ -32,6 +38,7 @@ export class ShopRepo extends Repository<Shops> {
     findShop = (shopId: number) => {
         return this.createQueryBuilder("shops")
             .leftJoinAndSelect("shops.dishes", "dishes")
+            .leftJoinAndSelect("shops.addresses", "addresses")
             .where("shops.shopId = :shopId", { shopId: shopId })
             .getOne();
     };

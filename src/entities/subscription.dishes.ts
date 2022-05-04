@@ -24,9 +24,6 @@ export default class SubscriptionDishes {
     dishId: number;
 
     @Column("boolean", { default: false })
-    oneTime: boolean;
-
-    @Column("boolean", { default: false })
     main: boolean;
 
     @Column("varchar", { length: 30 })

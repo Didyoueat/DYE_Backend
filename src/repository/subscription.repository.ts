@@ -51,14 +51,14 @@ export class SubsRepo extends Repository<Subscriptions> {
             .getOne();
     };
 
-    createSubs = async (userId: number, data: createTypes.subscription) => {
+    createSubs = async (userId: number, addressId: number, data: createTypes.subscription) => {
         return await this.createQueryBuilder()
             .insert()
             .into(Subscriptions)
             .values({
                 userId: userId,
+                addressId: addressId,
                 receiver: data.receiver,
-                address: data.address,
                 toShop: data.toShop,
                 toDelivery: data.toDelivery,
             })

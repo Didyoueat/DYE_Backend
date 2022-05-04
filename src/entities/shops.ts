@@ -56,7 +56,7 @@ export default class Shops {
     @OneToMany(() => Dishes, (dishes) => dishes.shops)
     dishes: Dishes[];
 
-    @OneToMany(() => Addresses, (addresses) => addresses.users)
+    @OneToMany(() => Addresses, (addresses) => addresses.shops)
     addresses: Addresses[];
 
     @OneToMany(() => ShopTemporaryDays, (shopTemporaryDays) => shopTemporaryDays.shops)

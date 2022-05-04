@@ -4,6 +4,28 @@ import httpStatus from "http-status";
 import infoTypes from "infoTypes";
 import { ShopRepo } from "@repository/shop.repository";
 import { DishRepo } from "@repository/dish.repository";
+import Shops from "@entities/shops";
+
+const delArray = (shop: Shops) => {
+    if (shop.addresses.length > 0) {
+        const location = shop.addresses.filter((address) => address.main === true)[0];
+        delete shop.addresses;
+        delete location.userId;
+        delete location.shopId;
+        shop["location"] = location;
+    }
+    if (shop.shopTemporaryDays.length > 0) {
+        const temporaryDayId = Math.max.apply(
+            Math,
+            shop.shopTemporaryDays.map((day) => day.shopTemporaryDayId)
+        );
+        shop["temporaryDay"] = {
+            start: shop.shopTemporaryDays.filter((day) => day.shopTemporaryDayId === temporaryDayId)[0].startDay,
+            end: shop.shopTemporaryDays.filter((day) => day.shopTemporaryDayId === temporaryDayId)[0].endDay,
+        };
+        delete shop.shopTemporaryDays;
+    }
+};
 
 export const findAllShop = async () => {
     const shopRepo = repository(ShopRepo);
@@ -12,6 +34,8 @@ export const findAllShop = async () => {
     if (!allShop || allShop.length === 0) {
         errorGenerator(httpStatus.NOT_FOUND);
     }
+    console.log(allShop);
+    allShop.map((shop) => delArray(shop));
 
     return allShop;
 };
@@ -26,6 +50,8 @@ export const findAroundShop = async (lat: number, lon: number, radius: number) =
         errorGenerator(httpStatus.NOT_FOUND);
     }
 
+    aroundShop.map((shop) => delArray(shop));
+
     return aroundShop;
 };
 
@@ -38,6 +64,8 @@ export const findOneShop = async (shopId: number) => {
     if (!shop) {
         errorGenerator(httpStatus.NOT_FOUND);
     }
+
+    delArray(shop);
 
     return shop;
 };

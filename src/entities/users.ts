@@ -1,7 +1,6 @@
 import {
     Entity,
     PrimaryGeneratedColumn,
-    JoinColumn,
     Column,
     CreateDateColumn,
     UpdateDateColumn,
@@ -60,5 +59,5 @@ export default class Users {
     payments: Payments[];
 
     @OneToMany(() => Signs, (signs) => signs.users)
-    signs: Payments[];
+    signs: Signs[];
 }
