@@ -15,6 +15,7 @@ export const createUser = async (data: infoTypes.user) => {
     data.password = null;
     data.paymentState = null;
     data.paymentKey = null;
+    data.phone = null;
 
     const userRepo = repository(UserRepo);
 
