@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import JWT from "@modules/jwt";
 
-const afterware = (fn: Function) => (req: Request, res: Response, next: NextFunction) => {
+const terminus = (fn: Function) => (req: Request, res: Response, next: NextFunction) => {
     Promise.resolve(fn(req, res, next))
         .then(async (data) => {
             const requestId: number = req.body.requestId;
@@ -32,4 +32,4 @@ const afterware = (fn: Function) => (req: Request, res: Response, next: NextFunc
         .catch((err) => next(err));
 };
 
-export default afterware;
+export default terminus;
