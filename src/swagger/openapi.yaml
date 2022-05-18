@@ -2071,9 +2071,9 @@ components:
         subscriptionDish:
           type: "array"
           items:
-            $ref: "#/components/schemas/SubscriptionDish"
+            $ref: "#/components/schemas/SubscriptionDishes"
     
-    SubscriptionDish:
+    SubscriptionDishes:
       type: "object"
       properties:
         subscriptionDishId:
@@ -2170,7 +2170,7 @@ components:
           maxLength: 50
           nullable: true
           example: "조심히 와주세요"
-        subsData:
+        subscriptionDays:
           type: "array"
           items:
             $ref: "#/components/schemas/SubsData"
@@ -2188,7 +2188,7 @@ components:
         deliveryCost:
           type: "integer"
           example: 3000
-        dishes:
+        subscriptionDishes:
           type: "array"
           items:
             $ref: "#/components/schemas/SubsDish"
