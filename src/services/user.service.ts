@@ -6,7 +6,7 @@ import { errorGenerator } from "@modules/api.error";
 import httpStatus from "http-status";
 
 export const findUser = async (userId: number) => {
-    propertyCheck(userId);
+    // propertyCheck(userId);
 
     const userRepo = repository(UserRepo);
 

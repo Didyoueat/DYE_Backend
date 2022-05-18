@@ -20,7 +20,7 @@ export const findAllSubs = async () => {
 };
 
 export const findShopSubs = async (shopId: number) => {
-    propertyCheck(shopId);
+    // propertyCheck(shopId);
 
     const subsRepo = repository(SubsRepo);
     const shopSubs = await subsRepo.findShopSubs(shopId);
@@ -33,7 +33,7 @@ export const findShopSubs = async (shopId: number) => {
 };
 
 export const findUserSubs = async (userId: number, weekLabel: number) => {
-    propertyCheck(userId);
+    // propertyCheck(userId);
 
     const subsRepo = repository(SubsRepo);
     const userSubs = await subsRepo.findUserSubs(userId);
@@ -51,7 +51,7 @@ export const findUserSubs = async (userId: number, weekLabel: number) => {
 };
 
 export const findUserSubsDay = async (userId: number, subsDayId: number) => {
-    propertyCheck(userId, subsDayId);
+    // propertyCheck(userId, subsDayId);
 
     const subsRepo = repository(SubsRepo);
 
@@ -59,7 +59,7 @@ export const findUserSubsDay = async (userId: number, subsDayId: number) => {
 };
 
 export const createSubs = async (userId: number, data: createTypes.subscription) => {
-    propertyCheck(userId, { data: data, type: "subscription", mode: "create" });
+    // propertyCheck(userId, { data: data, type: "subscription", mode: "create" });
 
     await Promise.all(
         data.subscriptionDays.map(async (day) => {
@@ -102,7 +102,7 @@ export const updateSubs = async (userId: number, data: infoTypes.subscription) =
 };
 
 export const deleteSubs = async (userId: number) => {
-    propertyCheck(userId);
+    // propertyCheck(userId);
 
     const subsRepo = repository(SubsRepo);
 

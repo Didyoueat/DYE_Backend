@@ -17,7 +17,7 @@ export const findAllOrder = async () => {
 };
 
 export const findShopOrder = async (shopId: number) => {
-    propertyCheck(shopId);
+    // propertyCheck(shopId);
 
     const orderRepo = repository(OrderRepo);
     const shopOrder = await orderRepo.findShopOrders(shopId);
@@ -30,7 +30,7 @@ export const findShopOrder = async (shopId: number) => {
 };
 
 export const findUserOrder = async (userId: number) => {
-    propertyCheck(userId);
+    // propertyCheck(userId);
 
     const orderRepo = repository(OrderRepo);
     const userOrder = await orderRepo.findUserOrders(userId);
@@ -43,7 +43,7 @@ export const findUserOrder = async (userId: number) => {
 };
 
 export const findOneOrder = async (userId: number, orderId: number) => {
-    propertyCheck(userId, orderId);
+    // propertyCheck(userId, orderId);
 
     const orderRepo = repository(OrderRepo);
     const order = await orderRepo.findOrder(userId, orderId);
@@ -56,13 +56,13 @@ export const findOneOrder = async (userId: number, orderId: number) => {
 };
 
 // export const createOrder = async (userId: number, orderState: string, paymentState: string) => {
-//     propertyCheck(userId);
+// propertyCheck(userId);
 
 //     const subs = findUserSubs(userId, undefined);
 // };
 
 export const deleteOrder = async (userId: number, orderId: number) => {
-    propertyCheck(userId, orderId);
+    // propertyCheck(userId, orderId);
 
     const orderRepo = repository(OrderRepo);
 

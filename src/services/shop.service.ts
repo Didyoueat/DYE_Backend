@@ -17,7 +17,7 @@ export const findAllShop = async () => {
 };
 
 export const findAroundShop = async (lat: number, lon: number, radius: number) => {
-    propertyCheck(lat, lon, radius);
+    // propertyCheck(lat, lon, radius);
 
     const shopRepo = repository(ShopRepo);
     const aroundShop = await shopRepo.findAroundShops(lat, lon, radius);
@@ -30,7 +30,7 @@ export const findAroundShop = async (lat: number, lon: number, radius: number) =
 };
 
 export const findOneShop = async (shopId: number) => {
-    propertyCheck(shopId);
+    // propertyCheck(shopId);
 
     const shopRepo = repository(ShopRepo);
     const shop = await shopRepo.findShop(shopId);
@@ -43,7 +43,7 @@ export const findOneShop = async (shopId: number) => {
 };
 
 export const createShop = async (data: infoTypes.shop) => {
-    propertyCheck({ data: data, type: "shop", mode: "create" });
+    // propertyCheck({ data: data, type: "shop", mode: "create" });
 
     const shopRepo = repository(ShopRepo);
 
@@ -53,7 +53,7 @@ export const createShop = async (data: infoTypes.shop) => {
 };
 
 export const updateShop = async (shopId: number, data: infoTypes.shop) => {
-    propertyCheck(shopId, { data: data, type: "shop", mode: "update" });
+    // propertyCheck(shopId, { data: data, type: "shop", mode: "update" });
 
     const shopRepo = repository(ShopRepo);
 
@@ -63,7 +63,7 @@ export const updateShop = async (shopId: number, data: infoTypes.shop) => {
 };
 
 export const deleteShop = async (shopId: number) => {
-    propertyCheck(shopId);
+    // propertyCheck(shopId);
 
     const shopRepo = repository(ShopRepo);
     const dishRepo = repository(DishRepo);

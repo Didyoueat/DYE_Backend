@@ -5,7 +5,7 @@ import httpStatus from "http-status";
 import infoTypes from "infoTypes";
 
 export const findShopDishes = async (shopId: number) => {
-    propertyCheck(shopId);
+    // propertyCheck(shopId);
 
     const dishRepo = repository(DishRepo);
     const dishes = await dishRepo.findShopAllDishes(shopId);
@@ -18,7 +18,7 @@ export const findShopDishes = async (shopId: number) => {
 };
 
 export const findShopDish = async (shopId: number, dishId: number) => {
-    propertyCheck(shopId, dishId);
+    // propertyCheck(shopId, dishId);
 
     const dishRepo = repository(DishRepo);
     const dish = await dishRepo.findDish(shopId, dishId);
@@ -31,7 +31,7 @@ export const findShopDish = async (shopId: number, dishId: number) => {
 };
 
 export const createDish = async (shopId: number, data: infoTypes.dish) => {
-    propertyCheck(shopId, { data: data, type: "dish", mode: "create" });
+    // propertyCheck(shopId, { data: data, type: "dish", mode: "create" });
 
     const dishRepo = repository(DishRepo);
 
@@ -39,7 +39,7 @@ export const createDish = async (shopId: number, data: infoTypes.dish) => {
 };
 
 export const updateDish = async (shopId: number, dishId: number, data: infoTypes.dish) => {
-    propertyCheck(shopId, dishId, { data: data, type: "dish", mode: "update" });
+    // propertyCheck(shopId, dishId, { data: data, type: "dish", mode: "update" });
 
     const dishRepo = repository(DishRepo);
 
@@ -49,7 +49,7 @@ export const updateDish = async (shopId: number, dishId: number, data: infoTypes
 };
 
 export const deleteDish = async (shopId: number, dishId: number) => {
-    propertyCheck(shopId, dishId);
+    // propertyCheck(shopId, dishId);
 
     const dishRepo = repository(DishRepo);
 
