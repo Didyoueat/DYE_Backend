@@ -12,7 +12,9 @@ const authorization = async (req: Request, res: Response) => {
     const refresh = String(req.headers.refresh_token);
     const accessResult = JWT.accessVerify(access);
 
-    if (!accessResult.valid) errorGenerator(httpStatus.UNAUTHORIZED);
+    if (!accessResult.valid && accessResult.message !== "jwt expired") {
+        errorGenerator(httpStatus.UNAUTHORIZED);
+    }
 
     const refreshResult = await JWT.refreshVerity(refresh, originId(accessResult.decoded["id"]), accessResult.decoded["group"]);
 
