@@ -6,7 +6,7 @@ import Users from "@entities/users";
 export class UserRepo extends Repository<Users> {
     isExistUser = async (keyword?: { userId?: number; email?: string; phone?: string }) => {
         const user = await this.createQueryBuilder("users")
-            .select("users.userId, users.staff")
+            .select()
             .where("users.userId = :userId OR users.email = :email OR users.phone = :phone", {
                 userId: keyword.userId,
                 email: keyword.email,
@@ -22,11 +22,17 @@ export class UserRepo extends Repository<Users> {
     };
 
     findUser = (userId: number) => {
-        return this.createQueryBuilder("users").where("users.userId = :userId", { userId: userId }).getOne();
+        return this.createQueryBuilder("users")
+            .where("users.userId = :userId", { userId: userId })
+            .getOne();
     };
 
     findDeletedUser = (userId: number) => {
-        return this.createQueryBuilder().select().withDeleted().where("userId = :userId", { userId: userId }).getOne();
+        return this.createQueryBuilder()
+            .select()
+            .withDeleted()
+            .where("userId = :userId", { userId: userId })
+            .getOne();
     };
 
     createUser = async (data: infoTypes.user) => {
@@ -34,10 +40,16 @@ export class UserRepo extends Repository<Users> {
     };
 
     softDeleteUser = async (userId: number) => {
-        return await this.createQueryBuilder("users").softDelete().where("users.userId = :userId", { userId: userId }).execute();
+        return await this.createQueryBuilder("users")
+            .softDelete()
+            .where("users.userId = :userId", { userId: userId })
+            .execute();
     };
 
     deleteUser = async (userId: number) => {
-        return await this.createQueryBuilder("users").delete().where("users.userId = :userId", { userId: userId }).execute();
+        return await this.createQueryBuilder("users")
+            .delete()
+            .where("users.userId = :userId", { userId: userId })
+            .execute();
     };
 }

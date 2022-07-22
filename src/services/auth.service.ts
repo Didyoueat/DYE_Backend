@@ -12,27 +12,23 @@ export const accessKakaoInfo = async (kakaoToken: string) => {
         headers: {
             Authorization: `Bearer ${kakaoToken}`,
         },
-    })
-        .then(async (kakaoInfo) => {
-            // await axios("https://kapi.kakao.com/v1/user/logout", {
-            //     method: "POST",
-            //     headers: {
-            //         Authorization: `Bearer ${kakaoToken}`,
-            //     },
-            // });
+    }).then(async (kakaoInfo) => {
+        // await axios("https://kapi.kakao.com/v1/user/logout", {
+        //     method: "POST",
+        //     headers: {
+        //         Authorization: `Bearer ${kakaoToken}`,
+        //     },
+        // });
 
-            const userRepo = repository(UserRepo);
-            const user = await userRepo.isExistUser({ email: kakaoInfo.data.kakao_account.email });
+        const userRepo = repository(UserRepo);
+        const user = await userRepo.isExistUser({ email: kakaoInfo.data.kakao_account.email });
 
-            if (!user) {
-                errorGenerator(httpStatus.UNAUTHORIZED);
-            }
+        if (!user) {
+            errorGenerator(httpStatus.UNAUTHORIZED);
+        }
 
-            return user;
-        })
-        .catch((err) => {
-            errorGenerator(httpStatus.BAD_REQUEST, err.response.data.msg);
-        });
+        return user;
+    });
 };
 
 // export const accessShopInfo = async (businessNumber: string, password: string)
