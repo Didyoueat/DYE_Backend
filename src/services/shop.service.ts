@@ -3,6 +3,7 @@ import { errorGenerator } from "@modules/api.error";
 import httpStatus from "http-status";
 import infoTypes from "infoTypes";
 import { ShopRepo } from "@repository/shop.repository";
+import { ShopPostRepo } from "@repository/shop.post.repository";
 import { DishRepo } from "@repository/dish.repository";
 
 export const findAllShop = async () => {
@@ -68,7 +69,56 @@ export const deleteShop = async (shopId: number) => {
     const shopRepo = repository(ShopRepo);
     const dishRepo = repository(DishRepo);
 
-    if ((await shopRepo.softDeleteShop(shopId)).affected !== 1 || (await dishRepo.softDeleteShopDishes(shopId)).affected !== 1) {
+    if (
+        (await shopRepo.softDeleteShop(shopId)).affected !== 1 ||
+        (await dishRepo.softDeleteShopDishes(shopId)).affected !== 1
+    ) {
         errorGenerator(httpStatus.BAD_REQUEST);
     }
+};
+
+/* ================================= */
+/*             Shop Post             */
+/* ================================= */
+
+export const findAllShopPosts = async () => {
+    const shopPostRepo = repository(ShopPostRepo);
+
+    return await shopPostRepo.findAllShopPosts();
+};
+
+export const findShopPosts = async (shopId: number) => {
+    const shopPostRepo = repository(ShopPostRepo);
+
+    return await shopPostRepo.findShopPosts(shopId);
+};
+
+export const findOnePost = async (shopPostId: number) => {
+    const shopPostRepo = repository(ShopPostRepo);
+
+    return await shopPostRepo.findOnePost(shopPostId);
+};
+
+export const createShopPost = async (shopId: number, data: infoTypes.shopPost) => {
+    const shopPostRepo = repository(ShopPostRepo);
+
+    return await shopPostRepo.createShopPost(shopId, data);
+};
+
+export const updateShopPost = async (shopPostId: number, data: infoTypes.shopPost) => {
+    const shopPostRepo = repository(ShopPostRepo);
+
+    return await shopPostRepo.updateShopPost(shopPostId, data);
+};
+
+export const softDeleteShopPost = async (shopPostId: number) => {
+    const shopPostRepo = repository(ShopPostRepo);
+
+    return await shopPostRepo.softDeleteShopPost(shopPostId);
+};
+
+export const deleteShopPost = async (shopPostId: number) => {
+    const shopPostRepo = repository(ShopPostRepo);
+
+    return await shopPostRepo.deleteShopPost(shopPostId);
 };

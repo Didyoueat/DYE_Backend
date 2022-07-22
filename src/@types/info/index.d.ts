@@ -29,6 +29,11 @@ declare module "infoTypes" {
             temporaryDayEnd: Date | null;
         }
 
+        interface shopPost {
+            title: string;
+            content: string;
+        }
+
         interface dish {
             shopId: number;
             main: boolean;
