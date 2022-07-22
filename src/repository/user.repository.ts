@@ -6,7 +6,7 @@ import Users from "@entities/users";
 export class UserRepo extends Repository<Users> {
     isExistUser = async (keyword?: { userId?: number; email?: string; phone?: string }) => {
         const user = await this.createQueryBuilder("users")
-            .select()
+            .select("users.userId, users.staff")
             .where("users.userId = :userId OR users.email = :email OR users.phone = :phone", {
                 userId: keyword.userId,
                 email: keyword.email,
