@@ -14,7 +14,10 @@ export const errorConverter = (err: any, req: Request, res: Response, next: Next
     if (!(err instanceof ApiError)) {
         const statusCode = error.statusCode || httpStatus.INTERNAL_SERVER_ERROR;
         const message = error.message || httpStatus[statusCode];
-        error = new ApiError(statusCode, message, err.stack);
+        error = new ApiError(statusCode, message, {
+            stack: err.stack,
+            isFatal: statusCode == 500 ? true : false,
+        });
     }
     next(error);
 };

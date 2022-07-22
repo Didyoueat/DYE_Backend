@@ -5,7 +5,11 @@ Error.stackTraceLimit = 10;
 export class ApiError extends Error {
     statusCode: number;
     isFatal: boolean;
-    constructor(statusCode: number, message: string, option?: { stack?: string; isFatal: boolean }) {
+    constructor(
+        statusCode: number,
+        message: string,
+        option?: { stack?: string; isFatal: boolean }
+    ) {
         super(message);
         this.statusCode = statusCode;
         if (option) {
