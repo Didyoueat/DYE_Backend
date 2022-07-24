@@ -259,12 +259,67 @@ paths:
           $ref: "#/components/responses/ServerError"
       
   
-  /users:
+  /users/{user_id}:
     get:
       tags:
       - Users
-      summary: 전체 회원 리스트 조회
-      description: <h1>모든 사용자 정보를 조회한다.</h1><br/><br/><h2>Permission</h2>`관리자`
+      summary: 회원 조회
+      description: <h1>사용자 정보 조회</h1><br/><br/><h2>Permission</h2>`관리자`
+      parameters:
+        - in: header
+          name: access_token
+          schema:
+            type: string
+            example: 발급받은 Access Toekn 입력
+          required: true
+        - in: header
+          name: refresh_token
+          schema:
+            type: string
+            example: 발급받은 Refresh Toekn 입력
+          required: true
+        - in: path
+          name: user_id
+          schema:
+            type: integer
+            example: user_id 입력
+          required: true
+      responses:
+        # 수정해야함
+        200:
+          description: <h2>회원 정보 반환</h2>
+          headers:
+            access_token:
+              schema:
+                $ref: "#/components/schemas/access_token"
+            refresh_token:
+              schema:
+                $ref: "#/components/schemas/refresh_token"
+            is_changed:
+              description: "true일 경우 새로운 토큰이 담긴다."
+              schema:
+                $ref: "#/components/schemas/is_changed"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        403:
+          $ref: "#/components/responses/Forbidden"
+        404:
+          $ref: "#/components/responses/NotFound"
+        500:
+          $ref: "#/components/responses/ServerError"
+          
+  /users/me:
+    get:
+      tags:
+      - Users
+      summary: 자기 자신 조회
+      description: <h1>자신의 정보 조회</h1><br/><br/><h2>Permission</h2>`관리자`
       parameters:
         - in: header
           name: access_token
@@ -281,7 +336,22 @@ paths:
       responses:
         # 수정해야함
         200:
-          $ref: "#/components/responses/Ok"
+          description: <h2>회원 정보 반환</h2>
+          headers:
+            access_token:
+              schema:
+                $ref: "#/components/schemas/access_token"
+            refresh_token:
+              schema:
+                $ref: "#/components/schemas/refresh_token"
+            is_changed:
+              description: "true일 경우 새로운 토큰이 담긴다."
+              schema:
+                $ref: "#/components/schemas/is_changed"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
         400:
           $ref: "#/components/responses/BadRequest"
         401:
@@ -2066,6 +2136,55 @@ components:
             type: "integer"
             example: 300
             description: "사용자와 가게 사이의 거리 (기준: 미터)"
+      
+    User:
+      type: "object"
+      properties:
+        userId:
+          type: "integer"
+          example: 1
+        staff:
+          type: "boolean"
+          example: false
+        loginState:
+          type: "string"
+          maxLength: 20
+          example: "카카오톡"
+        email:
+          type: "string"
+          maxLength: 50
+          example: "test@test.com"
+        name:
+          type: "string"
+          maxLength: 10
+          example: "김성수"
+        age:
+          type: "integer"
+          example: 26
+        gender:
+          type: "string"
+          maxLength: 10
+          example: "male"
+        phone:
+          type: "string"
+          maxLength: 20
+          example: "010-1234-1234"
+        address:
+          type: "string"
+          maxLength: 100
+          example: "서울시 강남구 개포로 416, 새롬관"
+        paymentState:
+          type: "string"
+          maxLength: 20
+          example: "토스"
+        createdAt:
+            type: "string"
+            format: "date-time"
+            example: "2021-12-07T09:36:14.076Z"
+        updatedAt:
+          type: "string"
+          format: "date-time"
+          example: "2021-12-07T09:36:14.076Z"
       
     Shop:
       type: "object"
