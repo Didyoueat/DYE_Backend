@@ -2408,7 +2408,7 @@ components:
           type: "string"
           format: "date-time"
           example: "2021-12-07T09:36:14.076Z"
-        SubscriptionDays:
+        subscriptionDays:
           type: "array"
           items:
             $ref: "#/components/schemas/SubscriptionDays"
@@ -2454,7 +2454,7 @@ components:
     SubscriptionDays:
       type: "object"
       properties:
-        SubscriptionDayId:
+        subscriptionDayId:
           type: "integer"
           example: 1
         shopId:

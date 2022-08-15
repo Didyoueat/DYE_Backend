@@ -10,6 +10,7 @@ export const getUser = async (req: Request, res: Response) => {
 
 // 회원 생성
 export const createUser = async (req: Request, res: Response) => {
+    req.body.changedRequire = true;
     return await userService.createUser(req.body);
 };
 

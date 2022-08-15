@@ -18,6 +18,7 @@ node_modules/
 
 # TypeScript build / generate output
 dist/
+build/
 
 # Database directories
 migrations/

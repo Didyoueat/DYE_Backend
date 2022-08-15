@@ -7,7 +7,8 @@ export class OrderRepo extends Repository<Orders> {
     findAllOrders = () => {
         return this.createQueryBuilder("orders")
             .select()
-            .leftJoinAndSelect("orders.orderDishes", "orderDishes")
+            .leftJoinAndSelect("orders.orderDays", "orderDays")
+            .leftJoinAndSelect("orderDays.orderDishes", "orderDishes")
             .orderBy("orders.userId", "ASC")
             .getMany();
     };
@@ -15,7 +16,8 @@ export class OrderRepo extends Repository<Orders> {
     findShopOrders = (shopId: number) => {
         return this.createQueryBuilder("orders")
             .select()
-            .leftJoinAndSelect("orders.orderDishes", "orderDishes")
+            .leftJoinAndSelect("orders.orderDays", "orderDays")
+            .leftJoinAndSelect("orderDays.orderDishes", "orderDishes")
             .where("orders.shopId = :shopId", { shopId: shopId })
             .orderBy("orders.userId", "ASC")
             .getMany();
@@ -24,7 +26,8 @@ export class OrderRepo extends Repository<Orders> {
     findUserOrders = (userId: number) => {
         return this.createQueryBuilder("orders")
             .select()
-            .leftJoinAndSelect("orders.orderDishes", "orderDishes")
+            .leftJoinAndSelect("orders.orderDays", "orderDays")
+            .leftJoinAndSelect("orderDays.orderDishes", "orderDishes")
             .where("orders.userId = :userId", { userId: userId })
             .getMany();
     };
@@ -32,7 +35,8 @@ export class OrderRepo extends Repository<Orders> {
     findOrder = (userId: number, orderId: number) => {
         return this.createQueryBuilder("orders")
             .select()
-            .leftJoinAndSelect("orders.orderDishes", "orderDishes")
+            .leftJoinAndSelect("orders.orderDays", "orderDays")
+            .leftJoinAndSelect("orderDays.orderDishes", "orderDishes")
             .where("orders.userId = :userId AND orders.orderId = :orderId", { userId: userId, orderId: orderId })
             .getOne();
     };
