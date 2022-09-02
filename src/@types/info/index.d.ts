@@ -1,17 +1,13 @@
 declare module "infoTypes" {
     namespace infoTypes {
         interface user {
-            staff?: boolean;
-            loginStatus?: string;
+            loginStatus: string;
             email: string;
-            password?: string;
             name: string;
             age: number;
             gender: string;
             phone: string;
             address: string;
-            paymentState?: string;
-            paymentKey?: string;
         }
 
         interface shop {
@@ -31,6 +27,11 @@ declare module "infoTypes" {
             officeHour: string;
             temporaryDayStart: Date | null;
             temporaryDayEnd: Date | null;
+        }
+
+        interface shopPost {
+            title: string;
+            content: string;
         }
 
         interface dish {

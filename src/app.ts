@@ -3,6 +3,9 @@ import morgan from "morgan";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import { createConnection } from "typeorm";
+import swaggerUI from "swagger-ui-express";
+import YAML from "yamljs";
+import appDir from "app-root-path";
 
 import * as apiRouter from "@routes/index";
 
@@ -19,6 +22,10 @@ const corsOptions = {
     credentials: true,
     method: ["POST", "GET", "PUT", "PATCH", "DELETE"],
 };
+
+const swaggerSpec = YAML.load(appDir.path + "/src/swagger/openapi.yaml");
+
+app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 
 app.use(cors(corsOptions));
 app.use(morgan("dev", { stream: logger.stream }));

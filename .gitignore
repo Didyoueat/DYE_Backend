@@ -14,9 +14,11 @@ node_modules/
 .env.test
 .env.prod
 .env.dev
+.env.refactor
 
 # TypeScript build / generate output
 dist/
+build/
 
 # Database directories
 migrations/

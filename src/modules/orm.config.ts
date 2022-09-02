@@ -2,6 +2,7 @@ import { createConnection, ConnectionOptions, getConnection } from "typeorm";
 import env from "@modules/env";
 import Users from "@entities/users";
 import Shops from "@entities/shops";
+import ShopPosts from "@entities/shop.posts";
 import Dishes from "@entities/dishes";
 import Subscriptions from "@entities/subscriptions";
 import SubscriptionDays from "@entities/subscription.days";
@@ -23,7 +24,18 @@ const defaultOrmConfig: ConnectionOptions = {
     logging: ["error"],
     logger: "file",
     maxQueryExecutionTime: 2000,
-    entities: [Users, Shops, Dishes, Subscriptions, SubscriptionDays, SubscriptionDishes, Orders, OrderDays, OrderDishes],
+    entities: [
+        Users,
+        Shops,
+        ShopPosts,
+        Dishes,
+        Subscriptions,
+        SubscriptionDays,
+        SubscriptionDishes,
+        Orders,
+        OrderDays,
+        OrderDishes,
+    ],
 };
 
 const dbLoader = async (ormConfig: ConnectionOptions = defaultOrmConfig) =>

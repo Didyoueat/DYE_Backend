@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany, DeleteDateColumn } from "typeorm";
 import { VirtualColumn } from "@modules/decorator";
 import Dishes from "@entities/dishes";
+import ShopPosts from "@entities/shop.posts";
 import SubscriptionDays from "@entities/subscription.days";
 import OrderDays from "@entities/order.days";
 
@@ -68,6 +69,9 @@ export default class Shops {
 
     @OneToMany(() => Dishes, (dishes) => dishes.shops)
     dishes: Dishes[];
+
+    @OneToMany(() => ShopPosts, (shopPosts) => shopPosts.shops)
+    shopPosts: ShopPosts[];
 
     @OneToMany(() => SubscriptionDays, (subscriptionDays) => subscriptionDays.shops)
     subscriptionDays: SubscriptionDays[];

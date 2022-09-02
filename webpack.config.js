@@ -9,15 +9,15 @@ const { NODE_ENV } = process.env;
 const config = {
     production: {
         env: "./.env.prod",
-        outputPath: "dist",
+        outputPath: "build",
     },
     test: {
         env: "./.env.test",
-        outputPath: "dist",
+        outputPath: "build",
     },
     development: {
         env: "./.env.dev",
-        outputPath: "dist",
+        outputPath: "build",
     },
 };
 

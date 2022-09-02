@@ -3,13 +3,14 @@ import * as userService from "@services/user.service";
 
 // 회원 정보 조회
 export const getUser = async (req: Request, res: Response) => {
-    const userId = parseInt(req.params.userId, 10);
+    const userId = parseInt(req.params.userId, 10) || parseInt(req.body.requestId);
 
     return await userService.findUser(userId);
 };
 
 // 회원 생성
 export const createUser = async (req: Request, res: Response) => {
+    req.body.changedRequire = true;
     return await userService.createUser(req.body);
 };
 

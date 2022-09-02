@@ -10,7 +10,6 @@ import {
     DeleteDateColumn,
 } from "typeorm";
 import Users from "@entities/users";
-import Shops from "@entities/shops";
 import OrderDays from "./order.days";
 
 @Entity("orders")
@@ -25,7 +24,7 @@ export default class Orders {
     orderState: string;
 
     @Column("varchar", { length: 10 })
-    reciever: string;
+    receiver: string;
 
     @Column("varchar", { length: 100 })
     address: string;

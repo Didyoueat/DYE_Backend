@@ -20,8 +20,16 @@ const afterware = (fn: Function) => (req: Request, res: Response, next: NextFunc
 
             if (response.is_changed) {
                 if (group === 1) {
-                    res.cookie("access_token", response.access_token, { httpOnly: true, secure: true, sameSite: "none" });
-                    res.cookie("refresh_token", response.refresh_token, { httpOnly: true, secure: true, sameSite: "none" });
+                    res.cookie("access_token", response.access_token, {
+                        httpOnly: true,
+                        secure: true,
+                        sameSite: "none",
+                    });
+                    res.cookie("refresh_token", response.refresh_token, {
+                        httpOnly: true,
+                        secure: true,
+                        sameSite: "none",
+                    });
                 } else {
                     res.header(response);
                 }

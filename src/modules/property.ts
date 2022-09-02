@@ -46,7 +46,7 @@ const createCheck = (data: createTypes.user | createTypes.shop | createTypes.dis
             if (data[prop[i]].length === 0) {
                 return false;
             }
-            data[prop[i]].map((value) => {
+            data[prop[i]].map((value: createTypes.subscriptionDay) => {
                 for (let j = 0; j < createProp.subscriptionDay.length; j++) {
                     const subsDay = createProp.subscriptionDay[j];
                     if (!value[subsDay]) {
@@ -79,8 +79,8 @@ const updateProp = {
     user: ["staff", "loginStatus", "email", "password", "name", "age", "gender", "phone", "addrss", "paymentState", "paymentKey"],
     shop: ["dayOff", "origin", "content", "officeHour", "temporaryDayStart", "temporaryDayEnd"],
     dish: ["main", "title", "content", "price", "count", "weight"],
-    subscription: ["address", "receiver", "toShop", "toDelivery", "subscriptionDay"],
-    subscriptionDay: ["shopId", "weekLabel", "deliveryCost", "dishes"],
+    subscription: ["address", "receiver", "subscriptionDay"],
+    subscriptionDay: ["shopId", "weekLabel", "deliveryCost", "subscriptionDishes"],
 };
 
 const updateCheck = (data: updateTypes.user | updateTypes.shop | updateTypes.dish | updateTypes.subscription, type: string) => {
@@ -100,8 +100,8 @@ const updateCheck = (data: updateTypes.user | updateTypes.shop | updateTypes.dis
         if (prop.indexOf(keys[i]) === -1) {
             return false;
         }
-        if (type === "subscription" && keys[i] === "subscriptionDay") {
-            if (data[keys[i]].length === 0 || data[keys[i]]["subscriptionDish"].length === 0) {
+        if (type === "subscription" && keys[i] === "subscriptionDays") {
+            if (data[keys[i]].length === 0 || data[keys[i]]["subscriptionDishes"].length === 0) {
                 return false;
             }
         }
