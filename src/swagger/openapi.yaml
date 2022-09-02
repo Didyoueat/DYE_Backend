@@ -637,7 +637,7 @@ paths:
             schema:
               type: "object"
               properties:
-                dayoff:
+                dayOff:
                   type: "integer"
                   example: 9
                 origin:
@@ -2071,7 +2071,7 @@ components:
             type: "string"
             maxLength: 20
             example: "02-124-1234"
-          dayoff:
+          dayOff:
             type: "integer"
             example: 9
           address:
@@ -2204,7 +2204,7 @@ components:
           type: "string"
           maxLength: 20
           example: "02-124-1234"
-        dayoff:
+        dayOff:
           type: "integer"
           example: 9
         address:
@@ -2511,45 +2511,7 @@ components:
           type: "boolean"
           example: false
           description: "반찬 정보가 변경되었으면 true로 바뀜"
-        subscriptionOnetimeDish:
-          type: "array"
-          items:
-            $ref: "#/components/schemas/SubscriptionOnetime"
-            
-    SubscriptionOnetime:
-      type: "object"
-      properties:
-        subscriptionOnetimeId:
-          type: "integer"
-          example: 1
-        subscriptionDishId:
-          type: "integer"
-          example: 1
-        dishId:
-          type: "integer"
-          example: 1
-        main:
-          type: "boolean"
-          example: false
-        title:
-          type: "string"
-          maxLength: 30
-          example: "가지 볶음"
-        price: 
-          type: "integer"
-          example: 3000
-        orderCount:
-          type: "integer"
-          example: 5
-        weight:
-          type: "integer"
-          example: 150
-        imageUrl:
-          type: "string"
-          maxLength: 500
-          nullable: true
-          example: "S3 이미지 URL"
-        
+
     SubsRegister:
       type: "object"
       properties:
@@ -2648,12 +2610,12 @@ components:
           type: "string"
           format: "date-time"
           example: "2021-12-07T09:36:14.076Z"
-        orderDay:
+        orderDays:
           type: "array"
           items:
-            $ref: "#/components/schemas/OrderDay"
+            $ref: "#/components/schemas/OrderDays"
             
-    OrderDay:
+    OrderDays:
       type: "object"
       properties:
         orderDayId:
@@ -2668,12 +2630,12 @@ components:
         deliveryCost:
           type: "integer"
           example: 3000
-        orderDish:
+        orderDishs:
           type: "array"
           items:
-            $ref: "#/components/schemas/OrderDish"
+            $ref: "#/components/schemas/OrderDishs"
           
-    OrderDish:
+    OrderDishs:
       type: "object"
       properties:
         orderDishId:
