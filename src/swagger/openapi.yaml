@@ -2630,12 +2630,12 @@ components:
         deliveryCost:
           type: "integer"
           example: 3000
-        orderDishs:
+        orderDishes:
           type: "array"
           items:
-            $ref: "#/components/schemas/OrderDishs"
+            $ref: "#/components/schemas/OrderDishes"
           
-    OrderDishs:
+    OrderDishes:
       type: "object"
       properties:
         orderDishId:
