@@ -1,9 +1,7 @@
 import { OrderRepo } from "@repository/order.repository";
-import { repository, propertyCheck } from "@modules/property";
+import { repository } from "@modules/property";
 import { errorGenerator } from "@modules/api.error";
 import httpStatus from "http-status";
-import infoTypes from "infoTypes";
-import { findUserSubs } from "./subs.service";
 
 export const findAllOrder = async () => {
     const orderRepo = repository(OrderRepo);
