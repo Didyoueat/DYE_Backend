@@ -2625,9 +2625,6 @@ components:
           type: "string"
           maxLength: 100
           example: "서울시 서초구 강남대로 327, 대륭서초타워 4층"
-        totalPayment:
-          type: "integer"
-          example: 15000
         paymentState:
           type: "string"
           maxLength: 50
