@@ -9,6 +9,8 @@ ormlogs.log
 # Dependency directories
 node_modules/
 
+# IDE
+.idea/
 
 # dotenv environment variables file
 .env.test
@@ -25,5 +27,3 @@ migrations/
 
 # Development test directories
 dummy/
-coverage/
-test/
