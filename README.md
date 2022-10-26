@@ -107,19 +107,19 @@ https://user-images.githubusercontent.com/74334399/197935299-859eafdf-c218-4f1f-
 
 > 사용 스택
 
-<img style="width: 60%" src="https://user-images.githubusercontent.com/74334399/197940049-d88151a7-7576-4341-8556-3e39a7f3245e.png">
+<img src="https://user-images.githubusercontent.com/74334399/197940049-d88151a7-7576-4341-8556-3e39a7f3245e.png">
 
 <br>
 
-> 로그인 Flow 및 Sequence
+> 로그인 Flow Chart
 
-<div style="width: 100%; text-align: center; display: flex; flex-direction: row;">
-  <img style="display: inline-block; width: 40%;" src="https://user-images.githubusercontent.com/74334399/197938164-1004ab09-9def-484d-8865-5acf72c3a834.png">
-  &nbsp
-  &nbsp
-  &nbsp
-  <img style="display: inline-block; width: 55%;" src="https://user-images.githubusercontent.com/74334399/197939383-790b8a3a-2055-4509-ab40-170465fa180d.png">
-</div>
+<img src="https://user-images.githubusercontent.com/74334399/197938164-1004ab09-9def-484d-8865-5acf72c3a834.png">
+
+<br>
+
+> 로그인 Sequence Diagram
+
+<img src="https://user-images.githubusercontent.com/74334399/197939383-790b8a3a-2055-4509-ab40-170465fa180d.png">
 
 <br>
 
